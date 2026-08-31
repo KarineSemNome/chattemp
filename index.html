@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chat privado</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#f1f1f1;color:#222}
+button,input{font-family:Arial,sans-serif}
+#loginScreen{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:20px}
+.loginBox{width:100%;max-width:380px;background:#fff;border:1px solid #ccc;border-radius:10px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.loginBox h1{margin:0 0 8px;font-size:24px}
+.loginBox p{margin:0 0 20px;color:#666;font-size:14px}
+.loginBox input{width:100%;height:44px;border:1px solid #bbb;border-radius:6px;padding:0 12px;font-size:16px;margin-bottom:10px}
+.loginBox button{width:100%;height:44px;border:0;border-radius:6px;background:#333;color:#fff;font-size:16px}
+#error{display:none;margin-top:12px;color:#a00000;font-size:14px}
+#app{display:none;width:100%;height:100%;overflow:hidden}
+.header{height:58px;background:#333;color:#fff;display:flex;align-items:center;padding:0 12px}
+.header .title{font-size:18px;font-weight:bold;flex:1}
+.header .user{font-size:13px;margin-right:10px;color:#ddd}
+.header button{background:#555;color:#fff;border:0;border-radius:5px;padding:8px 10px}
+.layout{height:calc(100% - 58px);display:flex}
+.contacts{width:240px;background:#fff;border-right:1px solid #ccc;padding:10px}
+.contact{width:100%;padding:14px 12px;border:1px solid #ddd;background:#fafafa;border-radius:7px;margin-bottom:8px;text-align:left;font-size:16px}
+.contact.active{background:#e8e8e8;border-color:#999}
+.chat{flex:1;min-width:0;display:flex;flex-direction:column}
+.chatHeader{height:52px;background:#fff;border-bottom:1px solid #ccc;display:flex;align-items:center;padding:0 14px;font-weight:bold}
+.messages{flex:1;overflow-y:auto;padding:12px;background:#eee}
+.empty{text-align:center;color:#777;margin-top:30px;font-size:14px}
+.msgRow{display:flex;margin-bottom:8px}
+.msgRow.mine{justify-content:flex-end}
+.bubble{max-width:78%;padding:9px 11px;border-radius:10px;background:#fff;border:1px solid #ddd;word-wrap:break-word;white-space:pre-wrap}
+.mine .bubble{background:#dcdcdc;border-color:#c8c8c8}
+.msgTime{display:block;font-size:10px;color:#777;margin-top:4px;text-align:right}
+.composer{display:flex;background:#fff;border-top:1px solid #ccc;padding:8px}
+.composer input{flex:1;height:42px;border:1px solid #bbb;border-radius:6px;padding:0 10px;font-size:16px;min-width:0}
+.composer button{width:80px;margin-left:7px;border:0;border-radius:6px;background:#333;color:#fff;font-size:15px}
+.status{font-size:12px;color:#777;padding:4px 10px;background:#fff}
+@media(max-width:600px){
+ .contacts{width:150px;padding:7px}
+ .contact{font-size:14px;padding:11px 8px}
+ .user{display:none}
+ .bubble{max-width:88%}
+}
+</style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="loginBox">
+    <h1>Chat privado</h1>
+    <p>Entre com seu e-mail e senha.</p>
+    <input id="email" type="email" placeholder="E-mail" autocomplete="off">
+    <input id="password" type="password" placeholder="Senha" autocomplete="off">
+    <button id="loginBtn">Entrar</button>
+    <div id="error"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div class="title">Chat privado</div>
+    <div class="user" id="currentUser"></div>
+    <button id="logoutBtn">Sair</button>
+  </div>
+
+  <div class="layout">
+    <div class="contacts" id="contacts"></div>
+
+    <div class="chat">
+      <div class="chatHeader" id="chatTitle">Selecione uma conversa</div>
+      <div class="messages" id="messages">
+        <div class="empty">Selecione uma conversa.</div>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="composer">
+        <input id="messageInput" type="text" maxlength="2000" placeholder="Digite uma mensagem..." disabled>
+        <button id="sendBtn" disabled>Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+ * ============================================================
+ * CONFIGURAÇÃO
+ * ============================================================
+ * 1) No Firebase Console:
+ *    Configurações do projeto -> Seus apps -> Web
+ *    registre um app Web (</>) se ainda não tiver um.
+ *
+ * 2) Copie apenas o valor de databaseURL e apiKey para os
+ *    campos abaixo.
+ *
+ * NÃO coloque senhas neste arquivo.
+ */
+var FIREBASE_API_KEY = "COLE_AQUI_SUA_API_KEY";
+var FIREBASE_DATABASE_URL = "COLE_AQUI_A_URL_DO_REALTIME_DATABASE";
+
+/*
+ * UIDs das contas criadas no seu Firebase.
+ */
+var USERS = {
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2": {name:"USER 1", email:"usuário@chat.local"},
+  "rN0rwjdIxUV7ov3pbNWe745i7VE3": {name:"Nathan", email:"nathan@chat.local"},
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92": {name:"Marly", email:"marly@chat.local"}
+};
+
+var state = {
+  idToken:null,
+  refreshToken:null,
+  uid:null,
+  currentConversation:null,
+  messages:{},
+  pollTimer:null,
+  refreshTimer:null
+};
+
+function $(id){ return document.getElementById(id); }
+
+function showError(text){
+  $("error").style.display="block";
+  $("error").innerHTML=text;
+}
+
+function clearError(){
+  $("error").style.display="none";
+  $("error").innerHTML="";
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function formatTime(ts){
+  var d=new Date(ts);
+  var h=d.getHours(); if(h<10) h="0"+h;
+  var m=d.getMinutes(); if(m<10) m="0"+m;
+  return h+":"+m;
+}
+
+function api(path, options, callback){
+  var xhr=new XMLHttpRequest();
+  xhr.open(options.method || "GET", path, true);
+  if(options.body){
+    xhr.setRequestHeader("Content-Type","application/json");
+  }
+  xhr.onreadystatechange=function(){
+    if(xhr.readyState!==4) return;
+    var data=null;
+    try { data=xhr.responseText ? JSON.parse(xhr.responseText) : null; } catch(e){}
+    callback(xhr.status, data, xhr.responseText);
+  };
+  xhr.send(options.body ? JSON.stringify(options.body) : null);
+}
+
+function login(){
+  clearError();
+
+  var email=$("email").value.replace(/^\s+|\s+$/g,"");
+  var password=$("password").value;
+
+  if(!email || !password){
+    showError("Informe o e-mail e a senha.");
+    return;
+  }
+
+  if(FIREBASE_API_KEY.indexOf("COLE_AQUI")===0 ||
+     FIREBASE_DATABASE_URL.indexOf("COLE_AQUI")===0){
+    showError("Primeiro coloque a API Key e a URL do Realtime Database na configuração deste HTML.");
+    return;
+  }
+
+  $("loginBtn").disabled=true;
+  $("loginBtn").innerHTML="Entrando...";
+
+  var url="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
+          +encodeURIComponent(FIREBASE_API_KEY);
+
+  api(url,{method:"POST",body:{
+    email:email,
+    password:password,
+    returnSecureToken:true
+  }},function(status,data){
+    $("loginBtn").disabled=false;
+    $("loginBtn").innerHTML="Entrar";
+
+    if(status!==200 || !data || !data.localId){
+      showError("Não foi possível entrar. Verifique o e-mail e a senha.");
+      return;
+    }
+
+    if(!USERS[data.localId]){
+      showError("Esta conta não está autorizada neste chat.");
+      return;
+    }
+
+    state.idToken=data.idToken;
+    state.refreshToken=data.refreshToken;
+    state.uid=data.localId;
+
+    saveSession();
+    openApp();
+    scheduleTokenRefresh(data.expiresIn);
+  });
+}
+
+function saveSession(){
+  try{
+    localStorage.setItem("chat_idToken",state.idToken);
+    localStorage.setItem("chat_refreshToken",state.refreshToken);
+    localStorage.setItem("chat_uid",state.uid);
+  }catch(e){}
+}
+
+function clearSession(){
+  try{
+    localStorage.removeItem("chat_idToken");
+    localStorage.removeItem("chat_refreshToken");
+    localStorage.removeItem("chat_uid");
+  }catch(e){}
+}
+
+function tryRestore(){
+  var token=null, refresh=null, uid=null;
+  try{
+    token=localStorage.getItem("chat_idToken");
+    refresh=localStorage.getItem("chat_refreshToken");
+    uid=localStorage.getItem("chat_uid");
+  }catch(e){}
+
+  if(token && refresh && uid && USERS[uid]){
+    state.idToken=token;
+    state.refreshToken=refresh;
+    state.uid=uid;
+    openApp();
+    refreshIdToken();
+  }
+}
+
+function refreshIdToken(){
+  if(!state.refreshToken) return;
+
+  var url="https://securetoken.googleapis.com/v1/token?key="
+          +encodeURIComponent(FIREBASE_API_KEY);
+
+  var xhr=new XMLHttpRequest();
+  xhr.open("POST",url,true);
+  xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+  xhr.onreadystatechange=function(){
+    if(xhr.readyState!==4) return;
+    if(xhr.status!==200){
+      logout();
+      return;
+    }
+    var data;
+    try{data=JSON.parse(xhr.responseText);}catch(e){logout();return;}
+
+    state.idToken=data.id_token;
+    state.refreshToken=data.refresh_token || state.refreshToken;
+    saveSession();
+    scheduleTokenRefresh(data.expires_in || 3600);
+  };
+  xhr.send("grant_type=refresh_token&refresh_token="+encodeURIComponent(state.refreshToken));
+}
+
+function scheduleTokenRefresh(seconds){
+  if(state.refreshTimer) clearTimeout(state.refreshTimer);
+  var wait=Math.max(60000,(parseInt(seconds,10)-120)*1000);
+  state.refreshTimer=setTimeout(refreshIdToken,wait);
+}
+
+function conversationFor(otherUid){
+  if(state.uid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2"){
+    if(otherUid==="qncO2nyU7id0Z6Oa3GXsgZ3udH92") return "user1_marly";
+    if(otherUid==="rN0rwjdIxUV7ov3pbNWe745i7VE3") return "user1_nathan";
+  }
+  if(state.uid==="qncO2nyU7id0Z6Oa3GXsgZ3udH92" &&
+     otherUid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2") return "user1_marly";
+
+  if(state.uid==="rN0rwjdIxUV7ov3pbNWe745i7VE3" &&
+     otherUid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2") return "user1_nathan";
+
+  return null;
+}
+
+function allowedContacts(){
+  if(state.uid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2"){
+    return ["qncO2nyU7id0Z6Oa3GXsgZ3udH92","rN0rwjdIxUV7ov3pbNWe745i7VE3"];
+  }
+  return ["ZwESBVxjszRqPiOy9dDhx7rRmUK2"];
+}
+
+function openApp(){
+  $("loginScreen").style.display="none";
+  $("app").style.display="block";
+  $("currentUser").innerHTML=escapeHtml(USERS[state.uid].name);
+  buildContacts();
+}
+
+function buildContacts(){
+  var box=$("contacts");
+  box.innerHTML="";
+  var list=allowedContacts();
+
+  for(var i=0;i<list.length;i++){
+    (function(otherUid){
+      var b=document.createElement("button");
+      b.className="contact";
+      b.innerHTML=escapeHtml(USERS[otherUid].name);
+      b.onclick=function(){selectConversation(otherUid,b);};
+      box.appendChild(b);
+    })(list[i]);
+  }
+}
+
+function selectConversation(otherUid,button){
+  var path=conversationFor(otherUid);
+  if(!path) return;
+
+  var all=document.getElementsByClassName("contact");
+  for(var i=0;i<all.length;i++) all[i].className="contact";
+  button.className="contact active";
+
+  state.currentConversation=path;
+  state.messages={};
+  $("chatTitle").innerHTML="Conversa com "+escapeHtml(USERS[otherUid].name);
+  $("messageInput").disabled=false;
+  $("sendBtn").disabled=false;
+  $("messageInput").focus();
+  $("status").innerHTML="";
+
+  loadMessages();
+  if(state.pollTimer) clearInterval(state.pollTimer);
+  state.pollTimer=setInterval(loadMessages,2000);
+}
+
+function loadMessages(){
+  if(!state.currentConversation || !state.idToken) return;
+
+  var url=FIREBASE_DATABASE_URL.replace(/\/$/,"")+
+          "/chat/"+state.currentConversation+"/messages.json?auth="+
+          encodeURIComponent(state.idToken);
+
+  api(url,{method:"GET"},function(status,data){
+    if(status===401){
+      refreshIdToken();
+      return;
+    }
+    if(status!==200){
+      $("status").innerHTML="Não foi possível atualizar as mensagens.";
+      return;
+    }
+
+    state.messages=data || {};
+    renderMessages();
+    $("status").innerHTML="Conectado";
+  });
+}
+
+function renderMessages(){
+  var box=$("messages");
+  var keys=[], k;
+
+  for(k in state.messages){
+    if(state.messages.hasOwnProperty(k)) keys.push(k);
+  }
+
+  keys.sort(function(a,b){
+    var ta=Number(state.messages[a].timestamp)||0;
+    var tb=Number(state.messages[b].timestamp)||0;
+    return ta-tb;
+  });
+
+  if(!keys.length){
+    box.innerHTML='<div class="empty">Nenhuma mensagem ainda.</div>';
+    return;
+  }
+
+  var html="";
+  for(var i=0;i<keys.length;i++){
+    var m=state.messages[keys[i]];
+    var mine=(m.senderId===state.uid);
+    html+='<div class="msgRow '+(mine?"mine":"")+'">';
+    html+='<div class="bubble">';
+    html+=escapeHtml(m.text || "");
+    html+='<span class="msgTime">'+formatTime(Number(m.timestamp)||Date.now())+'</span>';
+    html+='</div></div>';
+  }
+
+  var shouldScroll=(box.scrollTop+box.clientHeight+80>=box.scrollHeight);
+  box.innerHTML=html;
+  if(shouldScroll) box.scrollTop=box.scrollHeight;
+}
+
+function sendMessage(){
+  if(!state.currentConversation || !state.idToken) return;
+
+  var input=$("messageInput");
+  var text=input.value.replace(/^\s+|\s+$/g,"");
+  if(!text) return;
+
+  $("sendBtn").disabled=true;
+
+  var message={
+    senderId:state.uid,
+    text:text,
+    timestamp:Date.now()
+  };
+
+  var url=FIREBASE_DATABASE_URL.replace(/\/$/,"")+
+          "/chat/"+state.currentConversation+"/messages.json?auth="+
+          encodeURIComponent(state.idToken);
+
+  api(url,{method:"POST",body:message},function(status,data){
+    $("sendBtn").disabled=false;
+
+    if(status===401){
+      refreshIdToken();
+      return;
+    }
+
+    if(status!==200){
+      $("status").innerHTML="Erro ao enviar a mensagem.";
+      return;
+    }
+
+    input.value="";
+    loadMessages();
+    input.focus();
+  });
+}
+
+function logout(){
+  if(state.pollTimer) clearInterval(state.pollTimer);
+  if(state.refreshTimer) clearTimeout(state.refreshTimer);
+
+  state.idToken=null;
+  state.refreshToken=null;
+  state.uid=null;
+  state.currentConversation=null;
+  state.messages={};
+
+  clearSession();
+
+  $("app").style.display="none";
+  $("loginScreen").style.display="flex";
+  $("password").value="";
+  $("messages").innerHTML='<div class="empty">Selecione uma conversa.</div>';
+  $("messageInput").disabled=true;
+  $("sendBtn").disabled=true;
+}
+
+$("loginBtn").onclick=login;
+$("logoutBtn").onclick=logout;
+$("sendBtn").onclick=sendMessage;
+
+$("messageInput").onkeydown=function(e){
+  e=e||window.event;
+  if(e.keyCode===13){
+    sendMessage();
+    return false;
+  }
+};
+
+$("password").onkeydown=function(e){
+  e=e||window.event;
+  if(e.keyCode===13) login();
+};
+
+tryRestore();
+</script>
+</body>
+</html>
