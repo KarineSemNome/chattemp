@@ -51,10 +51,15 @@ button,input{font-family:Arial,sans-serif}
   <div class="loginBox">
     <h1>Chat privado</h1>
     <p>Entre com seu e-mail e senha.</p>
-    <input id="email" type="email" placeholder="E-mail" autocomplete="off">
+    <input id="email" type="email" placeholder="E-mail (ex.: usuário@chat.local)" autocomplete="off">
     <input id="password" type="password" placeholder="Senha" autocomplete="off">
     <button id="loginBtn">Entrar</button>
     <div id="error"></div>
+    <div style="margin-top:12px;color:#777;font-size:12px;line-height:1.4">
+      USER 1: usuário@chat.local<br>
+      Marly: marly@chat.local<br>
+      Nathan: nathan@chat.local
+    </div>
   </div>
 </div>
 
@@ -96,8 +101,8 @@ button,input{font-family:Arial,sans-serif}
  *
  * NÃO coloque senhas neste arquivo.
  */
-var FIREBASE_API_KEY = "COLE_AQUI_SUA_API_KEY";
-var FIREBASE_DATABASE_URL = "COLE_AQUI_A_URL_DO_REALTIME_DATABASE";
+var FIREBASE_API_KEY = "AIzaSyDLqp4ieS3LqeJhHYLud1UjqtR7_5W8QfA";
+var FIREBASE_DATABASE_URL = "https://chat-temporario-b83d1-default-rtdb.firebaseio.com";
 
 /*
  * UIDs das contas criadas no seu Firebase.
@@ -174,8 +179,14 @@ function login(){
 
   if(FIREBASE_API_KEY.indexOf("COLE_AQUI")===0 ||
      FIREBASE_DATABASE_URL.indexOf("COLE_AQUI")===0){
-    showError("Primeiro coloque a API Key e a URL do Realtime Database na configuração deste HTML.");
+    showError("Configuração do Firebase incompleta.");
     return;
+  }
+
+  /* Atalho para o endereço que foi digitado na primeira versão.
+     A conta criada no Firebase foi registrada como usuário@chat.local. */
+  if(email.toLowerCase()==="usuario@chat.com"){
+    email="usuário@chat.local";
   }
 
   $("loginBtn").disabled=true;
