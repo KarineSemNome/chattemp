@@ -19,7 +19,7 @@ button,input{font:inherit}
 .login-card button{width:100%;height:46px;margin-top:8px;border:0;border-radius:7px;background:#075e54;color:#fff;font-weight:bold}
 .error{color:#b00020;margin-top:10px;font-size:13px}
 
-/* Fix de tela e teclado virtual no Android */
+/* Layout App */
 #app{position:fixed;top:0;bottom:0;left:0;right:0;display:flex;flex-direction:column}
 .top{height:58px;background:#075e54;color:#fff;display:flex;align-items:center;padding:0 8px;flex-shrink:0}
 .brand{font-size:18px;font-weight:bold;flex:1}
@@ -50,11 +50,23 @@ button,input{font:inherit}
 
 .time{font-size:10px;color:#777;float:right;margin:8px 0 0 8px}
 .photo{max-width:300px;width:100%;display:block;border-radius:6px}
-.audio{width:240px;max-width:100%;height:40px}
+.audio-box{display:flex;flex-direction:column;gap:4px;min-width:200px}
+.audio{width:220px;max-width:100%;height:40px}
+.audio-fallback-btn{display:inline-block;padding:6px 10px;background:#075e54;color:#fff;text-decoration:none;border-radius:4px;font-size:12px;text-align:center;font-weight:bold;margin-top:2px}
 
-/* Campo de Digitação e Botões Corrigidos */
+/* Painel Emojis */
+.emoji-picker{height:160px;background:#fff;border-top:1px solid #ccc;display:flex;flex-direction:column;flex-shrink:0}
+.emoji-tabs{display:flex;background:#e0e0e0;border-bottom:1px solid #ccc}
+.emoji-tab{flex:1;padding:8px;border:0;background:transparent;font-weight:bold;cursor:pointer;font-size:12px;color:#555}
+.emoji-tab.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.emoji-content{flex:1;padding:8px;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start}
+.emoji-btn{background:transparent;border:0;font-size:22px;padding:6px;cursor:pointer;border-radius:4px;margin:2px}
+.emoji-btn:hover,.emoji-btn:active{background:#eee}
+.emoticon-btn{background:#f0f2f5;border:1px solid #ccc;font-size:13px;padding:6px 10px;cursor:pointer;border-radius:14px;margin:3px;font-family:monospace}
+
+/* Campo de Digitação */
 .composer{background:#f0f2f5;padding:7px;display:flex;align-items:center;flex-shrink:0}
-.iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px}
+.iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px;cursor:pointer}
 .composer input[type=text]{
   flex:1;
   height:42px;
@@ -69,7 +81,7 @@ button,input{font:inherit}
   line-height:normal;
   -webkit-appearance:none;
 }
-.send{width:72px;height:42px;border:0;border-radius:21px;background:#075e54;color:#fff;font-weight:bold}
+.send{width:72px;height:42px;border:0;border-radius:21px;background:#075e54;color:#fff;font-weight:bold;cursor:pointer}
 
 .recording{font-size:12px;color:#b00020;padding:4px 10px;background:#f0f2f5}
 .status{height:18px;background:#f0f2f5;color:#777;font-size:10px;padding-left:12px}
@@ -127,7 +139,18 @@ button,input{font:inherit}
       </div>
       <div id="status" class="status"></div>
       <div id="rec" class="recording hidden">● Gravando áudio... clique novamente para parar</div>
+      
+      <!-- Painel Emojis -->
+      <div id="emojiPicker" class="emoji-picker hidden">
+        <div class="emoji-tabs">
+          <button id="tabEmojis" class="emoji-tab active">Emojis 😊</button>
+          <button id="tabEmoticons" class="emoji-tab">Emoticons :-) </button>
+        </div>
+        <div id="emojiList" class="emoji-content"></div>
+      </div>
+
       <div class="composer">
+        <button id="emojiToggleBtn" class="iconbtn" title="Emojis">😊</button>
         <button id="photoBtn" class="iconbtn" title="Foto">📎</button>
         <input id="file" type="file" accept="image/*,audio/*" class="hidden">
         <button id="micBtn" class="iconbtn" title="Gravar áudio">🎤</button>
@@ -149,6 +172,9 @@ var SUPABASE_URL="https://dvmaiospgekqfiwkhcfh.supabase.co";
 var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
 var USERS={"ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},"rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},"qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"}};
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
+
+var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","🤏","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
+var EMOTICONS = [":-)", ":-D", ";-)", "xD", ":-(", ":'-(", ":-P", ":-O", "B-)", ":-|", ":/*", "\\(^o^)/", "(¬_¬)", "(•_•)", "( ͡° ͜ʖ ͡°)", "¯\\_(ツ)_/¯", "(O_o)", "(>_<)", "(T_T)", "(x_x)", "(='.'=)", "(^_-)", "(*_*)"];
 
 function $(x){return document.getElementById(x)}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
@@ -191,6 +217,7 @@ function openApp(){
   $('me').innerHTML=esc(USERS[S.uid].name);
   applySavedColors();
   buildSide();
+  renderEmojiPicker('emojis');
 }
 
 function buildSide(){
@@ -244,7 +271,11 @@ function render(old){
     h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
     if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
     else if(m.type==="audio"){
-      h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"><a href="'+esc(m.url)+'" target="_blank">Ouvir áudio</a></audio>';
+      /* Solução de compatibilidade extrema para áudio no Android KitKat */
+      h+='<div class="audio-box">';
+      h+='<audio class="audio" controls preload="none" src="'+esc(m.url)+'"></audio>';
+      h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+      h+='</div>';
     }
     else h+=esc(m.text||"");
     h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
@@ -287,7 +318,10 @@ function sendMsg(m){
 
 function sendText(){
   var t=$('text').value.replace(/^\s+|\s+$/g,"");
-  if(t)sendMsg({senderId:S.uid,text:t,type:"text",timestamp:Date.now()});
+  if(t){
+    sendMsg({senderId:S.uid,text:t,type:"text",timestamp:Date.now()});
+    hideEmojiPicker();
+  }
 }
 
 function uploadFile(f){
@@ -329,12 +363,13 @@ function startRecord(){
     S.recording=true;
     $('rec').className="recording";
     
-    var mimeTypes = ["audio/mp4", "audio/aac", "audio/ogg", "audio/webm"];
+    /* Configura os MIME types aceitos garantindo audio/3gp e audio/mp4 */
     var selectedMime = "";
+    var mimes = ["audio/mp4", "audio/3gpp", "audio/aac", "audio/ogg", "audio/webm"];
     if(window.MediaRecorder && MediaRecorder.isTypeSupported){
-      for(var i=0; i<mimeTypes.length; i++){
-        if(MediaRecorder.isTypeSupported(mimeTypes[i])){
-          selectedMime = mimeTypes[i];
+      for(var i=0; i<mimes.length; i++){
+        if(MediaRecorder.isTypeSupported(mimes[i])){
+          selectedMime = mimes[i];
           break;
         }
       }
@@ -347,8 +382,8 @@ function startRecord(){
     S.rec.ondataavailable=function(e){if(e.data&&e.data.size)S.chunks.push(e.data);};
     S.rec.onstop=function(){
       stream.getTracks().forEach(function(t){t.stop();});
-      var finalMime = S.rec.mimeType || selectedMime || "audio/aac";
-      var ext = finalMime.indexOf("mp4")!==-1 ? "mp4" : (finalMime.indexOf("ogg")!==-1 ? "ogg" : "aac");
+      var finalMime = S.rec.mimeType || selectedMime || "audio/mp4";
+      var ext = finalMime.indexOf("mp4")!==-1 ? "mp4" : (finalMime.indexOf("3gp")!==-1 ? "3gp" : "aac");
       var blob=new Blob(S.chunks,{type: finalMime});
       var file=new File([blob],"audio_"+Date.now()+"."+ext,{type:blob.type});
       uploadFile(file);
@@ -376,6 +411,78 @@ function clearChat(){
   };
   x.send();
 }
+
+function renderEmojiPicker(type){
+  var container = $('emojiList');
+  container.innerHTML = "";
+  if(type === 'emojis'){
+    for(var i=0; i<EMOJIS.length; i++){
+      var btn = document.createElement('button');
+      btn.className = 'emoji-btn';
+      btn.innerHTML = EMOJIS[i];
+      btn.onclick = (function(val){
+        return function(){ insertAtCursor(val); };
+      })(EMOJIS[i]);
+      container.appendChild(btn);
+    }
+  } else {
+    for(var j=0; j<EMOTICONS.length; j++){
+      var btn2 = document.createElement('button');
+      btn2.className = 'emoticon-btn';
+      btn2.innerHTML = esc(EMOTICONS[j]);
+      btn2.onclick = (function(val){
+        return function(){ insertAtCursor(val + " "); };
+      })(EMOTICONS[j]);
+      container.appendChild(btn2);
+    }
+  }
+}
+
+function insertAtCursor(textToInsert) {
+  var input = $('text');
+  input.focus();
+  if (document.selection) {
+    var sel = document.selection.createRange();
+    sel.text = textToInsert;
+  } else if (input.selectionStart || input.selectionStart === 0) {
+    var startPos = input.selectionStart;
+    var endPos = input.selectionEnd;
+    input.value = input.value.substring(0, startPos) + textToInsert + input.value.substring(endPos, input.value.length);
+    input.selectionStart = startPos + textToInsert.length;
+    input.selectionEnd = startPos + textToInsert.length;
+  } else {
+    input.value += textToInsert;
+  }
+}
+
+function toggleEmojiPicker(){
+  var p = $('emojiPicker');
+  if(p.className.indexOf('hidden') !== -1){
+    p.className = 'emoji-picker';
+    var box = $('messages');
+    box.scrollTop = box.scrollHeight;
+  } else {
+    hideEmojiPicker();
+  }
+}
+
+function hideEmojiPicker(){
+  $('emojiPicker').className = 'emoji-picker hidden';
+}
+
+$('tabEmojis').onclick = function(){
+  $('tabEmojis').className = 'emoji-tab active';
+  $('tabEmoticons').className = 'emoji-tab';
+  renderEmojiPicker('emojis');
+};
+
+$('tabEmoticons').onclick = function(){
+  $('tabEmoticons').className = 'emoji-tab active';
+  $('tabEmojis').className = 'emoji-tab';
+  renderEmojiPicker('emoticons');
+};
+
+$('emojiToggleBtn').onclick = toggleEmojiPicker;
 
 function requestNotify(){
   if(window.Notification&&Notification.permission==="default")try{Notification.requestPermission();}catch(e){}
@@ -408,7 +515,6 @@ function logout(){
   location.reload();
 }
 
-/* Troca de Cores */
 function setColors(bg, bubble){
   $('messages').style.backgroundColor = bg;
   $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
@@ -434,8 +540,8 @@ $('bubbleColorPicker').onchange = function(){
   localStorage.chatBubbleColor = bubble;
 };
 
-/* Rolagem automática ao focar no teclado para Android KitKat */
 $('text').addEventListener('focus', function(){
+  hideEmojiPicker();
   setTimeout(function(){
     window.scrollTo(0, 0);
     var box = $('messages');
