@@ -31,7 +31,31 @@ function buildSide(){var ids=S.uid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2"?["qncO2nyU7i
 function select(other,b){var mine="ZwESBVxjszRqPiOy9dDhx7rRmUK2";S.other=other;S.conv=(S.uid===mine?(other==="qncO2nyU7id0Z6Oa3GXsgZ3udH92"?"user1_marly":"user1_nathan"):(S.uid==="qncO2nyU7id0Z6Oa3GXsgZ3udH92"?"user1_marly":"user1_nathan"));var bs=$('side').getElementsByTagName('button');for(var i=0;i<bs.length;i++)bs[i].className="person";b.className="person active";$('chatName').innerHTML=esc(USERS[other].name);$('clearBtn').className="";S.lastSeen=Date.now();load();if(S.timer)clearInterval(S.timer);S.timer=setInterval(load,2000);}
 function dbUrl(){return FIREBASE_DATABASE_URL+"/chat/"+S.conv+"/messages.json?auth="+encodeURIComponent(S.token)}
 function load(){if(!S.conv)return;api(dbUrl(),{method:"GET"},function(st,d){if(st===401){refreshToken();return}if(st!==200)return;var old=S.data;S.data=d||{};render(old);});}
-function render(old){var keys=[],k;for(k in S.data)if(S.data.hasOwnProperty(k))keys.push(k);keys.sort(function(a,b){return (Number(S.data[a].timestamp)||0)-(Number(S.data[b].timestamp)||0)});var h="";for(var i=0;i<keys.length;i++){var m=S.data[keys[i]],mine=m.senderId===S.uid;h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';else if(m.type==="audio")h+='<audio class="audio" controls src="'+esc(m.url)+'"></audio>';else h+=esc(m.text||"");h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';}$("messages").innerHTML=h||'<div class="empty">Nenhuma mensagem ainda.</div>';$('messages').scrollTop=$('messages').scrollHeight;var newest=keys.length?Number(S.data[keys[keys.length-1]].timestamp):0;if(old&&newest>S.lastSeen){var m2=S.data[keys[keys.length-1]];if(m2.senderId!==S.uid)notify(m2);}S.lastSeen=Math.max(S.lastSeen,newest);}
+function render(old){
+var box=$("messages"),wasNearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+var previousHeight=box.scrollHeight,previousTop=box.scrollTop;
+var keys=[],k;
+for(k in S.data)if(S.data.hasOwnProperty(k))keys.push(k);
+keys.sort(function(a,b){return (Number(S.data[a].timestamp)||0)-(Number(S.data[b].timestamp)||0)});
+var h="";
+for(var i=0;i<keys.length;i++){
+var m=S.data[keys[i]],mine=m.senderId===S.uid;
+h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
+if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
+else if(m.type==="audio")h+='<audio class="audio" controls src="'+esc(m.url)+'"></audio>';
+else h+=esc(m.text||"");
+h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
+}
+box.innerHTML=h||'<div class="empty">Nenhuma mensagem ainda.</div>';
+if(wasNearBottom){box.scrollTop=box.scrollHeight;}
+else{box.scrollTop=previousTop+(box.scrollHeight-previousHeight);}
+var newest=keys.length?Number(S.data[keys[keys.length-1]].timestamp):0;
+if(old&&newest>S.lastSeen){
+var m2=S.data[keys[keys.length-1]];
+if(m2.senderId!==S.uid)notify(m2);
+}
+S.lastSeen=Math.max(S.lastSeen,newest);
+}
 function formatTime(ts){var d=new Date(Number(ts)||Date.now()),h=d.getHours(),m=d.getMinutes();return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;}
 function notify(m){$('status').innerHTML="Nova mensagem";try{var a=$('notificationSound');a.currentTime=0;var pr=a.play();if(pr&&pr.catch)pr.catch(function(){});}catch(e){}if(window.Notification&&Notification.permission==="granted")try{new Notification("ChatTemp - "+USERS[S.other].name,{body:m.type==="image"?"📷 Foto":m.type==="audio"?"🎤 Áudio":m.text||"Nova mensagem"});}catch(e){}}
 function sendMsg(m){api(dbUrl(),{method:"POST",body:m},function(st){if(st===401){refreshToken();return}if(st===200){$('text').value="";load();}else $('status').innerHTML="Não foi possível enviar.";});}
