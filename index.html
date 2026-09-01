@@ -15,17 +15,21 @@ button,input{font:inherit}
 .login-card{width:100%;max-width:380px;background:#fff;border-radius:10px;padding:24px;box-shadow:0 3px 14px #0004}
 .login-card h1{margin:0 0 6px;color:#075e54}
 .login-card p{margin:0 0 18px;color:#666}
-.login-card input{width:100%;height:46px;margin:6px 0;padding:0 12px;border:1px solid #bbb;border-radius:7px}
+.login-card input{width:100%;height:46px;margin:6px 0;padding:0 12px;border:1px solid #bbb;border-radius:7px;color:#000;background:#fff}
 .login-card button{width:100%;height:46px;margin-top:8px;border:0;border-radius:7px;background:#075e54;color:#fff;font-weight:bold}
 .error{color:#b00020;margin-top:10px;font-size:13px}
 
-/* Ajustes para evitar que o teclado esconda o campo de texto no Android */
+/* Fix de tela e teclado virtual no Android */
 #app{position:fixed;top:0;bottom:0;left:0;right:0;display:flex;flex-direction:column}
-.top{height:58px;background:#075e54;color:#fff;display:flex;align-items:center;padding:0 12px;flex-shrink:0}
-.brand{font-size:19px;font-weight:bold;flex:1}
-.me{font-size:13px;margin-right:10px;color:#d7eeeb}
-.top button,.top input[type=color]{background:#064f48;color:#fff;border:0;border-radius:6px;padding:6px 8px;margin-left:4px;cursor:pointer}
-.top input[type=color]{width:34px;height:32px;padding:0;border:1px solid #ffffff44}
+.top{height:58px;background:#075e54;color:#fff;display:flex;align-items:center;padding:0 8px;flex-shrink:0}
+.brand{font-size:18px;font-weight:bold;flex:1}
+.me{font-size:12px;margin-right:6px;color:#d7eeeb}
+
+/* Seletores de Cor */
+.color-group{display:flex;align-items:center;margin-right:6px}
+.color-group label{font-size:10px;margin-right:2px;color:#fff}
+.top input[type=color]{width:28px;height:28px;padding:0;border:1px solid #ffffff66;background:transparent;cursor:pointer;border-radius:4px}
+.top button{background:#064f48;color:#fff;border:0;border-radius:6px;padding:6px 8px;cursor:pointer;font-size:12px}
 
 .body{display:flex;flex:1;min-height:0}
 .side{width:250px;background:#fff;border-right:1px solid #ccc;padding:8px;overflow-y:auto}
@@ -42,30 +46,42 @@ button,input{font:inherit}
 .bubble-row{display:flex;margin:4px 0}
 .bubble-row.mine{justify-content:flex-end}
 .bubble{max-width:82%;padding:7px 9px;border-radius:8px;background:#fff;box-shadow:0 1px 1px #0002;word-wrap:break-word;white-space:pre-wrap}
-
-/* Cor inicial dos seus balões */
 .mine .bubble{background:#dcf8c6}
 
 .time{font-size:10px;color:#777;float:right;margin:8px 0 0 8px}
 .photo{max-width:300px;width:100%;display:block;border-radius:6px}
-.audio{width:260px;max-width:100%;height:38px}
+.audio{width:240px;max-width:100%;height:40px}
 
+/* Campo de Digitação e Botões Corrigidos */
 .composer{background:#f0f2f5;padding:7px;display:flex;align-items:center;flex-shrink:0}
 .iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px}
-.composer input[type=text]{flex:1;height:42px;border:0;border-radius:21px;padding:0 14px;min-width:0;margin-right:6px}
+.composer input[type=text]{
+  flex:1;
+  height:42px;
+  border:1px solid #ccc !important;
+  border-radius:21px;
+  padding:0 14px;
+  min-width:0;
+  margin-right:6px;
+  background:#ffffff !important;
+  color:#000000 !important;
+  font-size:15px !important;
+  line-height:normal;
+  -webkit-appearance:none;
+}
 .send{width:72px;height:42px;border:0;border-radius:21px;background:#075e54;color:#fff;font-weight:bold}
 
 .recording{font-size:12px;color:#b00020;padding:4px 10px;background:#f0f2f5}
 .status{height:18px;background:#f0f2f5;color:#777;font-size:10px;padding-left:12px}
 .empty{text-align:center;color:#777;margin-top:30px}
-.date{font-size:10px;color:#888;margin-bottom:3px}
 
 @media(max-width:650px){
-  .side{width:110px;padding:4px}
-  .person{font-size:12px;padding:8px 4px}
+  .side{width:100px;padding:4px}
+  .person{font-size:11px;padding:8px 2px}
   .me{display:none}
   .bubble{max-width:90%}
-  .send{width:58px}
+  .send{width:54px}
+  .color-group label{display:none}
 }
 </style>
 <style id="customBubbleStyle"></style>
@@ -86,8 +102,17 @@ button,input{font:inherit}
   <div class="top">
     <div class="brand">ChatTemp</div>
     <div id="me" class="me"></div>
-    <!-- Seletor de cor dos balões de conversa -->
-    <input type="color" id="colorPicker" value="#dcf8c6" title="Cor dos meus balões">
+    
+    <div class="color-group" title="Cor do fundo">
+      <label>Fundo:</label>
+      <input type="color" id="bgColorPicker" value="#efe7dd">
+    </div>
+    
+    <div class="color-group" title="Cor dos meus balões">
+      <label>Balão:</label>
+      <input type="color" id="bubbleColorPicker" value="#dcf8c6">
+    </div>
+
     <button id="logout">Sair</button>
   </div>
   <div class="body">
@@ -104,9 +129,9 @@ button,input{font:inherit}
       <div id="rec" class="recording hidden">● Gravando áudio... clique novamente para parar</div>
       <div class="composer">
         <button id="photoBtn" class="iconbtn" title="Foto">📎</button>
-        <input id="file" type="file" accept="image/*" class="hidden">
+        <input id="file" type="file" accept="image/*,audio/*" class="hidden">
         <button id="micBtn" class="iconbtn" title="Gravar áudio">🎤</button>
-        <input id="text" type="text" placeholder="Mensagem" maxlength="2000">
+        <input id="text" type="text" placeholder="Mensagem" maxlength="2000" autocomplete="off">
         <button id="send" class="send">Enviar</button>
       </div>
     </div>
@@ -164,7 +189,7 @@ function openApp(){
   $("login").className="hidden";
   $('app').className="";
   $('me').innerHTML=esc(USERS[S.uid].name);
-  applySavedBubbleColor();
+  applySavedColors();
   buildSide();
 }
 
@@ -218,7 +243,9 @@ function render(old){
     var m=S.data[keys[i]],mine=m.senderId===S.uid;
     h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
     if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
-    else if(m.type==="audio")h+='<audio class="audio" controls src="'+esc(m.url)+'"></audio>';
+    else if(m.type==="audio"){
+      h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"><a href="'+esc(m.url)+'" target="_blank">Ouvir áudio</a></audio>';
+    }
     else h+=esc(m.text||"");
     h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
   }
@@ -278,30 +305,52 @@ function uploadFile(f){
     if(x.readyState!==4)return;
     if(x.status>=200&&x.status<300){
       var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
-      sendMsg({senderId:S.uid,type:f.type.indexOf("image/")===0?"image":"audio",url:publicUrl,text:"",timestamp:Date.now()});
-    }else $('status').innerHTML="Erro no upload. O bucket chat-media precisa permitir upload.";
+      var isImg = f.type.indexOf("image/")===0;
+      var isAud = f.type.indexOf("audio/")===0;
+      sendMsg({
+        senderId:S.uid,
+        type: isImg ? "image" : (isAud ? "audio" : "file"),
+        url:publicUrl,
+        text:"",
+        timestamp:Date.now()
+      });
+    }else $('status').innerHTML="Erro no upload de mídia.";
   };
   x.send(f);
 }
 
 function startRecord(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
-    $('status').innerHTML="Seu navegador não permite gravação de áudio.";
+    $('status').innerHTML="Seu navegador não suporta gravação direta.";
     return;
   }
   if(S.recording){stopRecord();return}
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
     S.recording=true;
     $('rec').className="recording";
-    var opts={};
-    try{opts={mimeType:"audio/webm"};}catch(e){}
-    try{S.rec=new MediaRecorder(stream,opts);}catch(e){S.rec=new MediaRecorder(stream);}
+    
+    var mimeTypes = ["audio/mp4", "audio/aac", "audio/ogg", "audio/webm"];
+    var selectedMime = "";
+    if(window.MediaRecorder && MediaRecorder.isTypeSupported){
+      for(var i=0; i<mimeTypes.length; i++){
+        if(MediaRecorder.isTypeSupported(mimeTypes[i])){
+          selectedMime = mimeTypes[i];
+          break;
+        }
+      }
+    }
+    
+    var opts = selectedMime ? {mimeType: selectedMime} : {};
+    try{ S.rec=new MediaRecorder(stream, opts); }catch(e){ S.rec=new MediaRecorder(stream); }
+    
     S.chunks=[];
     S.rec.ondataavailable=function(e){if(e.data&&e.data.size)S.chunks.push(e.data);};
     S.rec.onstop=function(){
       stream.getTracks().forEach(function(t){t.stop();});
-      var blob=new Blob(S.chunks,{type:S.rec.mimeType||"audio/webm"});
-      var file=new File([blob],"audio_"+Date.now()+".webm",{type:blob.type});
+      var finalMime = S.rec.mimeType || selectedMime || "audio/aac";
+      var ext = finalMime.indexOf("mp4")!==-1 ? "mp4" : (finalMime.indexOf("ogg")!==-1 ? "ogg" : "aac");
+      var blob=new Blob(S.chunks,{type: finalMime});
+      var file=new File([blob],"audio_"+Date.now()+"."+ext,{type:blob.type});
       uploadFile(file);
       S.recording=false;
       $('rec').className="recording hidden";
@@ -359,24 +408,33 @@ function logout(){
   location.reload();
 }
 
-/* Troca de Cor dos Balões de Mensagem */
-function setBubbleColor(color){
-  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + color + ' !important; }';
+/* Troca de Cores */
+function setColors(bg, bubble){
+  $('messages').style.backgroundColor = bg;
+  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
 }
 
-function applySavedBubbleColor(){
-  var color = localStorage.chatBubbleColor || "#dcf8c6";
-  setBubbleColor(color);
-  $('colorPicker').value = color;
+function applySavedColors(){
+  var bg = localStorage.chatBgColor || "#efe7dd";
+  var bubble = localStorage.chatBubbleColor || "#dcf8c6";
+  setColors(bg, bubble);
+  $('bgColorPicker').value = bg;
+  $('bubbleColorPicker').value = bubble;
 }
 
-$('colorPicker').onchange = function(){
-  var color = this.value;
-  setBubbleColor(color);
-  localStorage.chatBubbleColor = color;
+$('bgColorPicker').onchange = function(){
+  var bg = this.value;
+  $('messages').style.backgroundColor = bg;
+  localStorage.chatBgColor = bg;
 };
 
-/* Mantém o scroll visível ao focar no teclado (Android 4.4.2) */
+$('bubbleColorPicker').onchange = function(){
+  var bubble = this.value;
+  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
+  localStorage.chatBubbleColor = bubble;
+};
+
+/* Rolagem automática ao focar no teclado para Android KitKat */
 $('text').addEventListener('focus', function(){
   setTimeout(function(){
     window.scrollTo(0, 0);
