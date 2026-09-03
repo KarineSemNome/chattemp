@@ -900,12 +900,9 @@ function playNotificationSound(){
 function refreshTokenAndRetry(cb){
   if(!S.refresh) return;
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var body = JSON.stringify({
-    grant_type: "refresh_token",
-    refresh_token: S.refresh
-  });
+  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
   
-  req("POST", u, body, {"Content-Type": "application/json"}, function(st, d){
+  req("POST", u, body, {"Content-Type": "application/x-www-form-urlencoded"}, function(st, d){
     if(st === 200 && d && (d.id_token || d.idToken)){
       S.token = d.id_token || d.idToken;
       S.refresh = d.refresh_token || d.refreshToken;
@@ -915,7 +912,6 @@ function refreshTokenAndRetry(cb){
     }
   });
 }
-
 function fetchData(){
   if(!S.token) return;
   var u = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
