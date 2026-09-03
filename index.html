@@ -750,10 +750,10 @@ function login(){
   if(!e || !p){ $("err").innerHTML = "Preencha tudo."; return; }
   
   var u = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + FIREBASE_API_KEY;
-  var payload = JSON.stringify({ email: e, password: p, returnSecureToken: true });
+  var body = "email=" + enc(e) + "&password=" + enc(p) + "&returnSecureToken=true";
   
-  // Mantém application/json obrigatório para o Firebase e compatível com Android 4.4.2
-  req("POST", u, payload, { "Content-Type": "application/json" }, function(st, d, txt){
+  // Enviamos sem headers customizados para evitar preflight (OPTIONS) e erros de CORS
+  req("POST", u, body, {}, function(st, d, txt){
     if(st === 200 && d && d.idToken){
       if(!USERS[d.localId]){
         $("err").innerHTML = "Usuário não autorizado.";
@@ -777,32 +777,15 @@ function login(){
 function refreshTokenAndRetry(cb){
   if(!S.refresh) return;
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var payload = JSON.stringify({
-    grant_type: "refresh_token",
-    refresh_token: S.refresh
-  });
+  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
   
-  req("POST", u, payload, { "Content-Type": "application/json" }, function(st, d){
+  req("POST", u, body, {}, function(st, d){
     if(st === 200 && d && (d.id_token || d.idToken)){
       S.token = d.id_token || d.idToken;
       S.refresh = d.refresh_token || d.refreshToken;
       if(cb) cb();
     } else {
       logout();
-    }
-  });
-}
-      S.token=d.idToken;
-      S.refresh=d.refreshToken;
-      S.uid=d.localId;
-      $("login").classList.add("hidden");
-      $("app").classList.remove("hidden");
-      $("me").innerHTML=esc(USERS[S.uid]?USERS[S.uid].name:S.uid);
-      loadSavedColors();
-      renderSide();
-      startSync();
-    }else{
-      $("err").innerHTML="Erro no login: "+(d&&d.error?d.error.message:st);
     }
   });
 }
@@ -933,21 +916,6 @@ function playNotificationSound(){
   } catch(e) {}
 }
 
-function refreshTokenAndRetry(cb){
-  if(!S.refresh) return;
-  var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
-  
-  req("POST", u, body, {"Content-Type": "application/x-www-form-urlencoded"}, function(st, d){
-    if(st === 200 && d && (d.id_token || d.idToken)){
-      S.token = d.id_token || d.idToken;
-      S.refresh = d.refresh_token || d.refreshToken;
-      if(cb) cb();
-    } else {
-      logout();
-    }
-  });
-}
 function fetchData(){
   if(!S.token) return;
   var u = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
