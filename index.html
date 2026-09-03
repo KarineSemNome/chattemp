@@ -1,137 +1,1071 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Chat</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; background: #e5ddd5; height: 100vh; display: flex; flex-direction: column; }
-    #messages { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; }
-    .bubble-row { display: flex; margin-bottom: 8px; width: 100%; }
-    .bubble-row.mine { justify-content: flex-end; }
-    .bubble { max-width: 75%; background: #fff; padding: 8px 10px; border-radius: 7.5px; position: relative; font-size: 14px; word-wrap: break-word; }
-    .mine .bubble { background: #dcf8c6; }
-    .sticker-bubble { background: transparent !important; box-shadow: none !important; padding: 0 !important; }
-    .sticker-image { max-width: 150px; max-height: 150px; display: block; }
-    .photo { max-width: 100%; border-radius: 5px; display: block; margin-bottom: 5px; }
-    .time { font-size: 10px; color: #999; float: right; margin-left: 10px; margin-top: 4px; }
-    .empty { text-align: center; color: #777; margin-top: 20px; font-size: 14px; }
-    .audio-box { display: flex; flex-direction: column; gap: 4px; }
-    .audio-fallback-btn { font-size: 11px; color: #075e54; text-decoration: none; font-weight: bold; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#075e54">
+<title>Chat Temporário</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#efe7dd;color:#222}
+button,input{font:inherit}
+.hidden{display:none!important}
+
+#login{height:100%;display:flex;align-items:center;justify-content:center;background:#075e54;padding:18px}
+.login-card{width:100%;max-width:380px;background:#fff;border-radius:10px;padding:24px;box-shadow:0 3px 14px #0004}
+.login-card h1{margin:0 0 6px;color:#075e54}
+.login-card p{margin:0 0 18px;color:#666}
+.login-card input{width:100%;height:46px;margin:6px 0;padding:0 12px;border:1px solid #bbb;border-radius:7px;color:#000;background:#fff}
+.login-card button{width:100%;height:46px;margin-top:8px;border:0;border-radius:7px;background:#075e54;color:#fff;font-weight:bold}
+.error{color:#b00020;margin-top:10px;font-size:13px}
+
+/* Layout App */
+#app{position:fixed;top:0;bottom:0;left:0;right:0;display:flex;flex-direction:column}
+.top{height:58px;background:#075e54;color:#fff;display:flex;align-items:center;padding:0 8px;flex-shrink:0}
+.brand{font-size:18px;font-weight:bold;flex:1}
+.me{font-size:12px;margin-right:6px;color:#d7eeeb}
+
+/* Seletores de Cor */
+.color-group{display:flex;align-items:center;margin-right:6px}
+.color-group label{font-size:10px;margin-right:2px;color:#fff}
+.top input[type=color]{width:28px;height:28px;padding:0;border:1px solid #ffffff66;background:transparent;cursor:pointer;border-radius:4px}
+.top button{background:#064f48;color:#fff;border:0;border-radius:6px;padding:6px 8px;cursor:pointer;font-size:12px}
+
+.body{display:flex;flex:1;min-height:0}
+.side{width:250px;background:#fff;border-right:1px solid #ccc;padding:8px;overflow-y:auto}
+.person{width:100%;border:0;border-bottom:1px solid #eee;background:#fff;text-align:left;padding:13px 10px;font-weight:bold;cursor:pointer}
+.person.active{background:#e8f5f3}
+.person small{display:block;color:#888;font-weight:normal;margin-top:3px}
+
+.chat{flex:1;display:flex;flex-direction:column;min-width:0;height:100%}
+.chatbar{height:52px;background:#f0f2f5;border-bottom:1px solid #ccc;display:flex;align-items:center;padding:0 10px;font-weight:bold;flex-shrink:0}
+.chatbar .name{flex:1}
+.chatbar button{border:0;background:transparent;color:#555;font-size:13px}
+
+.messages{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;background:#efe7dd}
+.bubble-row{display:flex;margin:4px 0}
+.bubble-row.mine{justify-content:flex-end}
+.bubble{max-width:82%;padding:7px 9px;border-radius:8px;background:#fff;box-shadow:0 1px 1px #0002;word-wrap:break-word;white-space:pre-wrap}
+.mine .bubble{background:#dcf8c6}
+
+.time{font-size:10px;color:#777;float:right;margin:8px 0 0 8px}
+.photo{max-width:300px;width:100%;display:block;border-radius:6px}
+.audio-box{display:flex;flex-direction:column;gap:4px;min-width:220px}
+.audio{width:100%;height:40px}
+.audio-fallback-btn{display:inline-block;padding:6px 10px;background:#075e54;color:#fff;text-decoration:none;border-radius:4px;font-size:12px;text-align:center;font-weight:bold;margin-top:2px}
+
+/* Painel Emojis */
+.emoji-picker{height:160px;background:#fff;border-top:1px solid #ccc;display:flex;flex-direction:column;flex-shrink:0}
+.emoji-tabs{display:flex;background:#e0e0e0;border-bottom:1px solid #ccc}
+.emoji-tab{flex:1;padding:8px;border:0;background:transparent;font-weight:bold;cursor:pointer;font-size:12px;color:#555}
+.emoji-tab.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.emoji-content{flex:1;padding:8px;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start}
+.emoji-btn{background:transparent;border:0;font-size:22px;padding:6px;cursor:pointer;border-radius:4px;margin:2px}
+.emoji-btn:hover,.emoji-btn:active{background:#eee}
+.emoticon-btn{background:#f0f2f5;border:1px solid #ccc;font-size:13px;padding:6px 10px;cursor:pointer;border-radius:14px;margin:3px;font-family:monospace}
+
+/* Campo de Digitação */
+.composer{background:#f0f2f5;padding:8px;display:flex;align-items:flex-end;flex-shrink:0}
+.iconbtn{width:44px;height:44px;min-width:44px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px;cursor:pointer}
+.composer textarea{
+  flex:1;
+  height:48px;
+  min-height:48px;
+  max-height:96px;
+  resize:none;
+  overflow-y:auto;
+  border:1px solid #ccc !important;
+  border-radius:24px;
+  padding:12px 14px;
+  min-width:0;
+  margin-right:6px;
+  background:#ffffff !important;
+  color:#000000 !important;
+  font-size:16px !important;
+  line-height:22px;
+  -webkit-appearance:none;
+}
+.send{width:78px;height:44px;min-width:78px;border:0;border-radius:22px;background:#075e54;color:#fff;font-weight:bold;cursor:pointer}
+
+.recording{font-size:12px;color:#b00020;padding:4px 10px;background:#f0f2f5}
+.status{height:18px;background:#f0f2f5;color:#777;font-size:10px;padding-left:12px}
+
+/* Stickers */
+.sticker-picker{height:210px;background:#fff;border-top:1px solid #ccc;display:flex;flex-direction:column;flex-shrink:0}
+.sticker-tabs{display:flex;background:#e0e0e0;border-bottom:1px solid #ccc}
+.sticker-tab{flex:1;padding:8px;border:0;background:transparent;font-weight:bold;cursor:pointer;font-size:12px;color:#555}
+.sticker-tab.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.sticker-actions{display:flex;background:#f5f5f5;border-bottom:1px solid #ccc}
+.sticker-action{flex:1;padding:8px 4px;border:0;background:transparent;font-weight:bold;font-size:12px;color:#555;cursor:pointer}
+.sticker-action.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.sticker-list{position:relative}
+.sticker-item{width:25%;min-width:72px;text-align:center;padding:4px;position:relative}
+.sticker-item .sticker-btn{width:100%;min-width:0}
+.sticker-save{display:block;width:100%;height:22px;border:0;border-radius:4px;background:#075e54;color:#fff;font-size:10px;cursor:pointer;margin-top:2px}
+.sticker-owner{font-size:9px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticker-create{padding:10px;background:#fff;border-bottom:1px solid #ccc}
+.sticker-create input{width:100%;height:36px;border:1px solid #bbb;border-radius:5px;padding:0 8px;margin-bottom:6px}
+.sticker-create button{height:36px;border:0;border-radius:5px;background:#075e54;color:#fff;font-weight:bold;padding:0 12px;margin-right:4px}
+.sticker-create .cancel{background:#777}
+.sticker-empty{text-align:center;color:#777;padding:20px;font-size:12px}
+
+.sticker-list{flex:1;padding:8px;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start}
+.sticker-btn{width:25%;min-width:72px;height:82px;background:#fff;border:0;cursor:pointer;border-radius:8px;padding:5px}
+.sticker-btn:active{background:#eee}
+.sticker-btn img{width:68px;height:68px;max-width:100%;display:block;margin:auto}
+.sticker-bubble{width:150px;height:150px;max-width:150px;background:transparent!important;box-shadow:none!important;padding:2px}
+.sticker-image{width:145px;height:145px;display:block}
+
+/* Conversa em tela cheia */
+.conversation-fullscreen .top{display:none}
+.conversation-fullscreen .side{display:none}
+.conversation-fullscreen .body{height:100%}
+.conversation-fullscreen .chatbar{height:54px}
+.back-chat{display:none}
+.fullscreen-btn{border:0;background:transparent;color:#555;font-size:18px;padding:6px 8px;cursor:pointer}.back-chat{border:0;background:transparent;color:#075e54;font-size:28px;line-height:1;padding:3px 8px;cursor:pointer}
+.empty{text-align:center;color:#777;margin-top:30px}
+
+@media(max-width:650px){
+  .top{height:50px}
+  .brand{font-size:16px}
+  .side{width:100%;padding:4px}
+  .person{font-size:14px;padding:14px 10px}
+  .me{display:none}
+  .body{position:relative}
+  .chat{display:none}
+  .body.has-chat .side{display:none}
+  .body.has-chat .chat{display:flex;width:100%}
+  .body.has-chat .back-chat{display:block}
+  .bubble{max-width:90%}
+  .send{width:62px;min-width:62px;font-size:12px}
+  .color-group{display:none}
+  .composer{padding:6px}
+  .iconbtn{width:40px;min-width:40px;height:40px;font-size:18px;margin-right:4px}
+  .composer textarea{height:52px;min-height:52px;border-radius:25px;font-size:16px!important;padding:13px 13px}
+  .sticker-picker{height:250px}
+  .sticker-btn{width:25%;min-width:65px;height:78px}
+  .sticker-item{width:25%;min-width:65px}
+  .sticker-save{font-size:9px}
+  .sticker-create input{font-size:16px}
+  .sticker-btn img{width:62px;height:62px}
+  .sticker-bubble{width:135px;height:135px;max-width:135px}
+  .sticker-image{width:130px;height:130px}
+}
+
+/* Android 4.4.2: keep layout simple and avoid modern viewport-dependent behavior. */
+@media(max-width:650px) and (orientation:landscape){
+  .sticker-picker{height:170px}
+}
+</style>
+<style id="customBubbleStyle"></style>
 </head>
 <body>
+<div id="login">
+  <div class="login-card">
+    <h1>ChatTemp</h1>
+    <p>Conversa privada</p>
+    <input id="email" placeholder="E-mail" autocomplete="off">
+    <input id="pass" type="password" placeholder="Senha">
+    <button id="loginBtn">Entrar</button>
+    <div id="err" class="error"></div>
+  </div>
+</div>
 
-  <div id="messages"></div>
-
-  <script>
-    // Utilitários legados para compatibility total com ES5 (Android 4.4.2)
-    function $(id) { return document.getElementById(id); }
+<div id="app" class="hidden">
+  <div class="top">
+    <div class="brand">ChatTemp</div>
+    <div id="me" class="me"></div>
     
-    function esc(str) {
-      if (!str) return "";
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
+    <div class="color-group" title="Cor do fundo">
+      <label>Fundo:</label>
+      <input type="color" id="bgColorPicker" value="#efe7dd">
+    </div>
+    
+    <div class="color-group" title="Cor dos meus balões">
+      <label>Balão:</label>
+      <input type="color" id="bubbleColorPicker" value="#dcf8c6">
+    </div>
 
-    function formatTime(ts) {
-      if (!ts) return "";
-      var d = new Date(Number(ts));
-      var h = d.getHours();
-      var m = d.getMinutes();
-      return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m);
-    }
-
-    // Variáveis globais de estado da aplicação (exemplo de estrutura)
-    var S = {
-      data: {},
-      uid: "user_1",
-      conv: "group_1",
-      lastSeen: 0
-    };
-    var GROUP_ID = "group_1";
-    var USERS = {};
-
-    function notify(m) {
-      // Implementação da notificação
-    }
-
-    // Função de Renderização corrigida e compatível com Android KitKat
-    function render(old) {
-      var box = $("messages");
-      var wasNearBottom = (box.scrollHeight - box.scrollTop - box.clientHeight) < 80;
-      var previousHeight = box.scrollHeight;
-      var previousTop = box.scrollTop;
+    <button id="logout">Sair</button>
+  </div>
+  <div class="body">
+    <div id="side" class="side"></div>
+    <div class="chat">
+      <div class="chatbar">
+        <button id="backChat" class="back-chat" title="Voltar">‹</button>
+        <div id="chatName" class="name">Selecione uma conversa</div>
+        <button id="fullScreenBtn" class="fullscreen-btn" title="Tela cheia">⛶</button>
+        <button id="clearBtn" class="hidden">Limpar</button>
+      </div>
+      <div id="messages" class="messages">
+        <div class="empty">Escolha uma conversa.</div>
+      </div>
+      <div id="status" class="status"></div>
+      <div id="rec" class="recording hidden">● Gravando áudio... clique novamente para parar</div>
       
-      var keys = [];
-      var k;
-      for (k in S.data) {
-        if (S.data.hasOwnProperty(k)) {
-          keys.push(k);
-        }
-      }
+      <div id="emojiPicker" class="emoji-picker hidden">
+        <div class="emoji-tabs">
+          <button id="tabEmojis" class="emoji-tab active">Emojis</button>
+          <button id="tabEmoticons" class="emoji-tab">Emoticons</button>
+        </div>
+        <div id="emojiList" class="emoji-content"></div>
+      </div>
 
-      keys.sort(function(a, b) {
-        return (Number(S.data[a].timestamp) || 0) - (Number(S.data[b].timestamp) || 0);
-      });
+      <div id="stickerPicker" class="sticker-picker hidden">
+        <div class="sticker-tabs">
+          <button id="stickerTab" class="sticker-tab active">Stickers</button>
+        </div>
+        <div class="sticker-actions">
+          <button id="stickerAllBtn" class="sticker-action active">Todos</button>
+          <button id="stickerMineBtn" class="sticker-action">Meus</button>
+          <button id="stickerSavedBtn" class="sticker-action">Salvos</button>
+          <button id="stickerNewBtn" class="sticker-action">Criar</button>
+        </div>
+        <div id="stickerCreate" class="sticker-create hidden">
+          <input id="stickerName" type="text" maxlength="40" placeholder="Nome do sticker">
+          <input id="stickerFile" type="file" accept="image/*" class="hidden">
+          <button id="stickerChooseBtn">Escolher imagem</button>
+          <button id="stickerCreateBtn">Criar sticker</button>
+          <button id="stickerCancelBtn" class="cancel">Cancelar</button>
+          <div id="stickerCreateStatus" class="sticker-owner"></div>
+        </div>
+        <div id="stickerList" class="sticker-list"></div>
+      </div>
 
-      var h = "";
-      for (var i = 0; i < keys.length; i++) {
-        var m = S.data[keys[i]];
-        var mine = m.senderId === S.uid;
-        var senderName = USERS[m.senderId] ? USERS[m.senderId].name : "Usuário";
+      <div class="composer">
+        <button id="emojiToggleBtn" class="iconbtn" title="Emojis">😊</button>
+        <button id="stickerToggleBtn" class="iconbtn" title="Stickers">★</button>
+        <button id="photoBtn" class="iconbtn" title="Foto">📎</button>
+        <input id="file" type="file" accept="image/*,audio/*" class="hidden">
+        <button id="micBtn" class="iconbtn" title="Gravar áudio">🎤</button>
+        <textarea id="text" placeholder="Digite sua mensagem..." maxlength="2000" autocomplete="off"></textarea>
+        <button id="send" class="send">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        if (m.type === "sticker") {
-          // Correção do Bug: Acumula no 'h' sem sobrescrever nem usar 'continue'
-          h += '<div class="bubble-row ' + (mine ? 'mine' : '') + '"><div class="bubble sticker-bubble">';
-          if (!mine && S.conv === GROUP_ID) {
-            h += '<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">' + esc(senderName) + '</div>';
-          }
-          h += '<img class="sticker-image" src="' + esc(m.url) + '" alt="Sticker">';
-          h += '<span class="time">' + formatTime(m.timestamp) + '</span></div></div>';
-        } else {
-          h += '<div class="bubble-row ' + (mine ? 'mine' : '') + '"><div class="bubble">';
-          if (!mine && S.conv === GROUP_ID) {
-            h += '<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">' + esc(senderName) + '</div>';
-          }
+<audio id="notificationSound" preload="auto">
+  <source src="notificacao.mp3" type="audio/mpeg">
+</audio>
 
-          if (m.type === "image") {
-            h += '<a href="' + esc(m.url) + '" target="_blank"><img class="photo" src="' + esc(m.url) + '"></a>';
-          } else if (m.type === "audio") {
-            h += '<div class="audio-box">';
-            h += '<audio class="audio" controls preload="metadata" src="' + esc(m.url) + '"></audio>';
-            h += '<a href="' + esc(m.url) + '" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
-            h += '</div>';
-          } else {
-            h += esc(m.text || "");
-          }
+<script>
+var FIREBASE_API_KEY="AIzaSyDLqp4ieS3LqeJhHYLud1UjqtR7_5W8QfA";
+var FIREBASE_DATABASE_URL="https://chat-temporario-b83d1-default-rtdb.firebaseio.com";
+var SUPABASE_URL="https://dvmaiospgekqfiwkhcfh.supabase.co";
+var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
 
-          h += '<span class="time">' + formatTime(m.timestamp) + '</span></div></div>';
-        }
-      }
+var USER1_UID = "ZwESBVxjszRqPiOy9dDhx7rRmUK2";
+var NATHAN_UID = "rN0rwjdIxUV7ov3pbNWe745i7VE3";
+var MARLY_UID  = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
 
-      box.innerHTML = h || '<div class="empty">Nenhuma mensagem ainda.</div>';
+var USERS={
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
+  "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3":{name:"Alex"},
+  "sOkHZMVNengztduR2L5UymjI3zc2":{name:"Pedro"},
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
+  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"},
+  "rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"}
+};
 
-      if (wasNearBottom) {
-        box.scrollTop = box.scrollHeight;
-      } else {
-        box.scrollTop = previousTop + (box.scrollHeight - previousHeight);
-      }
+var GROUP_ID="auzover";
+var GROUP_NAME="Auzover";
+var GROUP_MEMBERS=[
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2",
+  "8ovQde8DNAcjscHXqpadOrYgyFn2",
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3",
+  "sOkHZMVNengztduR2L5UymjI3zc2",
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62",
+  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
+];
 
-      var newest = keys.length ? Number(S.data[keys[keys.length - 1]].timestamp) : 0;
-      if (old && newest > S.lastSeen) {
-        var m2 = S.data[keys[keys.length - 1]];
-        if (m2.senderId !== S.uid) {
-          notify(m2);
-        }
-      }
-      S.lastSeen = Math.max(S.lastSeen, newest);
+var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
+
+var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
+var EMOTICONS = [":-)", ":-D", ";-)", "xD", ":-(", ":'-(", ":-P", ":-O", "B-)", ":-|", ":/*", "\\(^o^)/", "(¬_¬)", "(•_•)", "( ͡° ͜ʖ ͡°)", "¯\\_(ツ)_/¯", "(O_o)", "(>_<)", "(T_T)", "(x_x)", "(='.'=)", "(^_-)", "(*_*)"];
+
+function $(x){return document.getElementById(x)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+
+function api(url,opt,cb){
+  var x=new XMLHttpRequest();
+  x.open(opt.method||"GET",url,true);
+  if(opt.body!==undefined)x.setRequestHeader("Content-Type","application/json");
+  x.onreadystatechange=function(){
+    if(x.readyState!==4)return;
+    var d=null;
+    try{d=x.responseText?JSON.parse(x.responseText):null}catch(e){}
+    cb(x.status,d,x.responseText);
+  };
+  x.send(opt.body!==undefined?(opt.body===null?null:JSON.stringify(opt.body)):null);
+}
+
+function getPairId(uid1, uid2) {
+  return uid1 < uid2 ? "p_" + uid1 + "_" + uid2 : "p_" + uid2 + "_" + uid1;
+}
+
+function login(){
+  var e=$("email").value.replace(/^\s+|\s+$/g,"");
+  var p=$("pass").value;
+  $("err").innerHTML="";
+  if(e.toLowerCase()==="usuario@chat.com")e="usuário@chat.local";
+  if(e.toLowerCase()==="nathan@chat.local")e="nathan@chat.local";
+  if(e.toLowerCase()==="marly@chat")e="marly@chat";
+
+  var u="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+encodeURIComponent(FIREBASE_API_KEY);
+  api(u,{method:"POST",body:{email:e,password:p,returnSecureToken:true}},function(st,d){
+    if(st!==200||!d||!USERS[d.localId]){$("err").innerHTML="E-mail ou senha inválidos.";return}
+    S.token=d.idToken;
+    S.refresh=d.refreshToken;
+    S.uid=d.localId;
+    localStorage.chatT=S.token;
+    localStorage.chatR=S.refresh;
+    localStorage.chatU=S.uid;
+    openApp();
+    requestNotify();
+  });
+}
+
+function openApp(){
+  $("login").className="hidden";
+  $("app").className="";
+  $("me").innerHTML=esc(USERS[S.uid].name);
+  applySavedColors();
+  buildSide();
+  renderEmojiPicker("emojis");
+  var firstBtn = $("side").getElementsByTagName("button")[0];
+  if(firstBtn) firstBtn.click();
+}
+
+function buildSide(){
+  var h = "";
+  var myUid = S.uid;
+
+  if(myUid === NATHAN_UID || myUid === MARLY_UID) {
+    var pId = getPairId(myUid, USER1_UID);
+    h += '<button class="person" data-id="'+pId+'" data-other="'+USER1_UID+'">'+
+         esc(USERS[USER1_UID].name)+
+         '<small>Conversa Privada</small></button>';
+  } else if(myUid === USER1_UID) {
+    h += '<button class="person" data-id="'+GROUP_ID+'">'+
+         esc(GROUP_NAME)+
+         '<small>Grupo • 6 participantes</small></button>';
+    
+    var uids = [NATHAN_UID, MARLY_UID, "8ovQde8DNAcjscHXqpadOrYgyFn2", "c3r7cT6qUjbn0a312xk3lCo5eDJ3", "sOkHZMVNengztduR2L5UymjI3zc2", "iFZf5DwP8CdeJfcFCReIKQwn8k62", "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"];
+    for(var i=0; i<uids.length; i++){
+      var other = uids[i];
+      var pair = getPairId(myUid, other);
+      h += '<button class="person" data-id="'+pair+'" data-other="'+other+'">'+
+           esc(USERS[other].name)+
+           '<small>Conversa Privada</small></button>';
     }
-  </script>
+  } else {
+    h += '<button class="person" data-id="'+GROUP_ID+'">'+
+         esc(GROUP_NAME)+
+         '<small>Grupo • 6 participantes</small></button>';
+    
+    for(var j=0; j<GROUP_MEMBERS.length; j++){
+      var mUid = GROUP_MEMBERS[j];
+      if(mUid !== myUid){
+        var pairId = getPairId(myUid, mUid);
+        h += '<button class="person" data-id="'+pairId+'" data-other="'+mUid+'">'+
+             esc(USERS[mUid].name)+
+             '<small>Conversa Privada</small></button>';
+      }
+    }
+  }
+
+  $("side").innerHTML=h;
+  var bs=$("side").getElementsByTagName("button");
+  for(var k=0; k<bs.length; k++){
+    bs[k].onclick=function(){ selectChat(this); };
+  }
+}
+
+function selectChat(b){
+  var chatId = b.getAttribute("data-id");
+  var otherId = b.getAttribute("data-other");
+
+  S.conv = chatId;
+  S.other = otherId || null;
+
+  var bs=$("side").getElementsByTagName("button");
+  for(var i=0;i<bs.length;i++) bs[i].className="person";
+  b.className="person active";
+
+  if(chatId === GROUP_ID){
+    $("chatName").innerHTML=esc(GROUP_NAME)+" <small style='font-weight:normal;color:#777'>• 6 participantes</small>";
+    $("clearBtn").className="";
+  } else {
+    var otherName = USERS[otherId] ? USERS[otherId].name : "Privado";
+    $("chatName").innerHTML=esc(otherName)+" <small style='font-weight:normal;color:#777'>• Privado</small>";
+    $("clearBtn").className="hidden";
+  }
+
+  document.querySelector(".body").className = "body has-chat";
+  S.lastSeen=Date.now();
+  load();
+  if(S.timer)clearInterval(S.timer);
+  S.timer=setInterval(load,2000);
+}
+
+function dbUrl(){
+  return FIREBASE_DATABASE_URL+"/chat/"+S.conv+"/messages.json?auth="+encodeURIComponent(S.token);
+}
+
+function load(){
+  if(!S.conv)return;
+  api(dbUrl(),{method:"GET"},function(st,d){
+    if(st===401){refreshToken();return}
+    if(st!==200)return;
+    var old=S.data;
+    S.data=d||{};
+    render(old);
+  });
+}
+
+function render(old){
+  var box=$("messages"),wasNearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+  var previousHeight=box.scrollHeight,previousTop=box.scrollTop;
+  var keys=[],k;
+  for(k in S.data)if(S.data.hasOwnProperty(k))keys.push(k);
+  keys.sort(function(a,b){return (Number(S.data[a].timestamp)||0)-(Number(S.data[b].timestamp)||0)});
+  var h="";
+  for(var i=0;i<keys.length;i++){
+    var m=S.data[keys[i]],mine=m.senderId===S.uid;
+    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Usuário";
+    h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
+    if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
+    if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
+    else if(m.type==="audio"){
+      h+='<div class="audio-box">';
+      h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"></audio>';
+      h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+      h+='</div>';
+    }
+    else if(m.type==="sticker"){
+      h='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble sticker-bubble">';
+      h+='<img class="sticker-image" src="'+esc(m.url)+'" alt="Sticker">';
+      h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
+      continue;
+    }
+    else h+=esc(m.text||"");
+    h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
+  }
+  box.innerHTML=h||'<div class="empty">Nenhuma mensagem ainda.</div>';
+  if(wasNearBottom){box.scrollTop=box.scrollHeight;}
+  else{box.scrollTop=previousTop+(box.scrollHeight-previousHeight);}
+  var newest=keys.length?Number(S.data[keys[keys.length-1]].timestamp):0;
+  if(old&&newest>S.lastSeen){
+    var m2=S.data[keys[keys.length-1]];
+    if(m2.senderId!==S.uid)notify(m2);
+  }
+  S.lastSeen=Math.max(S.lastSeen,newest);
+}
+
+function formatTime(ts){
+  var d=new Date(Number(ts)||Date.now()),h=d.getHours(),m=d.getMinutes();
+  return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;
+}
+
+function notify(m){
+  $('status').innerHTML="Nova mensagem";
+  try{
+    var a=$('notificationSound');
+    a.currentTime=0;
+    var pr=a.play();
+    if(pr&&pr.catch)pr.catch(function(){});
+  }catch(e){}
+  if(window.Notification&&Notification.permission==="granted")try{
+    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"ChatTemp";
+    new Notification(senderName,{body:m.type==="image"?"Foto":m.type==="audio"?"Áudio":m.type==="sticker"?"Sticker":m.text||"Nova mensagem"});
+  }catch(e){}
+}
+
+function sendMsg(m){
+  api(dbUrl(),{method:"POST",body:m},function(st){
+    if(st===401){refreshToken();return}
+    if(st===200){$('text').value="";load();}else $('status').innerHTML="Não foi possível enviar.";
+  });
+}
+
+function sendText(){
+  var t=$('text').value.replace(/^\s+|\s+$/g,"");
+  if(t){
+    sendMsg({senderId:S.uid,senderName:USERS[S.uid].name,text:t,type:"text",timestamp:Date.now()});
+    hideEmojiPicker();
+    hideStickerPicker();
+  }
+}
+
+function uploadFile(f){
+  if(!f||!S.conv)return;
+  if(f.size>50*1024*1024){$('status').innerHTML="Arquivo acima de 50 MB.";return}
+  var ext=(f.name.split('.').pop()||"bin").replace(/[^a-zA-Z0-9]/g,"");
+  var path=S.conv+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"."+ext;
+  var url=SUPABASE_URL+"/storage/v1/object/chat-media/"+path;
+  var x=new XMLHttpRequest();
+  x.open("POST",url,true);
+  x.setRequestHeader("Authorization","Bearer "+SUPABASE_ANON_KEY);
+  x.setRequestHeader("apikey",SUPABASE_ANON_KEY);
+  x.setRequestHeader("Content-Type",f.type||"application/octet-stream");
+  x.onreadystatechange=function(){
+    if(x.readyState!==4)return;
+    if(x.status>=200&&x.status<300){
+      var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
+      var isImg = f.type.indexOf("image/")===0;
+      var isAud = f.type.indexOf("audio/")===0;
+      sendMsg({
+        senderId:S.uid,
+        senderName:USERS[S.uid].name,
+        type: isImg ? "image" : (isAud ? "audio" : "file"),
+        url:publicUrl,
+        text:"",
+        timestamp:Date.now()
+      });
+    }else $('status').innerHTML="Erro no upload de mídia.";
+  };
+  x.send(f);
+}
+
+/* Gravação de Áudio Otimizada para Computador e Celular */
+function startRecord(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    $('status').innerHTML="Seu navegador não suporta gravação direta.";
+    return;
+  }
+  if(S.recording){stopRecord();return}
+  
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    S.recording=true;
+    $('rec').className="recording";
+    
+    var options = {};
+    var mimeType = "audio/mp4";
+    
+    if (window.MediaRecorder && MediaRecorder.isTypeSupported) {
+      if (MediaRecorder.isTypeSupported('audio/mp4')) {
+        options = { mimeType: 'audio/mp4' };
+        mimeType = 'audio/mp4';
+      } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        options = { mimeType: 'audio/webm;codecs=opus' };
+        mimeType = 'audio/webm';
+      } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+        options = { mimeType: 'audio/ogg;codecs=opus' };
+        mimeType = 'audio/ogg';
+      } else if (MediaRecorder.isTypeSupported('audio/wav')) {
+        options = { mimeType: 'audio/wav' };
+        mimeType = 'audio/wav';
+      }
+    }
+
+    try {
+      S.rec = new MediaRecorder(stream, options);
+    } catch(e) {
+      S.rec = new MediaRecorder(stream);
+    }
+    
+    S.chunks=[];
+    S.rec.ondataavailable=function(e){ if(e.data && e.data.size > 0) S.chunks.push(e.data); };
+    
+    S.rec.onstop=function(){
+      stream.getTracks().forEach(function(t){ t.stop(); });
+      
+      var finalMime = S.rec.mimeType || mimeType;
+      var ext = 'mp4';
+      if(finalMime.indexOf('webm') !== -1) ext = 'webm';
+      if(finalMime.indexOf('ogg') !== -1) ext = 'ogg';
+      if(finalMime.indexOf('wav') !== -1) ext = 'wav';
+
+      var blob = new Blob(S.chunks, { type: finalMime });
+      var file = new File([blob], "audio_" + Date.now() + "." + ext, { type: finalMime });
+      
+      uploadFile(file);
+      S.recording=false;
+      $('rec').className="recording hidden";
+    };
+    
+    S.rec.start();
+  }).catch(function(err){
+    $('status').innerHTML="Permissão para microfone recusada ou erro de mídia.";
+  });
+}
+
+function stopRecord(){if(S.rec&&S.recording)S.rec.stop();}
+
+function clearChat(){
+  if(!S.conv)return;
+  if(S.conv !== GROUP_ID) return;
+  if(!confirm("Apagar toda a conversa do grupo Auzover para todos os participantes?"))return;
+  var x=new XMLHttpRequest();
+  x.open("DELETE",dbUrl(),true);
+  x.onreadystatechange=function(){
+    if(x.readyState===4){
+      if(x.status===200){
+        S.data={};
+        $('messages').innerHTML='<div class="empty">Nenhuma mensagem ainda.</div>';
+      }else $('status').innerHTML="Não foi possível limpar.";
+    }
+  };
+  x.send();
+}
+
+function renderEmojiPicker(type){
+  var container = $('emojiList');
+  container.innerHTML = "";
+  if(type === 'emojis'){
+    for(var i=0; i<EMOJIS.length; i++){
+      var btn = document.createElement('button');
+      btn.className = 'emoji-btn';
+      btn.innerHTML = EMOJIS[i];
+      btn.onclick = (function(val){
+        return function(){ insertAtCursor(val); };
+      })(EMOJIS[i]);
+      container.appendChild(btn);
+    }
+  } else {
+    for(var j=0; j<EMOTICONS.length; j++){
+      var btn2 = document.createElement('button');
+      btn2.className = 'emoticon-btn';
+      btn2.innerHTML = esc(EMOTICONS[j]);
+      btn2.onclick = (function(val){
+        return function(){ insertAtCursor(val + " "); };
+      })(EMOTICONS[j]);
+      container.appendChild(btn2);
+    }
+  }
+}
+
+function insertAtCursor(textToInsert) {
+  var input = $('text');
+  input.focus();
+  if (document.selection) {
+    var sel = document.selection.createRange();
+    sel.text = textToInsert;
+  } else if (input.selectionStart || input.selectionStart === 0) {
+    var startPos = input.selectionStart;
+    var endPos = input.selectionEnd;
+    input.value = input.value.substring(0, startPos) + textToInsert + input.value.substring(endPos, input.value.length);
+    input.selectionStart = startPos + textToInsert.length;
+    input.selectionEnd = startPos + textToInsert.length;
+  } else {
+    input.value += textToInsert;
+  }
+}
+
+function toggleEmojiPicker(){
+  var p = $('emojiPicker');
+  hideStickerPicker();
+  if(p.className.indexOf('hidden') !== -1){
+    p.className = 'emoji-picker';
+    var box = $('messages');
+    box.scrollTop = box.scrollHeight;
+  } else {
+    hideEmojiPicker();
+  }
+}
+
+function hideEmojiPicker(){
+  $('emojiPicker').className = 'emoji-picker hidden';
+}
+
+function hideStickerPicker(){
+  $('stickerPicker').className = 'sticker-picker hidden';
+}
+
+$('tabEmojis').onclick = function(){
+  $('tabEmojis').className = 'emoji-tab active';
+  $('tabEmoticons').className = 'emoji-tab';
+  renderEmojiPicker('emojis');
+};
+
+$('tabEmoticons').onclick = function(){
+  $('tabEmoticons').className = 'emoji-tab active';
+  $('tabEmojis').className = 'emoji-tab';
+  renderEmojiPicker('emoticons');
+};
+
+$('emojiToggleBtn').onclick = toggleEmojiPicker;
+
+function stickerSvg(emoji, title){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">'+
+    '<rect x="8" y="8" width="224" height="224" rx="55" fill="#ffffff" stroke="#dddddd" stroke-width="8"/>'+
+    '<text x="120" y="145" text-anchor="middle" font-size="105">'+emoji+'</text>'+
+    '<text x="120" y="205" text-anchor="middle" font-family="Arial" font-size="20" fill="#075e54">'+title+'</text>'+
+    '</svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+
+var DEFAULT_STICKERS=[
+  ["😀","Olá"],["😂","KKK"],["😍","Amei"],["😎","Boa"],["😱","Eita"],
+  ["😭","Chorei"],["😡","Irritado"],["🤔","Hmm"],["👍","Boa!"],["👏","Parabéns"],
+  ["❤️","Amor"],["🔥","Top"],["🎉","Festa"],["🙏","Obrigado"],["🤣","Muito bom"],
+  ["😴","Cansei"]
+];
+
+var STICKER_STATE={all:[],saved:{},mode:"all",loading:false};
+
+function stickerDbUrl(){
+  return FIREBASE_DATABASE_URL+"/stickers.json?auth="+encodeURIComponent(S.token);
+}
+function savedStickerDbUrl(){
+  return FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers.json?auth="+encodeURIComponent(S.token);
+}
+
+function loadStickerCollections(cb){
+  if(STICKER_STATE.loading){if(cb)cb();return;}
+  STICKER_STATE.loading=true;
+  var done=0, allData={}, savedData={};
+  function finish(){
+    done++;
+    if(done<2)return;
+    STICKER_STATE.all=[];
+    var k;
+    for(k in allData){
+      if(allData.hasOwnProperty(k)) {
+        allData[k].id=k;
+        STICKER_STATE.all.push(allData[k]);
+      }
+    }
+    STICKER_STATE.saved=savedData||{};
+    STICKER_STATE.loading=false;
+    if(cb)cb();
+  }
+  api(stickerDbUrl(),{method:"GET"},function(st,d){
+    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
+    if(st===200)allData=d||{};
+    finish();
+  });
+  api(savedStickerDbUrl(),{method:"GET"},function(st,d){
+    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
+    if(st===200)savedData=d||{};
+    finish();
+  });
+}
+
+function isSavedSticker(id){
+  return !!(STICKER_STATE.saved && STICKER_STATE.saved[id]);
+}
+
+function renderStickers(mode){
+  STICKER_STATE.mode=mode||"all";
+  var list=$('stickerList');
+  list.innerHTML="";
+  var i, b, img, item, save, owner, st;
+
+  if(STICKER_STATE.mode==="default"){
+    for(i=0;i<DEFAULT_STICKERS.length;i++){
+      st=DEFAULT_STICKERS[i];
+      item=document.createElement('div'); item.className='sticker-item';
+      b=document.createElement('button'); b.className='sticker-btn';
+      img=document.createElement('img'); img.src=stickerSvg(st[0],st[1]); img.alt=st[1];
+      b.appendChild(img);
+      b.onclick=(function(index){return function(){sendDefaultSticker(index);};})(i);
+      item.appendChild(b); list.appendChild(item);
+    }
+    return;
+  }
+
+  var source=STICKER_STATE.all||[];
+  if(STICKER_STATE.mode==="saved"){
+    source=[];
+    for(i=0;i<STICKER_STATE.all.length;i++){
+      if(isSavedSticker(STICKER_STATE.all[i].id))source.push(STICKER_STATE.all[i]);
+    }
+  }else if(STICKER_STATE.mode==="mine"){
+    source=[];
+    for(i=0;i<STICKER_STATE.all.length;i++){
+      if(STICKER_STATE.all[i].creatorId===S.uid)source.push(STICKER_STATE.all[i]);
+    }
+  }
+
+  if(!source.length){
+    list.innerHTML='<div class="sticker-empty">Nenhum sticker nesta coleção.</div>';
+    return;
+  }
+
+  for(i=0;i<source.length;i++){
+    st=source[i];
+    item=document.createElement('div'); item.className='sticker-item';
+    b=document.createElement('button'); b.className='sticker-btn';
+    img=document.createElement('img'); img.src=st.url; img.alt=st.name||"Sticker";
+    b.appendChild(img);
+    b.onclick=(function(obj){return function(){sendCustomSticker(obj);};})(st);
+    item.appendChild(b);
+
+    if(st.creatorName){
+      owner=document.createElement('div'); owner.className='sticker-owner'; owner.innerHTML=esc(st.creatorName);
+      item.appendChild(owner);
+    }
+
+    if(st.creatorId!==S.uid && !isSavedSticker(st.id)){
+      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvar';
+      save.onclick=(function(id){return function(e){if(e&&e.stopPropagation)e.stopPropagation();saveSticker(id);};})(st.id);
+      item.appendChild(save);
+    }else if(st.creatorId!==S.uid){
+      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvo';
+      save.onclick=function(e){if(e&&e.stopPropagation)e.stopPropagation();};
+      item.appendChild(save);
+    }
+    list.appendChild(item);
+  }
+}
+
+function sendDefaultSticker(index){
+  if(!S.conv)return;
+  var st=DEFAULT_STICKERS[index];
+  sendMsg({
+    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
+    url:stickerSvg(st[0],st[1]),text:st[1],timestamp:Date.now()
+  });
+  hideStickerPicker();
+}
+
+function sendCustomSticker(st){
+  if(!S.conv)return;
+  sendMsg({
+    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
+    url:st.url,text:st.name||"Sticker",stickerId:st.id||"",timestamp:Date.now()
+  });
+  hideStickerPicker();
+}
+
+function saveSticker(id){
+  if(!id||!S.uid)return;
+  var data={savedAt:Date.now()};
+  api(FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers/"+encodeURIComponent(id)+".json?auth="+encodeURIComponent(S.token),
+    {method:"PUT",body:data},function(st){
+      if(st===401){refreshToken();return;}
+      if(st===200){
+        STICKER_STATE.saved[id]=data;
+        renderStickers(STICKER_STATE.mode);
+        $('status').innerHTML="Sticker salvo no seu acervo.";
+      }else $('status').innerHTML="Não foi possível salvar o sticker.";
+    });
+}
+
+function toggleStickerCreate(show){
+  $('stickerCreate').className=show?'sticker-create':'sticker-create hidden';
+}
+
+function createSticker(){
+  var f=$('stickerFile').files[0], name=$('stickerName').value.replace(/^\s+|\s+$/g,"");
+  if(!f){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
+  if(f.type.indexOf("image/")!==0){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
+  if(f.size>2*1024*1024){$('stickerCreateStatus').innerHTML="A imagem deve ter no máximo 2 MB.";return;}
+  if(!name)name="Sticker de "+USERS[S.uid].name;
+
+  $('stickerCreateStatus').innerHTML="Enviando...";
+  var ext=(f.name.split('.').pop()||"png").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+  var path="stickers/"+S.uid+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"."+ext;
+  var url=SUPABASE_URL+"/storage/v1/object/chat-media/"+path;
+  var x=new XMLHttpRequest();
+  x.open("POST",url,true);
+  x.setRequestHeader("Authorization","Bearer "+SUPABASE_ANON_KEY);
+  x.setRequestHeader("apikey",SUPABASE_ANON_KEY);
+  x.setRequestHeader("Content-Type",f.type||"image/png");
+  x.onreadystatechange=function(){
+    if(x.readyState!==4)return;
+    if(x.status>=200&&x.status<300){
+      var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
+      var sticker={
+        name:name,url:publicUrl,creatorId:S.uid,creatorName:USERS[S.uid].name,
+        createdAt:Date.now()
+      };
+      api(stickerDbUrl(),{method:"POST",body:sticker},function(st2,d){
+        if(st2===200){
+          $('stickerName').value="";
+          $('stickerFile').value="";
+          $('stickerCreateStatus').innerHTML="Sticker criado!";
+          toggleStickerCreate(false);
+          loadStickerCollections(function(){renderStickers("mine");});
+        }else $('stickerCreateStatus').innerHTML="Imagem enviada, mas não foi possível cadastrar o sticker.";
+      });
+    }else $('stickerCreateStatus').innerHTML="Erro ao enviar a imagem.";
+  };
+  x.send(f);
+}
+
+function toggleStickerPicker(){
+  var p=$('stickerPicker');
+  hideEmojiPicker();
+  if(p.className.indexOf('hidden')!==-1){
+    p.className='sticker-picker';
+    loadStickerCollections(function(){renderStickers("all");});
+    var box=$('messages'); box.scrollTop=box.scrollHeight;
+  }else hideStickerPicker();
+}
+
+function hideStickerPicker(){
+  $('stickerPicker').className='sticker-picker hidden';
+  toggleStickerCreate(false);
+}
+
+$('stickerToggleBtn').onclick=toggleStickerPicker;
+
+$('stickerAllBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action active';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("all");});
+};
+$('stickerMineBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action active';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("mine");});
+};
+$('stickerSavedBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action active';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("saved");});
+};
+$('stickerNewBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action active';
+  toggleStickerCreate(true);
+};
+$('stickerChooseBtn').onclick=function(){$('stickerFile').click();};
+$('stickerCreateBtn').onclick=createSticker;
+$('stickerCancelBtn').onclick=function(){
+  $('stickerName').value=""; $('stickerFile').value="";
+  toggleStickerCreate(false);
+  $('stickerNewBtn').className='sticker-action';
+  $('stickerAllBtn').className='sticker-action active';
+  loadStickerCollections(function(){renderStickers("all");});
+};
+
+function setConversationFullscreen(on){
+  var app=$('app');
+  if(on){
+    app.className='conversation-fullscreen';
+  }else{
+    app.className='';
+  }
+}
+
+$('fullScreenBtn').onclick=function(){
+  var app=$('app');
+  setConversationFullscreen(app.className.indexOf('conversation-fullscreen')===-1);
+};
+
+$('backChat').onclick=function(){
+  setConversationFullscreen(false);
+  document.querySelector('.body').className='body';
+  hideEmojiPicker();
+  hideStickerPicker();
+};
+
+function requestNotify(){
+  if(window.Notification&&Notification.permission==="default")try{Notification.requestPermission();}catch(e){}
+}
+
+function refreshToken(){
+  if(!S.refresh)return;
+  var u="https://securetoken.googleapis.com/v1/token?key="+encodeURIComponent(FIREBASE_API_KEY);
+  var x=new XMLHttpRequest();
+  x.open("POST",u,true);
+  x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+  x.onreadystatechange=function(){
+    if(x.readyState!==4)return;
+    if(x.status!==200){logout();return}
+    var d;
+    try{d=JSON.parse(x.responseText)}catch(e){logout();return}
+    S.token=d.id_token;
+    S.refresh=d.refresh_token||S.refresh;
+    localStorage.chatT=S.token;
+    localStorage.chatR=S.refresh;
+  };
+  x.send("grant_type=refresh_token&refresh_token="+encodeURIComponent(S.refresh));
+}
+
+function logout(){
+  if(S.timer)clearInterval(S.timer);
+  localStorage.removeItem("chatT");
+  localStorage.removeItem("chatR");
+  localStorage.removeItem("chatU");
+  location.reload();
+}
+
+function setColors(bg, bubble){
+  $('messages').style.backgroundColor = bg;
+  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
+}
+
+function applySavedColors(){
+  var bg = localStorage.chatBgColor || "#efe7dd";
+  var bubble = localStorage.chatBubbleColor || "#dcf8c6";
+  setColors(bg, bubble);
+  $('bgColorPicker').value = bg;
+  $('bubbleColorPicker').value = bubble;
+}
+
+$('bgColorPicker').onchange = function(){
+  var bg = this.value;
+  $('messages').style.backgroundColor = bg;
+  localStorage.chatBgColor = bg;
+};
+
+$('bubbleColorPicker').onchange = function(){
+  var bubble = this.value;
+  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
+  localStorage.chatBubbleColor = bubble;
+};
+
+$('text').addEventListener('focus', function(){
+  hideEmojiPicker();
+  hideStickerPicker();
+  setTimeout(function(){
+    window.scrollTo(0, 0);
+    var box = $('messages');
+    box.scrollTop = box.scrollHeight;
+  }, 300);
+});
+
+$('text').oninput=function(){
+  this.style.height='48px';
+  var h=this.scrollHeight;
+  if(h>96)h=96;
+  if(h<48)h=48;
+  this.style.height=h+'px';
+};
+
+$('loginBtn').onclick=login;
+$('pass').onkeydown=function(e){if((e||window.event).keyCode===13)login()};
+$('send').onclick=sendText;
+$('text').onkeydown=function(e){
+  e=e||window.event;
+  if(e.keyCode===13 && !e.shiftKey){
+    sendText();
+    return false;
+  }
+};
+$('photoBtn').onclick=function(){if(S.conv)$('file').click()};
+$('file').onchange=function(){if(this.files&&this.files[0])uploadFile(this.files[0]);this.value=""};
+$('micBtn').onclick=startRecord;
+$('clearBtn').onclick=clearChat;
+$('logout').onclick=logout;
+document.body.addEventListener('click',requestNotify,{once:true});
+
+try{
+  if(localStorage.chatT&&localStorage.chatU&&USERS[localStorage.chatU]){
+    S.token=localStorage.chatT;
+    S.refresh=localStorage.chatR;
+    S.uid=localStorage.chatU;
+    openApp();
+  }
+}catch(e){}
+</script>
 </body>
 </html>
