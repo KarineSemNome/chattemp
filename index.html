@@ -33,7 +33,7 @@ button,input{font:inherit}
 
 .body{display:flex;flex:1;min-height:0}
 .side{width:250px;background:#fff;border-right:1px solid #ccc;padding:8px;overflow-y:auto}
-.person{width:100%;border:0;border-bottom:1px solid #eee;background:#fff;text-align:left;padding:13px 10px;font-weight:bold}
+.person{width:100%;border:0;border-bottom:1px solid #eee;background:#fff;text-align:left;padding:13px 10px;font-weight:bold;cursor:pointer}
 .person.active{background:#e8f5f3}
 .person small{display:block;color:#888;font-weight:normal;margin-top:3px}
 
@@ -256,24 +256,17 @@ var FIREBASE_API_KEY="AIzaSyDLqp4ieS3LqeJhHYLud1UjqtR7_5W8QfA";
 var FIREBASE_DATABASE_URL="https://chat-temporario-b83d1-default-rtdb.firebaseio.com";
 var SUPABASE_URL="https://dvmaiospgekqfiwkhcfh.supabase.co";
 var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
+
+var USER1_UID = "ZwESBVxjszRqPiOy9dDhx7rRmUK2";
+var NATHAN_UID = "rN0rwjdIxUV7ov3pbNWe745i7VE3";
+var MARLY_UID = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
+
 var USERS={
   "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
-  "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
-  "c3r7cT6qUjbn0a312xk3lCo5eDJ3":{name:"Dante"},
-  "sOkHZMVNengztduR2L5UymjI3zc2":{name:"Pedro"},
-  "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
-  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"}
+  "rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"}
 };
-var GROUP_ID="auzover";
-var GROUP_NAME="Auzover";
-var GROUP_MEMBERS=[
-  "ZwESBVxjszRqPiOy9dDhx7rRmUK2",
-  "8ovQde8DNAcjscHXqpadOrYgyFn2",
-  "c3r7cT6qUjbn0a312xk3lCo5eDJ3",
-  "sOkHZMVNengztduR2L5UymjI3zc2",
-  "iFZf5DwP8CdeJfcFCReIKQwn8k62",
-  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
-];
+
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
 
 var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
@@ -299,7 +292,9 @@ function login(){
   var e=$("email").value.replace(/^\s+|\s+$/g,"");
   var p=$("pass").value;
   $("err").innerHTML="";
-  if(e.toLowerCase()==="usuario@chat.com")e="usuário@chat.local";
+  if(e.toLowerCase()==="nathan@chat.local") e="nathan@chat.local";
+  if(e.toLowerCase()==="marly@chat") e="marly@chat";
+  
   var u="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+encodeURIComponent(FIREBASE_API_KEY);
   api(u,{method:"POST",body:{email:e,password:p,returnSecureToken:true}},function(st,d){
     if(st!==200||!d||!USERS[d.localId]){$("err").innerHTML="E-mail ou senha inválidos.";return}
@@ -314,16 +309,13 @@ function login(){
   });
 }
 
-function isGroupMember(uid){
-  for(var i=0;i<GROUP_MEMBERS.length;i++){
-    if(GROUP_MEMBERS[i]===uid)return true;
-  }
-  return false;
+function canUserAccess(){
+  return S.uid === USER1_UID || S.uid === NATHAN_UID || S.uid === MARLY_UID;
 }
 
 function openApp(){
-  if(!isGroupMember(S.uid)){
-    $("err").innerHTML="Esta conta não tem acesso ao Auzover.";
+  if(!canUserAccess()){
+    $("err").innerHTML="Esta conta não tem acesso ao chat.";
     return;
   }
   $("login").className="hidden";
@@ -332,41 +324,61 @@ function openApp(){
   applySavedColors();
   buildSide();
   renderEmojiPicker("emojis");
-  selectGroup($("side").getElementsByTagName("button")[0]);
+  
+  var firstBtn = $("side").getElementsByTagName("button")[0];
+  if(firstBtn) selectConv(firstBtn);
 }
 
 function buildSide(){
-  var h='<button class="person active" data-id="'+GROUP_ID+'">'+
-        esc(GROUP_NAME)+
-        '<small>Grupo • 6 participantes</small></button>';
+  var h="";
+  if(S.uid === USER1_UID){
+    h += '<button class="person" data-id="USER1_Nathan" data-other="'+NATHAN_UID+'">'+
+         esc(USERS[NATHAN_UID].name)+'<small>Conversa Privada</small></button>';
+    h += '<button class="person" data-id="USER1_Marly" data-other="'+MARLY_UID+'">'+
+         esc(USERS[MARLY_UID].name)+'<small>Conversa Privada</small></button>';
+  } else if(S.uid === NATHAN_UID){
+    h += '<button class="person" data-id="USER1_Nathan" data-other="'+USER1_UID+'">'+
+         esc(USERS[USER1_UID].name)+'<small>Conversa Privada</small></button>';
+  } else if(S.uid === MARLY_UID){
+    h += '<button class="person" data-id="USER1_Marly" data-other="'+USER1_UID+'">'+
+         esc(USERS[USER1_UID].name)+'<small>Conversa Privada</small></button>';
+  }
+  
   $("side").innerHTML=h;
   var bs=$("side").getElementsByTagName("button");
   for(var j=0;j<bs.length;j++){
-    bs[j].onclick=function(){selectGroup(this);};
+    bs[j].onclick=function(){selectConv(this);};
   }
 }
 
-function selectGroup(b){
-  if(!isGroupMember(S.uid)){
-    $("status").innerHTML="Você não tem acesso a este grupo.";
+function selectConv(b){
+  if(!canUserAccess()){
+    $("status").innerHTML="Você não tem permissão para acessar esta conversa.";
     return;
   }
-  S.other=null;
-  S.conv=GROUP_ID;
+  
+  var convId = b.getAttribute("data-id");
+  var otherUid = b.getAttribute("data-other");
+  
+  S.conv = convId;
+  S.other = otherUid;
+  
   var bs=$("side").getElementsByTagName("button");
-  for(var i=0;i<bs.length;i++)bs[i].className="person";
+  for(var i=0;i<bs.length;i++) bs[i].className="person";
   b.className="person active";
-  $("chatName").innerHTML=esc(GROUP_NAME)+" <small style='font-weight:normal;color:#777'>• 6 participantes</small>";
-  $("clearBtn").className="";
+  
+  $("chatName").innerHTML = esc(USERS[otherUid] ? USERS[otherUid].name : "Conversa");
+  $("clearBtn").className = "";
   document.querySelector(".body").className = "body has-chat";
   if(window.innerWidth<=650) document.querySelector(".body").className = "body has-chat";
+  
   S.lastSeen=Date.now();
   load();
   if(S.timer)clearInterval(S.timer);
   S.timer=setInterval(load,2000);
 }
 
-function dbUrl(){return FIREBASE_DATABASE_URL+"/chat/"+GROUP_ID+"/messages.json?auth="+encodeURIComponent(S.token)}
+function dbUrl(){return FIREBASE_DATABASE_URL+"/chat/"+S.conv+"/messages.json?auth="+encodeURIComponent(S.token)}
 
 function load(){
   if(!S.conv)return;
@@ -432,8 +444,8 @@ function notify(m){
     if(pr&&pr.catch)pr.catch(function(){});
   }catch(e){}
   if(window.Notification&&Notification.permission==="granted")try{
-    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Auzover";
-    new Notification("Auzover - "+senderName,{body:m.type==="image"?"Foto":m.type==="audio"?"Áudio":m.type==="sticker"?"Sticker":m.text||"Nova mensagem"});
+    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Chat";
+    new Notification(senderName,{body:m.type==="image"?"Foto":m.type==="audio"?"Áudio":m.type==="sticker"?"Sticker":m.text||"Nova mensagem"});
   }catch(e){}
 }
 
@@ -483,7 +495,7 @@ function uploadFile(f){
   x.send(f);
 }
 
-/* Gravação de Áudio Otimizada para Computador e Celular */
+/* Gravação de Áudio Otimizada */
 function startRecord(){
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
     $('status').innerHTML="Seu navegador não suporta gravação direta.";
@@ -550,7 +562,7 @@ function stopRecord(){if(S.rec&&S.recording)S.rec.stop();}
 
 function clearChat(){
   if(!S.conv)return;
-  if(!confirm("Apagar toda a conversa do grupo Auzover para todos os participantes?"))return;
+  if(!confirm("Apagar toda a conversa para ambos os participantes?"))return;
   var x=new XMLHttpRequest();
   x.open("DELETE",dbUrl(),true);
   x.onreadystatechange=function(){
