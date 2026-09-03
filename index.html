@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#075e54">
-<title>Chat Temporário</title>
+<title>Whatsapp 2</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#efe7dd;color:#222}
@@ -162,7 +162,7 @@ button,input{font:inherit}
 <body>
 <div id="login">
   <div class="login-card">
-    <h1>ChatTemp</h1>
+    <h1>Whatsapp 2</h1>
     <p>Conversa privada</p>
     <input id="email" placeholder="E-mail" autocomplete="off">
     <input id="pass" type="password" placeholder="Senha">
@@ -173,7 +173,7 @@ button,input{font:inherit}
 
 <div id="app" class="hidden">
   <div class="top">
-    <div class="brand">ChatTemp</div>
+    <div class="brand">Whatsapp 2</div>
     <div id="me" class="me"></div>
     
     <div class="color-group" title="Cor do fundo">
@@ -292,8 +292,8 @@ var GROUP_MEMBERS=[
   "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
 ];
 
-var GROUP2_ID="papo_do_zap_2";
-var GROUP2_NAME="Papo do Zap 2";
+var GROUP2_ID="bapo_do_zap_2";
+var GROUP2_NAME="Bapo do Zap 2 '-'";
 var GROUP2_MEMBERS=[
   USER1_UID,
   MARI_UID,
@@ -854,7 +854,7 @@ function selectConv(key,otherUid,title){
   
   if(key === getGroupPath(GROUP2_ID)){
     if(topEl) topEl.style.backgroundColor = "#FE3867";
-    if(chatbarEl) chatbarEl.style.backgroundColor = "#FE3867";
+    if(chatbarEl) chatbarEl.style.backgroundColor = "#FE3856";
     if(chatbarEl) chatbarEl.style.color = "#ffffff";
   } else {
     if(topEl) topEl.style.backgroundColor = "#075e54";
@@ -900,12 +900,15 @@ function playNotificationSound(){
 function refreshTokenAndRetry(cb){
   if(!S.refresh) return;
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
+  var body = JSON.stringify({
+    grant_type: "refresh_token",
+    refresh_token: S.refresh
+  });
   
-  req("POST", u, body, {"Content-Type": "application/x-www-form-urlencoded"}, function(st, d){
-    if(st === 200 && d && d.id_token){
-      S.token = d.id_token;
-      S.refresh = d.refresh_token;
+  req("POST", u, body, {"Content-Type": "application/json"}, function(st, d){
+    if(st === 200 && d && (d.id_token || d.idToken)){
+      S.token = d.id_token || d.idToken;
+      S.refresh = d.refresh_token || d.refreshToken;
       if(cb) cb();
     } else {
       logout();
@@ -1007,19 +1010,18 @@ function renderMessages(){
       html+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
     }else if(m.type==="sticker"){
       html+='<div class="sticker-bubble"><img class="sticker-image" src="'+esc(m.url)+'"></div>';
-    /* ... dentro da renderMessages() no bloco do m.type === "audio" ... */
-} else if(m.type === "audio"){
-  html += '<div class="audio-box">';
-  html += '<audio class="audio" controls preload="metadata">';
-  html += '<source src="' + esc(m.url) + '" type="audio/webm">';
-  html += '<source src="' + esc(m.url) + '" type="audio/mp3">';
-  html += '<source src="' + esc(m.url) + '" type="audio/ogg">';
-  html += '<source src="' + esc(m.url) + '" type="audio/aac">';
-  html += 'Seu navegador não suporta o áudio nativo.';
-  html += '</audio>';
-  html += '<a href="' + esc(m.url) + '" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
-  html += '</div>';
-}
+    }else if(m.type==="audio"){
+      html+='<div class="audio-box">';
+      html+='<audio class="audio" controls preload="metadata">';
+      html+='<source src="'+esc(m.url)+'" type="audio/webm">';
+      html+='<source src="'+esc(m.url)+'" type="audio/mp3">';
+      html+='<source src="'+esc(m.url)+'" type="audio/ogg">';
+      html+='<source src="'+esc(m.url)+'" type="audio/aac">';
+      html+='Seu navegador não suporta o áudio nativo.';
+      html+='</audio>';
+      html+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+      html+='</div>';
+    }
     
     html+='<span class="time">'+esc(time)+'</span>';
     html+='</div></div>';
@@ -1136,14 +1138,14 @@ function startRecord(){
     
     var options = {};
     if(typeof MediaRecorder.isTypeSupported === "function"){
-      if(MediaRecorder.isTypeSupported("audio/aac")){
+      if(MediaRecorder.isTypeSupported("audio/webm")){
+        options.mimeType = "audio/webm";
+      }else if(MediaRecorder.isTypeSupported("audio/aac")){
         options.mimeType = "audio/aac";
       }else if(MediaRecorder.isTypeSupported("audio/mp4")){
         options.mimeType = "audio/mp4";
       }else if(MediaRecorder.isTypeSupported("audio/ogg")){
         options.mimeType = "audio/ogg";
-      }else if(MediaRecorder.isTypeSupported("audio/webm")){
-        options.mimeType = "audio/webm";
       }
     }
 
@@ -1157,7 +1159,7 @@ function startRecord(){
       if(e.data && e.data.size>0) S.chunks.push(e.data);
     };
     S.rec.onstop=function(){
-      var mime = S.rec.mimeType || "audio/aac";
+      var mime = S.rec.mimeType || "audio/webm";
       var blob=new Blob(S.chunks,{type:mime});
       uploadAudioBlob(blob);
       stream.getTracks().forEach(function(track){track.stop()});
@@ -1185,7 +1187,7 @@ function uploadAudioBlob(blob){
   else if(type.indexOf("mp3") !== -1) ext = "mp3";
   else if(type.indexOf("aac") !== -1) ext = "aac";
 
-  var path = "audios/" + Date.now() + "_" + Math.floor(Math.random()*1000) + "." + ext;
+  var path="audios/"+Date.now()+"_"+Math.floor(Math.random()*1000)+"."+ext;
   setStatus("Enviando áudio...");
   
   var url = SUPABASE_URL + "/storage/v1/object/chat-files/" + path;
@@ -1195,13 +1197,13 @@ function uploadAudioBlob(blob){
     "apikey": SUPABASE_ANON_KEY,
     "Content-Type": type
   }, function(st, d, txt){
-    if(st === 200 || st === 201){
+    if(st===200 || st===201){
       setStatus("");
       var publicUrl = SUPABASE_URL + "/storage/v1/object/public/chat-files/" + path;
-      sendMsg({type: "audio", url: publicUrl});
-    } else {
-      setStatus("Erro no upload do áudio: " + st);
-      alert("Erro audio: " + st + " " + txt);
+      sendMsg({type:"audio", url:publicUrl});
+    }else{
+      setStatus("Erro no upload do áudio: "+st);
+      alert("Erro audio: "+st+" "+txt);
     }
   });
 }
