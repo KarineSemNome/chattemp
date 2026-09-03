@@ -122,7 +122,8 @@ button,input{font:inherit}
 .conversation-fullscreen .body{height:100%}
 .conversation-fullscreen .chatbar{height:54px}
 .back-chat{display:none}
-.fullscreen-btn{border:0;background:transparent;color:#555;font-size:18px;padding:6px 8px;cursor:pointer}.back-chat{border:0;background:transparent;color:#075e54;font-size:28px;line-height:1;padding:3px 8px;cursor:pointer}
+.fullscreen-btn{border:0;background:transparent;color:#555;font-size:18px;padding:6px 8px;cursor:pointer}
+.back-chat{border:0;background:transparent;color:#075e54;font-size:28px;line-height:1;padding:3px 8px;cursor:pointer}
 .empty{text-align:center;color:#777;margin-top:30px}
 
 @media(max-width:650px){
@@ -161,7 +162,7 @@ button,input{font:inherit}
 <body>
 <div id="login">
   <div class="login-card">
-    <h1>Whatsapp 2</h1>
+    <h1>ChatTemp</h1>
     <p>Conversa privada</p>
     <input id="email" placeholder="E-mail" autocomplete="off">
     <input id="pass" type="password" placeholder="Senha">
@@ -172,7 +173,7 @@ button,input{font:inherit}
 
 <div id="app" class="hidden">
   <div class="top">
-    <div class="brand">Whatsapp 2</div>
+    <div class="brand">ChatTemp</div>
     <div id="me" class="me"></div>
     
     <div class="color-group" title="Cor do fundo">
@@ -260,7 +261,7 @@ var MARLY_UID  = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
 
 var MARI_UID   = "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2";
 var SPACI_UID  = "f3NJQgbZB4YTozRDgqtBfVI0cPC2";
-var SILLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
+var SOLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
 var MARIA_UID  = "Cue1xqMOHoPuEQM26ZlNo2MCBEc2";
 var LUA_UID    = "wy3z9PIDI8XYQCMbv3qYXginJKG3";
 
@@ -275,7 +276,7 @@ var USERS={
   "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"},
   "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2":{name:"Mari"},
   "f3NJQgbZB4YTozRDgqtBfVI0cPC2":{name:"Spaci"},
-  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2":{name:"Silly"},
+  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2":{name:"Soly"},
   "Cue1xqMOHoPuEQM26ZlNo2MCBEc2":{name:"Maria"},
   "wy3z9PIDI8XYQCMbv3qYXginJKG3":{name:"Lua"}
 };
@@ -291,20 +292,20 @@ var GROUP_MEMBERS=[
   "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
 ];
 
-var GROUP2_ID="bapo_do_zap_2";
-var GROUP2_NAME="Bapo do Zap 2 '-'";
+var GROUP2_ID="papo_do_zap_2";
+var GROUP2_NAME="Papo do Zap 2";
 var GROUP2_MEMBERS=[
   USER1_UID,
   MARI_UID,
   SPACI_UID,
-  SILLY_UID,
+  SOLY_UID,
   MARIA_UID,
   LUA_UID
 ];
 
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
 
-var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🦷","🦴","👀","👁️","👅","👄","💋","🩸","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💖","💗","💓","💞","💕","❣","💔","❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💯","💢","💥","💫","💦","💨","🕳️","💣","💬","👁️‍🗨️","🗨️","🗯️","💭","💤"];
+var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","齿","骨","👀","👁️","👅","👄","💋","🩸","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💯","💥","💬"];
 var EMOTICONS = [":-)",":)",";-)",";)",":-D",":D",":-P",":P",":-O",":O",":-(",":(",":-'",":'-(","B-)","8-)",":-/",":/",":-\\",":\\",":-|",":|",">:-(",">:(","O:-)",":-*","<3","</3","\\o/","o/","\\o",":-X",":X",":-J",":-]",":-[","8-o","P=","=)","=("];
 var STICKERS = [
   {id:"s1", name:"Haha", url:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"},
@@ -725,14 +726,7 @@ function sendSticker(url){
     alert("Selecione uma conversa ou grupo primeiro!");
     return;
   }
-  
-  // Envia a figurinha usando a estrutura padrão de mensagens do app
-  sendMsg({
-    type: "sticker",
-    url: url
-  });
-
-  // Fecha o painel de stickers após o envio
+  sendMsg({type:"sticker", url:url});
   $("stickerPicker").classList.add("hidden");
 }
 
@@ -797,8 +791,8 @@ function canTalkTo(otherUid){
   if(S.uid === NATHAN_UID || S.uid === MARLY_UID) return false;
   if(otherUid === NATHAN_UID || otherUid === MARLY_UID) return false;
 
-  var isNewS1 = (S.uid === MARI_UID || S.uid === SPACI_UID || S.uid === SILLY_UID || S.uid === MARIA_UID || S.uid === LUA_UID);
-  var isNewS2 = (otherUid === MARI_UID || otherUid === SPACI_UID || otherUid === SILLY_UID || otherUid === MARIA_UID || otherUid === LUA_UID);
+  var isNewS1 = (S.uid === MARI_UID || S.uid === SPACI_UID || S.uid === SOLY_UID || S.uid === MARIA_UID || S.uid === LUA_UID);
+  var isNewS2 = (otherUid === MARI_UID || otherUid === SPACI_UID || otherUid === SOLY_UID || otherUid === MARIA_UID || otherUid === LUA_UID);
 
   if(isNewS1 && isNewS2) return true;
 
@@ -819,8 +813,15 @@ function renderSide(){
 
   if(isGroupAllowed(GROUP2_ID)){
     var g2btn=document.createElement("button");
-    g2btn.className="person"+(S.conv===getGroupPath(GROUP2_ID)?" active":"");
-    g2btn.innerHTML=esc(GROUP2_NAME)+" <small>Grupo</small>";
+    var isActive2 = (S.conv === getGroupPath(GROUP2_ID));
+    g2btn.className = "person" + (isActive2 ? " active" : "");
+    g2btn.innerHTML = esc(GROUP2_NAME) + " <small style='color:#FE3867;font-weight:bold;'>Grupo</small>";
+    
+    if(isActive2){
+      g2btn.style.backgroundColor = "#ffe6ec";
+      g2btn.style.borderLeft = "4px solid #FE3867";
+    }
+
     g2btn.onclick=function(){selectConv(getGroupPath(GROUP2_ID),null,GROUP2_NAME)};
     side.appendChild(g2btn);
   }
@@ -847,17 +848,15 @@ function selectConv(key,otherUid,title){
   S.conv=key;
   S.other=otherUid;
   $("chatName").innerHTML=esc(title);
-  
+
   var topEl = document.querySelector(".top");
   var chatbarEl = document.querySelector(".chatbar");
   
-  // Se for o grupo "Papo do Zap 2", aplica a cor #FE3867
   if(key === getGroupPath(GROUP2_ID)){
     if(topEl) topEl.style.backgroundColor = "#FE3867";
-    if(chatbarEl) chatbarEl.style.backgroundColor = "#000000";
+    if(chatbarEl) chatbarEl.style.backgroundColor = "#FE3867";
     if(chatbarEl) chatbarEl.style.color = "#ffffff";
   } else {
-    // Restaura a cor padrão do app para outras conversas
     if(topEl) topEl.style.backgroundColor = "#075e54";
     if(chatbarEl) chatbarEl.style.backgroundColor = "#f0f2f5";
     if(chatbarEl) chatbarEl.style.color = "#222222";
@@ -898,25 +897,45 @@ function playNotificationSound(){
   } catch(e) {}
 }
 
+function refreshTokenAndRetry(cb){
+  if(!S.refresh) return;
+  var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
+  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
+  
+  req("POST", u, body, {"Content-Type": "application/x-www-form-urlencoded"}, function(st, d){
+    if(st === 200 && d && d.id_token){
+      S.token = d.id_token;
+      S.refresh = d.refresh_token;
+      if(cb) cb();
+    } else {
+      logout();
+    }
+  });
+}
+
 function fetchData(){
-  if(!S.token)return;
-  var u=FIREBASE_DATABASE_URL+"/chats.json?auth="+S.token;
-  req("GET",u,null,{},function(st,d){
-    if(st===200&&d){
-      var maxTS=S.lastSeen;
-      var hasNewMessage=false;
+  if(!S.token) return;
+  var u = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
+  req("GET", u, null, {}, function(st, d){
+    if(st === 401){
+      refreshTokenAndRetry(fetchData);
+      return;
+    }
+    if(st === 200 && d){
+      var maxTS = S.lastSeen;
+      var hasNewMessage = false;
       
       for(var ck in d){
         if(d.hasOwnProperty(ck)){
-          var msgs=d[ck];
+          var msgs = d[ck];
           for(var mk in msgs){
             if(msgs.hasOwnProperty(mk)){
-              var m=msgs[mk];
-              if(m&&m.ts){
-                if(m.ts>maxTS){
-                  maxTS=m.ts;
+              var m = msgs[mk];
+              if(m && m.ts){
+                if(m.ts > maxTS){
+                  maxTS = m.ts;
                   if(S.ready && m.from !== S.uid){
-                    hasNewMessage=true;
+                    hasNewMessage = true;
                   }
                 }
               }
@@ -926,14 +945,14 @@ function fetchData(){
       }
 
       if(!S.ready){
-        S.ready=true;
-        S.lastSeen=maxTS;
-      }else if(hasNewMessage){
-        S.lastSeen=maxTS;
+        S.ready = true;
+        S.lastSeen = maxTS;
+      } else if(hasNewMessage){
+        S.lastSeen = maxTS;
         playNotificationSound();
       }
 
-      S.data=d;
+      S.data = d;
       renderMessages();
     }
   });
@@ -945,6 +964,13 @@ function renderMessages(){
     box.innerHTML='<div class="empty">Escolha uma conversa.</div>';
     return;
   }
+
+  if(S.conv === getGroupPath(GROUP2_ID)){
+    $("customBubbleStyle").innerHTML = ".mine .bubble { background-color: #ffccd5 !important; }";
+  } else {
+    applyCustomColors();
+  }
+
   var list=S.data[S.conv];
   if(!list){
     box.innerHTML='<div class="empty">Nenhuma mensagem ainda.</div>';
@@ -981,18 +1007,19 @@ function renderMessages(){
       html+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
     }else if(m.type==="sticker"){
       html+='<div class="sticker-bubble"><img class="sticker-image" src="'+esc(m.url)+'"></div>';
-    }else if(m.type==="audio"){
-      html+='<div class="audio-box">';
-      html+='<audio class="audio" controls preload="metadata">';
-      html+='<source src="'+esc(m.url)+'" type="audio/aac">';
-      html+='<source src="'+esc(m.url)+'" type="audio/mp3">';
-      html+='<source src="'+esc(m.url)+'" type="audio/ogg">';
-      html+='<source src="'+esc(m.url)+'" type="audio/3gpp">';
-      html+='Seu navegador não suporta o áudio nativo.';
-      html+='</audio>';
-      html+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
-      html+='</div>';
-    }
+    /* ... dentro da renderMessages() no bloco do m.type === "audio" ... */
+} else if(m.type === "audio"){
+  html += '<div class="audio-box">';
+  html += '<audio class="audio" controls preload="metadata">';
+  html += '<source src="' + esc(m.url) + '" type="audio/webm">';
+  html += '<source src="' + esc(m.url) + '" type="audio/mp3">';
+  html += '<source src="' + esc(m.url) + '" type="audio/ogg">';
+  html += '<source src="' + esc(m.url) + '" type="audio/aac">';
+  html += 'Seu navegador não suporta o áudio nativo.';
+  html += '</audio>';
+  html += '<a href="' + esc(m.url) + '" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+  html += '</div>';
+}
     
     html+='<span class="time">'+esc(time)+'</span>';
     html+='</div></div>';
@@ -1016,6 +1043,12 @@ function sendMsg(payload){
   
   var u=FIREBASE_DATABASE_URL+"/chats/"+enc(S.conv)+".json?auth="+S.token;
   req("POST",u,JSON.stringify(payload),{},function(st){
+    if(st===401){
+      refreshTokenAndRetry(function(){
+        sendMsg(payload);
+      });
+      return;
+    }
     if(st===200){
       fetchData();
     }else{
@@ -1029,6 +1062,10 @@ function clearChat(){
   if(!confirm("Deseja apagar esta conversa para todos?"))return;
   var u=FIREBASE_DATABASE_URL+"/chats/"+enc(S.conv)+".json?auth="+S.token;
   req("DELETE",u,null,{},function(st){
+    if(st===401){
+      refreshTokenAndRetry(clearChat);
+      return;
+    }
     if(st===200){
       fetchData();
     }else{
@@ -1141,13 +1178,14 @@ function stopRecord(){
 }
 
 function uploadAudioBlob(blob){
-  var ext = "aac";
-  if(blob.type.indexOf("ogg") !== -1) ext = "ogg";
-  else if(blob.type.indexOf("mp3") !== -1) ext = "mp3";
-  else if(blob.type.indexOf("webm") !== -1) ext = "webm";
-  else if(blob.type.indexOf("mp4") !== -1) ext = "mp4";
+  var type = blob.type || "audio/webm";
+  var ext = "webm";
+  
+  if(type.indexOf("ogg") !== -1) ext = "ogg";
+  else if(type.indexOf("mp3") !== -1) ext = "mp3";
+  else if(type.indexOf("aac") !== -1) ext = "aac";
 
-  var path="audios/"+Date.now()+"_"+Math.floor(Math.random()*1000)+"."+ext;
+  var path = "audios/" + Date.now() + "_" + Math.floor(Math.random()*1000) + "." + ext;
   setStatus("Enviando áudio...");
   
   var url = SUPABASE_URL + "/storage/v1/object/chat-files/" + path;
@@ -1155,15 +1193,15 @@ function uploadAudioBlob(blob){
   req("POST", url, blob, {
     "Authorization": "Bearer " + SUPABASE_ANON_KEY,
     "apikey": SUPABASE_ANON_KEY,
-    "Content-Type": blob.type || "audio/aac"
+    "Content-Type": type
   }, function(st, d, txt){
-    if(st===200 || st===201){
+    if(st === 200 || st === 201){
       setStatus("");
       var publicUrl = SUPABASE_URL + "/storage/v1/object/public/chat-files/" + path;
-      sendMsg({type:"audio", url:publicUrl});
-    }else{
-      setStatus("Erro no upload do áudio: "+st);
-      alert("Erro audio: "+st+" "+txt);
+      sendMsg({type: "audio", url: publicUrl});
+    } else {
+      setStatus("Erro no upload do áudio: " + st);
+      alert("Erro audio: " + st + " " + txt);
     }
   });
 }
