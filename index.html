@@ -258,6 +258,7 @@ var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
 var USER1_UID = "ZwESBVxjszRqPiOy9dDhx7rRmUK2";
 var NATHAN_UID = "rN0rwjdIxUV7ov3pbNWe745i7VE3";
 var MARLY_UID  = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
+var GIGI_UID   = "O0M9hAeCRib19DgGuKenNgp9grz2";
 
 var MARI_UID   = "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2";
 var SPACI_UID  = "f3NJQgbZB4YTozRDgqtBfVI0cPC2";
@@ -265,21 +266,21 @@ var SOLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
 var MARIA_UID  = "Cue1xqMOHoPuEQM26ZlNo2MCBEc2";
 var LUA_UID    = "wy3z9PIDI8XYQCMbv3qYXginJKG3";
 
-var USERS = {
-  "ZwESBVxjszRqPiOy9dDhx7rRmUK2": {name: "USER 1"},
-  "8ovQde8DNAcjscHXqpadOrYgyFn2": {name: "Sofia"}, // Se estivesse sem aspas (8ovQde...), daria exatamente esse erro!
-  "c3r7cT6qUjbn0a312xk3lCo5eDJ3": {name: "Alex"},
-  "sOkHZMVNengztduR2L5UymjI3zc2": {name: "Pedro"},
-  "iFZf5DwP8CdeJfcFCReIKQwn8k62": {name: "Pablo"},
-  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1": {name: "Tsar"},
-  "rN0rwjdIxUV7ov3pbNWe745i7VE3": {name: "Nathan"},
-  "qncO2nyU7id0Z6Oa3GXsgZ3udH92": {name: "Marly"},
-  "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2": {name: "Mari"},
-  "f3NJQgbZB4YTozRDgqtBfVI0cPC2": {name: "Spaci"},
-  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2": {name: "Soly"},
-  "Cue1xqMOHoPuEQM26ZlNo2MCBEc2": {name: "Maria"},
-  "wy3z9PIDI8XYQCMbv3qYXginJKG3": {name: "Lua"},
-  "O0M9hAeCRib19DgGuKenNgp9grz2": {name: "Gigi"}  // Verifique se a linha anterior a essa tem vírgula!
+var USERS={
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
+  "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3":{name:"Alex"},
+  "sOkHZMVNengztduR2L5UymjI3zc2":{name:"Pedro"},
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
+  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"},
+  "rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"},
+  "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2":{name:"Mari"},
+  "f3NJQgbZB4YTozRDgqtBfVI0cPC2":{name:"Spaci"},
+  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2":{name:"Soly"},
+  "Cue1xqMOHoPuEQM26ZlNo2MCBEc2":{name:"Maria"},
+  "wy3z9PIDI8XYQCMbv3qYXginJKG3":{name:"Lua"},
+  "O0M9hAeCRib19DgGuKenNgp9grz2":{name:"Gigi"}
 };
 
 var GROUP_ID="auzover";
@@ -434,7 +435,6 @@ function setupApp(){
   renderSide();
   renderEmojiList("emojis");
   
-  // Verifica login salvo automaticamente
   checkAutoLogin();
 }
 
@@ -774,7 +774,6 @@ function login(){
     returnSecureToken: true
   });
   
-  // Enviado como text/plain contendo JSON para evitar requisição CORS OPTIONS (preflight)
   req("POST", u, body, {"Content-Type": "text/plain"}, function(st, d, txt){
     if(st === 200 && d && d.idToken){
       if(!USERS[d.localId]){
@@ -785,7 +784,6 @@ function login(){
       S.refresh = d.refreshToken;
       S.uid = d.localId;
 
-      // Persistir no navegador
       localStorage.setItem("user_token", d.idToken);
       localStorage.setItem("user_refresh", d.refreshToken);
       localStorage.setItem("user_uid", d.localId);
@@ -815,14 +813,14 @@ function logout(){
 }
 
 function refreshTokenAndRetry(cb){
-  if(!S.refresh) return;
+  if(!S.refresh) {
+    logout();
+    return;
+  }
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var body = JSON.stringify({
-    grant_type: "refresh_token",
-    refresh_token: S.refresh
-  });
+  var body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(S.refresh);
   
-  req("POST", u, body, {"Content-Type": "text/plain"}, function(st, d){
+  req("POST", u, body, {"Content-Type": "application/x-www-form-urlencoded"}, function(st, d){
     if(st === 200 && d && (d.id_token || d.idToken)){
       S.token = d.id_token || d.idToken;
       S.refresh = d.refresh_token || d.refreshToken;
@@ -848,7 +846,16 @@ function fetchData(){
   var u = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
   req("GET", u, null, null, function(st, d){
     if(st === 401){
-      refreshTokenAndRetry(fetchData);
+      refreshTokenAndRetry(function(){
+        var uRetry = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
+        req("GET", uRetry, null, null, function(stRetry, dRetry){
+          if(stRetry === 200 && dRetry){
+            S.data = dRetry;
+            if(!S.ready){ S.ready = true; renderSide(); }
+            if(S.conv){ renderMessages(); }
+          }
+        });
+      });
       return;
     }
     if(st === 200 && d){
@@ -899,7 +906,7 @@ function isAllowedConv(cKey){
   }
   return false;
 }
-  
+
 function getConvKey(uid1, uid2){
   return uid1 < uid2 ? uid1 + "_" + uid2 : uid2 + "_" + uid1;
 }
