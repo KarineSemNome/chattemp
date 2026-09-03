@@ -750,10 +750,14 @@ function login(){
   if(!e || !p){ $("err").innerHTML = "Preencha tudo."; return; }
   
   var u = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + FIREBASE_API_KEY;
-  var body = "email=" + enc(e) + "&password=" + enc(p) + "&returnSecureToken=true";
+  var body = JSON.stringify({
+    email: e,
+    password: p,
+    returnSecureToken: true
+  });
   
-  // Enviamos sem headers customizados para evitar preflight (OPTIONS) e erros de CORS
-  req("POST", u, body, {}, function(st, d, txt){
+  // Usamos Content-Type: text/plain para evitar requisição CORS OPTIONS (preflight)
+  req("POST", u, body, {"Content-Type": "text/plain"}, function(st, d, txt){
     if(st === 200 && d && d.idToken){
       if(!USERS[d.localId]){
         $("err").innerHTML = "Usuário não autorizado.";
@@ -777,9 +781,12 @@ function login(){
 function refreshTokenAndRetry(cb){
   if(!S.refresh) return;
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
-  var body = "grant_type=refresh_token&refresh_token=" + enc(S.refresh);
+  var body = JSON.stringify({
+    grant_type: "refresh_token",
+    refresh_token: S.refresh
+  });
   
-  req("POST", u, body, {}, function(st, d){
+  req("POST", u, body, {"Content-Type": "text/plain"}, function(st, d){
     if(st === 200 && d && (d.id_token || d.idToken)){
       S.token = d.id_token || d.idToken;
       S.refresh = d.refresh_token || d.refreshToken;
@@ -789,7 +796,6 @@ function refreshTokenAndRetry(cb){
     }
   });
 }
-
 function logout(){
   if(S.timer) clearInterval(S.timer);
   S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
