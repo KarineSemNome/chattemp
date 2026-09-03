@@ -65,35 +65,96 @@ button,input{font:inherit}
 .emoticon-btn{background:#f0f2f5;border:1px solid #ccc;font-size:13px;padding:6px 10px;cursor:pointer;border-radius:14px;margin:3px;font-family:monospace}
 
 /* Campo de Digitação */
-.composer{background:#f0f2f5;padding:7px;display:flex;align-items:center;flex-shrink:0}
-.iconbtn{width:42px;height:42px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px;cursor:pointer}
-.composer input[type=text]{
+.composer{background:#f0f2f5;padding:8px;display:flex;align-items:flex-end;flex-shrink:0}
+.iconbtn{width:44px;height:44px;min-width:44px;border:0;border-radius:50%;background:#fff;font-size:20px;margin-right:6px;cursor:pointer}
+.composer textarea{
   flex:1;
-  height:42px;
+  height:48px;
+  min-height:48px;
+  max-height:96px;
+  resize:none;
+  overflow-y:auto;
   border:1px solid #ccc !important;
-  border-radius:21px;
-  padding:0 14px;
+  border-radius:24px;
+  padding:12px 14px;
   min-width:0;
   margin-right:6px;
   background:#ffffff !important;
   color:#000000 !important;
-  font-size:15px !important;
-  line-height:normal;
+  font-size:16px !important;
+  line-height:22px;
   -webkit-appearance:none;
 }
-.send{width:72px;height:42px;border:0;border-radius:21px;background:#075e54;color:#fff;font-weight:bold;cursor:pointer}
+.send{width:78px;height:44px;min-width:78px;border:0;border-radius:22px;background:#075e54;color:#fff;font-weight:bold;cursor:pointer}
 
 .recording{font-size:12px;color:#b00020;padding:4px 10px;background:#f0f2f5}
 .status{height:18px;background:#f0f2f5;color:#777;font-size:10px;padding-left:12px}
+
+/* Stickers */
+.sticker-picker{height:210px;background:#fff;border-top:1px solid #ccc;display:flex;flex-direction:column;flex-shrink:0}
+.sticker-tabs{display:flex;background:#e0e0e0;border-bottom:1px solid #ccc}
+.sticker-tab{flex:1;padding:8px;border:0;background:transparent;font-weight:bold;cursor:pointer;font-size:12px;color:#555}
+.sticker-tab.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.sticker-actions{display:flex;background:#f5f5f5;border-bottom:1px solid #ccc}
+.sticker-action{flex:1;padding:8px 4px;border:0;background:transparent;font-weight:bold;font-size:12px;color:#555;cursor:pointer}
+.sticker-action.active{background:#fff;color:#075e54;border-bottom:2px solid #075e54}
+.sticker-list{position:relative}
+.sticker-item{width:25%;min-width:72px;text-align:center;padding:4px;position:relative}
+.sticker-item .sticker-btn{width:100%;min-width:0}
+.sticker-save{display:block;width:100%;height:22px;border:0;border-radius:4px;background:#075e54;color:#fff;font-size:10px;cursor:pointer;margin-top:2px}
+.sticker-owner{font-size:9px;color:#777;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sticker-create{padding:10px;background:#fff;border-bottom:1px solid #ccc}
+.sticker-create input{width:100%;height:36px;border:1px solid #bbb;border-radius:5px;padding:0 8px;margin-bottom:6px}
+.sticker-create button{height:36px;border:0;border-radius:5px;background:#075e54;color:#fff;font-weight:bold;padding:0 12px;margin-right:4px}
+.sticker-create .cancel{background:#777}
+.sticker-empty{text-align:center;color:#777;padding:20px;font-size:12px}
+
+.sticker-list{flex:1;padding:8px;overflow-y:auto;display:flex;flex-wrap:wrap;align-content:flex-start}
+.sticker-btn{width:25%;min-width:72px;height:82px;background:#fff;border:0;cursor:pointer;border-radius:8px;padding:5px}
+.sticker-btn:active{background:#eee}
+.sticker-btn img{width:68px;height:68px;max-width:100%;display:block;margin:auto}
+.sticker-bubble{width:150px;height:150px;max-width:150px;background:transparent!important;box-shadow:none!important;padding:2px}
+.sticker-image{width:145px;height:145px;display:block}
+
+/* Conversa em tela cheia */
+.conversation-fullscreen .top{display:none}
+.conversation-fullscreen .side{display:none}
+.conversation-fullscreen .body{height:100%}
+.conversation-fullscreen .chatbar{height:54px}
+.back-chat{display:none}
+.fullscreen-btn{border:0;background:transparent;color:#555;font-size:18px;padding:6px 8px;cursor:pointer}.back-chat{border:0;background:transparent;color:#075e54;font-size:28px;line-height:1;padding:3px 8px;cursor:pointer}
 .empty{text-align:center;color:#777;margin-top:30px}
 
 @media(max-width:650px){
-  .side{width:100px;padding:4px}
-  .person{font-size:11px;padding:8px 2px}
+  .top{height:50px}
+  .brand{font-size:16px}
+  .side{width:100%;padding:4px}
+  .person{font-size:14px;padding:14px 10px}
   .me{display:none}
+  .body{position:relative}
+  .chat{display:none}
+  .body.has-chat .side{display:none}
+  .body.has-chat .chat{display:flex;width:100%}
+  .body.has-chat .back-chat{display:block}
   .bubble{max-width:90%}
-  .send{width:54px}
-  .color-group label{display:none}
+  .send{width:62px;min-width:62px;font-size:12px}
+  .color-group{display:none}
+  .composer{padding:6px}
+  .iconbtn{width:40px;min-width:40px;height:40px;font-size:18px;margin-right:4px}
+  .composer textarea{height:52px;min-height:52px;border-radius:25px;font-size:16px!important;padding:13px 13px}
+  .sticker-picker{height:250px}
+  .sticker-btn{width:25%;min-width:65px;height:78px}
+  .sticker-item{width:25%;min-width:65px}
+  .sticker-save{font-size:9px}
+  .sticker-create input{font-size:16px}
+  .sticker-btn img{width:62px;height:62px}
+  .sticker-bubble{width:135px;height:135px;max-width:135px}
+  .sticker-image{width:130px;height:130px}
+}
+
+/* Android 4.4.2: keep layout simple and avoid modern viewport-dependent behavior. */
+@media(max-width:650px) and (orientation:landscape){
+  .sticker-picker{height:170px}
 }
 </style>
 <style id="customBubbleStyle"></style>
@@ -131,7 +192,9 @@ button,input{font:inherit}
     <div id="side" class="side"></div>
     <div class="chat">
       <div class="chatbar">
+        <button id="backChat" class="back-chat" title="Voltar">‹</button>
         <div id="chatName" class="name">Selecione uma conversa</div>
+        <button id="fullScreenBtn" class="fullscreen-btn" title="Tela cheia">⛶</button>
         <button id="clearBtn" class="hidden">Limpar</button>
       </div>
       <div id="messages" class="messages">
@@ -143,18 +206,41 @@ button,input{font:inherit}
       <!-- Painel Emojis -->
       <div id="emojiPicker" class="emoji-picker hidden">
         <div class="emoji-tabs">
-          <button id="tabEmojis" class="emoji-tab active">Emojis 😊</button>
-          <button id="tabEmoticons" class="emoji-tab">Emoticons :-) </button>
+          <button id="tabEmojis" class="emoji-tab active">Emojis</button>
+          <button id="tabEmoticons" class="emoji-tab">Emoticons</button>
         </div>
         <div id="emojiList" class="emoji-content"></div>
       </div>
 
+      <!-- Painel de Stickers -->
+      <div id="stickerPicker" class="sticker-picker hidden">
+        <div class="sticker-tabs">
+          <button id="stickerTab" class="sticker-tab active">Stickers</button>
+        </div>
+        <div class="sticker-actions">
+          <button id="stickerAllBtn" class="sticker-action active">Todos</button>
+          <button id="stickerMineBtn" class="sticker-action">Meus</button>
+          <button id="stickerSavedBtn" class="sticker-action">Salvos</button>
+          <button id="stickerNewBtn" class="sticker-action">Criar</button>
+        </div>
+        <div id="stickerCreate" class="sticker-create hidden">
+          <input id="stickerName" type="text" maxlength="40" placeholder="Nome do sticker">
+          <input id="stickerFile" type="file" accept="image/*" class="hidden">
+          <button id="stickerChooseBtn">Escolher imagem</button>
+          <button id="stickerCreateBtn">Criar sticker</button>
+          <button id="stickerCancelBtn" class="cancel">Cancelar</button>
+          <div id="stickerCreateStatus" class="sticker-owner"></div>
+        </div>
+        <div id="stickerList" class="sticker-list"></div>
+      </div>
+
       <div class="composer">
         <button id="emojiToggleBtn" class="iconbtn" title="Emojis">😊</button>
+        <button id="stickerToggleBtn" class="iconbtn" title="Stickers">★</button>
         <button id="photoBtn" class="iconbtn" title="Foto">📎</button>
         <input id="file" type="file" accept="image/*,audio/*" class="hidden">
         <button id="micBtn" class="iconbtn" title="Gravar áudio">🎤</button>
-        <input id="text" type="text" placeholder="Mensagem" maxlength="2000" autocomplete="off">
+        <textarea id="text" placeholder="Digite sua mensagem..." maxlength="2000" autocomplete="off"></textarea>
         <button id="send" class="send">Enviar</button>
       </div>
     </div>
@@ -272,6 +358,8 @@ function selectGroup(b){
   b.className="person active";
   $("chatName").innerHTML=esc(GROUP_NAME)+" <small style='font-weight:normal;color:#777'>• 6 participantes</small>";
   $("clearBtn").className="";
+  document.querySelector(".body").className = "body has-chat";
+  if(window.innerWidth<=650) document.querySelector(".body").className = "body has-chat";
   S.lastSeen=Date.now();
   load();
   if(S.timer)clearInterval(S.timer);
@@ -310,6 +398,12 @@ function render(old){
       h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
       h+='</div>';
     }
+    else if(m.type==="sticker"){
+      h='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble sticker-bubble">';
+      h+='<img class="sticker-image" src="'+esc(m.url)+'" alt="Sticker">';
+      h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
+      continue;
+    }
     else h+=esc(m.text||"");
     h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
   }
@@ -339,7 +433,7 @@ function notify(m){
   }catch(e){}
   if(window.Notification&&Notification.permission==="granted")try{
     var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Auzover";
-    new Notification("Auzover - "+senderName,{body:m.type==="image"?"📷 Foto":m.type==="audio"?"🎤 Áudio":m.text||"Nova mensagem"});
+    new Notification("Auzover - "+senderName,{body:m.type==="image"?"Foto":m.type==="audio"?"Áudio":m.type==="sticker"?"Sticker":m.text||"Nova mensagem"});
   }catch(e){}
 }
 
@@ -355,6 +449,7 @@ function sendText(){
   if(t){
     sendMsg({senderId:S.uid,senderName:USERS[S.uid].name,text:t,type:"text",timestamp:Date.now()});
     hideEmojiPicker();
+    hideStickerPicker();
   }
 }
 
@@ -514,6 +609,7 @@ function insertAtCursor(textToInsert) {
 
 function toggleEmojiPicker(){
   var p = $('emojiPicker');
+  hideStickerPicker();
   if(p.className.indexOf('hidden') !== -1){
     p.className = 'emoji-picker';
     var box = $('messages');
@@ -525,6 +621,10 @@ function toggleEmojiPicker(){
 
 function hideEmojiPicker(){
   $('emojiPicker').className = 'emoji-picker hidden';
+}
+
+function hideStickerPicker(){
+  $('stickerPicker').className = 'sticker-picker hidden';
 }
 
 $('tabEmojis').onclick = function(){
@@ -540,6 +640,284 @@ $('tabEmoticons').onclick = function(){
 };
 
 $('emojiToggleBtn').onclick = toggleEmojiPicker;
+
+function stickerSvg(emoji, title){
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">'+
+    '<rect x="8" y="8" width="224" height="224" rx="55" fill="#ffffff" stroke="#dddddd" stroke-width="8"/>'+
+    '<text x="120" y="145" text-anchor="middle" font-size="105">'+emoji+'</text>'+
+    '<text x="120" y="205" text-anchor="middle" font-family="Arial" font-size="20" fill="#075e54">'+title+'</text>'+
+    '</svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+
+var DEFAULT_STICKERS=[
+  ["😀","Olá"],["😂","KKK"],["😍","Amei"],["😎","Boa"],["😱","Eita"],
+  ["😭","Chorei"],["😡","Irritado"],["🤔","Hmm"],["👍","Boa!"],["👏","Parabéns"],
+  ["❤️","Amor"],["🔥","Top"],["🎉","Festa"],["🙏","Obrigado"],["🤣","Muito bom"],
+  ["😴","Cansei"]
+];
+
+var STICKER_STATE={all:[],saved:{},mode:"all",loading:false};
+
+function stickerDbUrl(){
+  return FIREBASE_DATABASE_URL+"/stickers.json?auth="+encodeURIComponent(S.token);
+}
+function savedStickerDbUrl(){
+  return FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers.json?auth="+encodeURIComponent(S.token);
+}
+
+function loadStickerCollections(cb){
+  if(STICKER_STATE.loading){if(cb)cb();return;}
+  STICKER_STATE.loading=true;
+  var done=0, allData={}, savedData={};
+  function finish(){
+    done++;
+    if(done<2)return;
+    STICKER_STATE.all=[];
+    var k;
+    for(k in allData){
+      if(allData.hasOwnProperty(k)) {
+        allData[k].id=k;
+        STICKER_STATE.all.push(allData[k]);
+      }
+    }
+    STICKER_STATE.saved=savedData||{};
+    STICKER_STATE.loading=false;
+    if(cb)cb();
+  }
+  api(stickerDbUrl(),{method:"GET"},function(st,d){
+    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
+    if(st===200)allData=d||{};
+    finish();
+  });
+  api(savedStickerDbUrl(),{method:"GET"},function(st,d){
+    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
+    if(st===200)savedData=d||{};
+    finish();
+  });
+}
+
+function isSavedSticker(id){
+  return !!(STICKER_STATE.saved && STICKER_STATE.saved[id]);
+}
+
+function renderStickers(mode){
+  STICKER_STATE.mode=mode||"all";
+  var list=$('stickerList');
+  list.innerHTML="";
+  var i, b, img, item, save, owner, st;
+
+  if(STICKER_STATE.mode==="default"){
+    for(i=0;i<DEFAULT_STICKERS.length;i++){
+      st=DEFAULT_STICKERS[i];
+      item=document.createElement('div'); item.className='sticker-item';
+      b=document.createElement('button'); b.className='sticker-btn';
+      img=document.createElement('img'); img.src=stickerSvg(st[0],st[1]); img.alt=st[1];
+      b.appendChild(img);
+      b.onclick=(function(index){return function(){sendDefaultSticker(index);};})(i);
+      item.appendChild(b); list.appendChild(item);
+    }
+    return;
+  }
+
+  var source=STICKER_STATE.all||[];
+  if(STICKER_STATE.mode==="saved"){
+    source=[];
+    for(i=0;i<STICKER_STATE.all.length;i++){
+      if(isSavedSticker(STICKER_STATE.all[i].id))source.push(STICKER_STATE.all[i]);
+    }
+  }else if(STICKER_STATE.mode==="mine"){
+    source=[];
+    for(i=0;i<STICKER_STATE.all.length;i++){
+      if(STICKER_STATE.all[i].creatorId===S.uid)source.push(STICKER_STATE.all[i]);
+    }
+  }
+
+  if(!source.length){
+    list.innerHTML='<div class="sticker-empty">Nenhum sticker nesta coleção.</div>';
+    return;
+  }
+
+  for(i=0;i<source.length;i++){
+    st=source[i];
+    item=document.createElement('div'); item.className='sticker-item';
+    b=document.createElement('button'); b.className='sticker-btn';
+    img=document.createElement('img'); img.src=st.url; img.alt=st.name||"Sticker";
+    b.appendChild(img);
+    b.onclick=(function(obj){return function(){sendCustomSticker(obj);};})(st);
+    item.appendChild(b);
+
+    if(st.creatorName){
+      owner=document.createElement('div'); owner.className='sticker-owner'; owner.innerHTML=esc(st.creatorName);
+      item.appendChild(owner);
+    }
+
+    if(st.creatorId!==S.uid && !isSavedSticker(st.id)){
+      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvar';
+      save.onclick=(function(id){return function(e){if(e&&e.stopPropagation)e.stopPropagation();saveSticker(id);};})(st.id);
+      item.appendChild(save);
+    }else if(st.creatorId!==S.uid){
+      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvo';
+      save.onclick=function(e){if(e&&e.stopPropagation)e.stopPropagation();};
+      item.appendChild(save);
+    }
+    list.appendChild(item);
+  }
+}
+
+function sendDefaultSticker(index){
+  if(!S.conv)return;
+  var st=DEFAULT_STICKERS[index];
+  sendMsg({
+    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
+    url:stickerSvg(st[0],st[1]),text:st[1],timestamp:Date.now()
+  });
+  hideStickerPicker();
+}
+
+function sendCustomSticker(st){
+  if(!S.conv)return;
+  sendMsg({
+    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
+    url:st.url,text:st.name||"Sticker",stickerId:st.id||"",timestamp:Date.now()
+  });
+  hideStickerPicker();
+}
+
+function saveSticker(id){
+  if(!id||!S.uid)return;
+  var data={savedAt:Date.now()};
+  api(FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers/"+encodeURIComponent(id)+".json?auth="+encodeURIComponent(S.token),
+    {method:"PUT",body:data},function(st){
+      if(st===401){refreshToken();return;}
+      if(st===200){
+        STICKER_STATE.saved[id]=data;
+        renderStickers(STICKER_STATE.mode);
+        $('status').innerHTML="Sticker salvo no seu acervo.";
+      }else $('status').innerHTML="Não foi possível salvar o sticker.";
+    });
+}
+
+function toggleStickerCreate(show){
+  $('stickerCreate').className=show?'sticker-create':'sticker-create hidden';
+}
+
+function createSticker(){
+  var f=$('stickerFile').files[0], name=$('stickerName').value.replace(/^\s+|\s+$/g,"");
+  if(!f){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
+  if(f.type.indexOf("image/")!==0){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
+  if(f.size>2*1024*1024){$('stickerCreateStatus').innerHTML="A imagem deve ter no máximo 2 MB.";return;}
+  if(!name)name="Sticker de "+USERS[S.uid].name;
+
+  $('stickerCreateStatus').innerHTML="Enviando...";
+  var ext=(f.name.split('.').pop()||"png").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
+  var path="stickers/"+S.uid+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"."+ext;
+  var url=SUPABASE_URL+"/storage/v1/object/chat-media/"+path;
+  var x=new XMLHttpRequest();
+  x.open("POST",url,true);
+  x.setRequestHeader("Authorization","Bearer "+SUPABASE_ANON_KEY);
+  x.setRequestHeader("apikey",SUPABASE_ANON_KEY);
+  x.setRequestHeader("Content-Type",f.type||"image/png");
+  x.onreadystatechange=function(){
+    if(x.readyState!==4)return;
+    if(x.status>=200&&x.status<300){
+      var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
+      var sticker={
+        name:name,url:publicUrl,creatorId:S.uid,creatorName:USERS[S.uid].name,
+        createdAt:Date.now()
+      };
+      api(stickerDbUrl(),{method:"POST",body:sticker},function(st2,d){
+        if(st2===200){
+          $('stickerName').value="";
+          $('stickerFile').value="";
+          $('stickerCreateStatus').innerHTML="Sticker criado!";
+          toggleStickerCreate(false);
+          loadStickerCollections(function(){renderStickers("mine");});
+        }else $('stickerCreateStatus').innerHTML="Imagem enviada, mas não foi possível cadastrar o sticker.";
+      });
+    }else $('stickerCreateStatus').innerHTML="Erro ao enviar a imagem.";
+  };
+  x.send(f);
+}
+
+function toggleStickerPicker(){
+  var p=$('stickerPicker');
+  hideEmojiPicker();
+  if(p.className.indexOf('hidden')!==-1){
+    p.className='sticker-picker';
+    loadStickerCollections(function(){renderStickers("all");});
+    var box=$('messages'); box.scrollTop=box.scrollHeight;
+  }else hideStickerPicker();
+}
+
+function hideStickerPicker(){
+  $('stickerPicker').className='sticker-picker hidden';
+  toggleStickerCreate(false);
+}
+
+$('stickerToggleBtn').onclick=toggleStickerPicker;
+
+$('stickerAllBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action active';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("all");});
+};
+$('stickerMineBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action active';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("mine");});
+};
+$('stickerSavedBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action active';
+  $('stickerNewBtn').className='sticker-action';
+  toggleStickerCreate(false);
+  loadStickerCollections(function(){renderStickers("saved");});
+};
+$('stickerNewBtn').onclick=function(){
+  $('stickerAllBtn').className='sticker-action';
+  $('stickerMineBtn').className='sticker-action';
+  $('stickerSavedBtn').className='sticker-action';
+  $('stickerNewBtn').className='sticker-action active';
+  toggleStickerCreate(true);
+};
+$('stickerChooseBtn').onclick=function(){$('stickerFile').click();};
+$('stickerCreateBtn').onclick=createSticker;
+$('stickerCancelBtn').onclick=function(){
+  $('stickerName').value=""; $('stickerFile').value="";
+  toggleStickerCreate(false);
+  $('stickerNewBtn').className='sticker-action';
+  $('stickerAllBtn').className='sticker-action active';
+  loadStickerCollections(function(){renderStickers("all");});
+};
+
+function setConversationFullscreen(on){
+  var app=$('app');
+  if(on){
+    app.className='conversation-fullscreen';
+  }else{
+    app.className='';
+  }
+}
+
+$('fullScreenBtn').onclick=function(){
+  var app=$('app');
+  setConversationFullscreen(app.className.indexOf('conversation-fullscreen')===-1);
+};
+
+$('backChat').onclick=function(){
+  setConversationFullscreen(false);
+  document.querySelector('.body').className='body';
+  hideEmojiPicker();
+  hideStickerPicker();
+};
 
 function requestNotify(){
   if(window.Notification&&Notification.permission==="default")try{Notification.requestPermission();}catch(e){}
@@ -599,6 +977,7 @@ $('bubbleColorPicker').onchange = function(){
 
 $('text').addEventListener('focus', function(){
   hideEmojiPicker();
+  hideStickerPicker();
   setTimeout(function(){
     window.scrollTo(0, 0);
     var box = $('messages');
@@ -606,10 +985,24 @@ $('text').addEventListener('focus', function(){
   }, 300);
 });
 
+$('text').oninput=function(){
+  this.style.height='48px';
+  var h=this.scrollHeight;
+  if(h>96)h=96;
+  if(h<48)h=48;
+  this.style.height=h+'px';
+};
+
 $('loginBtn').onclick=login;
 $('pass').onkeydown=function(e){if((e||window.event).keyCode===13)login()};
 $('send').onclick=sendText;
-$('text').onkeydown=function(e){if((e||window.event).keyCode===13){sendText();return false}};
+$('text').onkeydown=function(e){
+  e=e||window.event;
+  if(e.keyCode===13 && !e.shiftKey){
+    sendText();
+    return false;
+  }
+};
 $('photoBtn').onclick=function(){if(S.conv)$('file').click()};
 $('file').onchange=function(){if(this.files&&this.files[0])uploadFile(this.files[0]);this.value=""};
 $('micBtn').onclick=startRecord;
