@@ -721,7 +721,18 @@ function renderStickers(){
 }
 
 function sendSticker(url){
-  sendMsg({type:"sticker", url:url});
+  if(!S.conv){
+    alert("Selecione uma conversa ou grupo primeiro!");
+    return;
+  }
+  
+  // Envia a figurinha usando a estrutura padrão de mensagens do app
+  sendMsg({
+    type: "sticker",
+    url: url
+  });
+
+  // Fecha o painel de stickers após o envio
   $("stickerPicker").classList.add("hidden");
 }
 
