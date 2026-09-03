@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#075e54">
-<title>Whatsapp 2</title>
+<title>Chat Temporário</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#efe7dd;color:#222}
@@ -258,6 +258,12 @@ var USER1_UID = "ZwESBVxjszRqPiOy9dDhx7rRmUK2";
 var NATHAN_UID = "rN0rwjdIxUV7ov3pbNWe745i7VE3";
 var MARLY_UID  = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
 
+var MARI_UID   = "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2";
+var SPACI_UID  = "f3NJQgbZB4YTozRDgqtBfVI0cPC2";
+var SILLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
+var MARIA_UID  = "Cue1xqMOHoPuEQM26ZlNo2MCBEc2";
+var LUA_UID    = "wy3z9PIDI8XYQCMbv3qYXginJKG3";
+
 var USERS={
   "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
   "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
@@ -266,7 +272,12 @@ var USERS={
   "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
   "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"},
   "rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},
-  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"}
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"},
+  "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2":{name:"Mari"},
+  "f3NJQgbZB4YTozRDgqtBfVI0cPC2":{name:"Spaci"},
+  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2":{name:"Silly"},
+  "Cue1xqMOHoPuEQM26ZlNo2MCBEc2":{name:"Maria"},
+  "wy3z9PIDI8XYQCMbv3qYXginJKG3":{name:"Lua"}
 };
 
 var GROUP_ID="auzover";
@@ -280,795 +291,873 @@ var GROUP_MEMBERS=[
   "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
 ];
 
+var GROUP2_ID="bapo_do_zap_2";
+var GROUP2_NAME="Bapo do Zap 2 '-'";
+var GROUP2_MEMBERS=[
+  USER1_UID,
+  MARI_UID,
+  SPACI_UID,
+  SILLY_UID,
+  MARIA_UID,
+  LUA_UID
+];
+
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
 
-var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","舌","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
-var EMOTICONS = [":-)", ":-D", ";-)", "xD", ":-(", ":'-(", ":-P", ":-O", "B-)", ":-|", ":/*", "\\(^o^)/", "(¬_¬)", "(•_•)", "( ͡° 倾 ͡°)", "¯\\_(ツ)_/¯", "(O_o)", "(>_<)", "(T_T)", "(x_x)", "(='.'=)", "(^_-)", "(*_*)"];
+var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🦷","🦴","👀","👁️","👅","👄","💋","🩸","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💖","💗","💓","💞","💕","❣","💔","❤️","🧡","💛","💚","💙","💜","🤎","🖤","🤍","💯","💢","💥","💫","💦","💨","🕳️","💣","💬","👁️‍🗨️","🗨️","🗯️","💭","💤"];
+var EMOTICONS = [":-)",":)",";-)",";)",":-D",":D",":-P",":P",":-O",":O",":-(",":(",":-'",":'-(","B-)","8-)",":-/",":/",":-\\",":\\",":-|",":|",">:-(",">:(","O:-)",":-*","<3","</3","\\o/","o/","\\o",":-X",":X",":-J",":-]",":-[","8-o","P=","=)","=("];
+var STICKERS = [
+  {id:"s1", name:"Haha", url:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"},
+  {id:"s2", name:"Valeu", url:"https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80"},
+  {id:"s3", name:"Top", url:"https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=200&q=80"},
+  {id:"s4", name:"Oi", url:"https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=200&q=80"}
+];
 
-function $(x){return document.getElementById(x)}
-function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+var stickerTabState = "all";
+var stickerImageFile = null;
 
-function api(url,opt,cb){
-  var x=new XMLHttpRequest();
-  x.open(opt.method||"GET",url,true);
-  if(opt.body!==undefined)x.setRequestHeader("Content-Type","application/json");
-  x.onreadystatechange=function(){
-    if(x.readyState!==4)return;
-    var d=null;
-    try{d=x.responseText?JSON.parse(x.responseText):null}catch(e){}
-    cb(x.status,d,x.responseText);
-  };
-  x.send(opt.body!==undefined?(opt.body===null?null:JSON.stringify(opt.body)):null);
+function $(i){return document.getElementById(i)}
+function enc(s){return encodeURIComponent(s)}
+function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+function isAndroid442(){
+  var ua = navigator.userAgent || "";
+  return ua.indexOf("Android 4.4.2") !== -1 || ua.indexOf("Android 4.4") !== -1;
 }
 
-function getPairId(uid1, uid2) {
-  return uid1 < uid2 ? "p_" + uid1 + "_" + uid2 : "p_" + uid2 + "_" + uid1;
+function getStoredStickers(){
+  try{
+    var st = localStorage.getItem("my_saved_stickers");
+    if(st){ return JSON.parse(st); }
+  }catch(e){}
+  return [];
+}
+
+function saveStoredStickers(list){
+  try{
+    localStorage.setItem("my_saved_stickers", JSON.stringify(list));
+  }catch(e){}
+}
+
+function req(method,url,body,headers,cb){
+  var x=new XMLHttpRequest();
+  x.open(method,url,true);
+  headers=headers||{};
+  for(var k in headers){if(headers.hasOwnProperty(k)){x.setRequestHeader(k,headers[k])}}
+  x.onreadystatechange=function(){
+    if(x.readyState===4){
+      var d=null;
+      try{d=JSON.parse(x.responseText)}catch(e){}
+      cb(x.status,d,x.responseText);
+    }
+  };
+  x.send(body||null);
+}
+
+function setStatus(t){$("status").innerHTML=esc(t)}
+
+function setupApp(){
+  $("loginBtn").onclick=login;
+  $("logout").onclick=logout;
+  $("bgColorPicker").onchange=function(){ applyCustomColors(); };
+  $("bubbleColorPicker").onchange=function(){ applyCustomColors(); };
+  $("send").onclick=sendText;
+  $("clearBtn").onclick=clearChat;
+  $("photoBtn").onclick=function(){$("file").removeAttribute("capture");$("file").click()};
+  $("micBtn").onclick=toggleRecord;
+  $("file").onchange=uploadFile;
+  $("text").onkeydown=function(e){
+    if(e.keyCode===13 && !e.shiftKey){
+      e.preventDefault();
+      sendText();
+    }
+  };
+  $("backChat").onclick=function(){
+    var b=document.querySelector(".body");
+    if(b){b.classList.remove("has-chat")}
+    S.conv=null;
+    S.other=null;
+    renderSide();
+  };
+  $("fullScreenBtn").onclick=toggleFullScreenConversation;
+
+  setupEmojiPicker();
+  setupStickerPicker();
+}
+
+function applyCustomColors(){
+  var bg = $("bgColorPicker").value;
+  var bubble = $("bubbleColorPicker").value;
+  $("messages").style.backgroundColor = bg;
+  
+  var styleEl = $("customBubbleStyle");
+  styleEl.innerHTML = ".mine .bubble { background-color: " + bubble + " !important; }";
+  
+  localStorage.setItem("chat_bg_color", bg);
+  localStorage.setItem("chat_bubble_color", bubble);
+}
+
+function loadSavedColors(){
+  var bg = localStorage.getItem("chat_bg_color");
+  var bubble = localStorage.getItem("chat_bubble_color");
+  if(bg) $("bgColorPicker").value = bg;
+  if(bubble) $("bubbleColorPicker").value = bubble;
+  applyCustomColors();
+}
+
+function setupEmojiPicker(){
+  $("emojiToggleBtn").onclick = function(){
+    var ep = $("emojiPicker");
+    var sp = $("stickerPicker");
+    sp.classList.add("hidden");
+    if(ep.classList.contains("hidden")){
+      ep.classList.remove("hidden");
+      renderEmojis();
+    }else{
+      ep.classList.add("hidden");
+    }
+  };
+
+  $("tabEmojis").onclick = function(){
+    $("tabEmojis").classList.add("active");
+    $("tabEmoticons").classList.remove("active");
+    renderEmojis();
+  };
+
+  $("tabEmoticons").onclick = function(){
+    $("tabEmoticons").classList.add("active");
+    $("tabEmojis").classList.remove("active");
+    renderEmoticons();
+  };
+}
+
+function renderEmojis(){
+  var container = $("emojiList");
+  var html = "";
+  for(var i=0; i<EMOJIS.length; i++){
+    html += '<button class="emoji-btn" onclick="insertEmoji(\'' + EMOJIS[i] + '\')">' + EMOJIS[i] + '</button>';
+  }
+  container.innerHTML = html;
+}
+
+function renderEmoticons(){
+  var container = $("emojiList");
+  var html = "";
+  for(var i=0; i<EMOTICONS.length; i++){
+    var safeEmoticon = esc(EMOTICONS[i]);
+    html += '<button class="emoticon-btn" onclick="insertEmoji(\'' + safeEmoticon + '\')">' + safeEmoticon + '</button>';
+  }
+  container.innerHTML = html;
+}
+
+function insertEmoji(charStr){
+  var txt = $("text");
+  txt.value += charStr;
+  txt.focus();
+}
+
+function setupStickerPicker(){
+  $("stickerToggleBtn").onclick = function(){
+    var sp = $("stickerPicker");
+    var ep = $("emojiPicker");
+    ep.classList.add("hidden");
+    if(sp.classList.contains("hidden")){
+      sp.classList.remove("hidden");
+      stickerTabState = "all";
+      updateStickerTabs();
+      renderStickers();
+    }else{
+      sp.classList.add("hidden");
+    }
+  };
+
+  $("stickerAllBtn").onclick = function(){
+    stickerTabState = "all";
+    updateStickerTabs();
+    renderStickers();
+  };
+
+  $("stickerMineBtn").onclick = function(){
+    stickerTabState = "mine";
+    updateStickerTabs();
+    renderStickers();
+  };
+
+  $("stickerSavedBtn").onclick = function(){
+    stickerTabState = "saved";
+    updateStickerTabs();
+    renderStickers();
+  };
+
+  $("stickerNewBtn").onclick = function(){
+    stickerTabState = "new";
+    updateStickerTabs();
+    $("stickerCreate").classList.remove("hidden");
+    $("stickerList").innerHTML = "";
+  };
+
+  $("stickerChooseBtn").onclick = function(){
+    $("stickerFile").click();
+  };
+
+  $("stickerFile").onchange = function(){
+    var f = $("stickerFile").files[0];
+    if(f){
+      $("stickerCreateStatus").innerHTML = "Selecionado: " + esc(f.name);
+      stickerImageFile = f;
+    }
+  };
+
+  $("stickerCancelBtn").onclick = function(){
+    stickerTabState = "all";
+    $("stickerCreate").classList.add("hidden");
+    updateStickerTabs();
+    renderStickers();
+  };
+
+  $("stickerCreateBtn").onclick = function(){
+    var name = $("stickerName").value.replace(/^\s+|\s+$/g, "");
+    if(!name){
+      alert("Digite um nome para o sticker!");
+      return;
+    }
+    if(!stickerImageFile){
+      alert("Escolha uma imagem para o sticker!");
+      return;
+    }
+    
+    setStatus("Enviando sticker...");
+    uploadStickerImage(stickerImageFile, function(err, imageUrl){
+      if(err){
+        setStatus("Erro ao enviar sticker.");
+        alert(err);
+        return;
+      }
+      saveStickerToDatabase(name, imageUrl, function(saveErr){
+        if(saveErr){
+          setStatus("Erro ao salvar no banco.");
+          alert(saveErr);
+          return;
+        }
+        setStatus("Sticker criado!");
+        $("stickerName").value = "";
+        $("stickerFile").value = "";
+        stickerImageFile = null;
+        $("stickerCreateStatus").innerHTML = "";
+        
+        stickerTabState = "mine";
+        updateStickerTabs();
+        renderStickers();
+      });
+    });
+  };
+}
+
+function updateStickerTabs(){
+  $("stickerAllBtn").className = (stickerTabState === "all") ? "sticker-action active" : "sticker-action";
+  $("stickerMineBtn").className = (stickerTabState === "mine") ? "sticker-action active" : "sticker-action";
+  $("stickerSavedBtn").className = (stickerTabState === "saved") ? "sticker-action active" : "sticker-action";
+  $("stickerNewBtn").className = (stickerTabState === "new") ? "sticker-action active" : "sticker-action";
+  
+  if(stickerTabState !== "new"){
+    $("stickerCreate").classList.add("hidden");
+  }
+}
+
+function isStickerSaved(stId){
+  var saved = getStoredStickers();
+  for(var i=0; i<saved.length; i++){
+    if(saved[i].id === stId) return true;
+  }
+  return false;
+}
+
+function toggleSaveSticker(stObj){
+  var saved = getStoredStickers();
+  var foundIndex = -1;
+  for(var i=0; i<saved.length; i++){
+    if(saved[i].id === stObj.id){
+      foundIndex = i;
+      break;
+    }
+  }
+
+  if(foundIndex > -1){
+    saved.splice(foundIndex, 1);
+  }else{
+    saved.push(stObj);
+  }
+  saveStoredStickers(saved);
+  renderStickers();
+}
+
+function uploadStickerImage(file, cb){
+  var ext = file.name.split(".").pop() || "jpg";
+  var path = "stickers/" + Date.now() + "_" + Math.floor(Math.random()*1000) + "." + ext;
+  var url = SUPABASE_URL + "/storage/v1/object/chat-files/" + path;
+
+  req("POST", url, file, {
+    "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+    "apikey": SUPABASE_ANON_KEY,
+    "Content-Type": file.type || "image/jpeg"
+  }, function(st, d, txt){
+    if(st === 200 || st === 201){
+      var publicUrl = SUPABASE_URL + "/storage/v1/object/public/chat-files/" + path;
+      cb(null, publicUrl);
+    }else{
+      cb("Erro upload: " + st + " " + txt);
+    }
+  });
+}
+
+function saveStickerToDatabase(name, url, cb){
+  var stId = "st_" + Date.now();
+  var payload = {
+    name: name,
+    url: url,
+    owner: S.uid,
+    createdAt: Date.now()
+  };
+
+  var firebaseUrl = FIREBASE_DATABASE_URL + "/stickers/" + stId + ".json?auth=" + S.token;
+  req("PUT", firebaseUrl, JSON.stringify(payload), {}, function(st, d, txt){
+    if(st === 200){
+      cb(null);
+    }else{
+      cb("Erro ao salvar sticker: " + st);
+    }
+  });
+}
+
+function renderStickers(){
+  if(stickerTabState === "new") return;
+
+  var firebaseUrl = FIREBASE_DATABASE_URL + "/stickers.json?auth=" + S.token;
+  req("GET", firebaseUrl, null, {}, function(st, data){
+    var listContainer = $("stickerList");
+    listContainer.innerHTML = "";
+    
+    var allStickers = [];
+    
+    for(var i=0; i<STICKERS.length; i++){
+      allStickers.push(STICKERS[i]);
+    }
+    
+    if(st === 200 && data){
+      for(var k in data){
+        if(data.hasOwnProperty(k)){
+          var item = data[k];
+          item.id = k;
+          allStickers.push(item);
+        }
+      }
+    }
+
+    var displayList = [];
+    if(stickerTabState === "all"){
+      displayList = allStickers;
+    }else if(stickerTabState === "mine"){
+      for(var j=0; j<allStickers.length; j++){
+        if(allStickers[j].owner === S.uid){
+          displayList.push(allStickers[j]);
+        }
+      }
+    }else if(stickerTabState === "saved"){
+      var saved = getStoredStickers();
+      displayList = saved;
+    }
+
+    if(displayList.length === 0){
+      listContainer.innerHTML = '<div class="sticker-empty">Nenhum sticker encontrado.</div>';
+      return;
+    }
+
+    for(var m=0; m<displayList.length; m++){
+      var st = displayList[m];
+      var ownerName = "Padrão";
+      if(st.owner){
+        ownerName = USERS[st.owner] ? USERS[st.owner].name : "Desconhecido";
+      }
+
+      var isSaved = isStickerSaved(st.id);
+      var btnLabel = isSaved ? "Remover" : "Salvar";
+
+      var itemDiv = document.createElement("div");
+      itemDiv.className = "sticker-item";
+
+      var stBtn = document.createElement("button");
+      stBtn.className = "sticker-btn";
+      stBtn.title = st.name;
+      stBtn.setAttribute("data-url", st.url);
+      stBtn.onclick = function(){
+        sendSticker(this.getAttribute("data-url"));
+      };
+
+      var img = document.createElement("img");
+      img.src = st.url;
+      img.alt = st.name;
+      stBtn.appendChild(img);
+
+      var ownerDiv = document.createElement("div");
+      ownerDiv.className = "sticker-owner";
+      ownerDiv.innerHTML = esc(ownerName);
+
+      var saveBtn = document.createElement("button");
+      saveBtn.className = "sticker-save";
+      saveBtn.innerHTML = btnLabel;
+      saveBtn.setAttribute("data-st", JSON.stringify(st));
+      saveBtn.onclick = function(){
+        var stObj = JSON.parse(this.getAttribute("data-st"));
+        toggleSaveSticker(stObj);
+      };
+
+      itemDiv.appendChild(stBtn);
+      itemDiv.appendChild(ownerDiv);
+      itemDiv.appendChild(saveBtn);
+
+      listContainer.appendChild(itemDiv);
+    }
+  });
+}
+
+function sendSticker(url){
+  sendMsg({type:"sticker", url:url});
+  $("stickerPicker").classList.add("hidden");
+}
+
+function isGroupAllowed(gid){
+  if(gid===GROUP_ID){
+    return GROUP_MEMBERS.indexOf(S.uid)!==-1;
+  }
+  if(gid===GROUP2_ID){
+    return GROUP2_MEMBERS.indexOf(S.uid)!==-1;
+  }
+  return false;
+}
+
+function getGroupPath(gid){
+  return "group_"+gid;
 }
 
 function login(){
-  var e=$("email").value.replace(/^\s+|\s+$/g,"");
-  var p=$("pass").value;
+  var e=$("email").value, p=$("pass").value;
   $("err").innerHTML="";
-  if(e.toLowerCase()==="usuario@chat.com")e="usuário@chat.local";
-  if(e.toLowerCase()==="nathan@chat.local")e="nathan@chat.local";
-  if(e.toLowerCase()==="marly@chat")e="marly@chat";
-
-  var u="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+encodeURIComponent(FIREBASE_API_KEY);
-  api(u,{method:"POST",body:{email:e,password:p,returnSecureToken:true}},function(st,d){
-    if(st!==200||!d||!USERS[d.localId]){$("err").innerHTML="E-mail ou senha inválidos.";return}
-    S.token=d.idToken;
-    S.refresh=d.refreshToken;
-    S.uid=d.localId;
-    localStorage.chatT=S.token;
-    localStorage.chatR=S.refresh;
-    localStorage.chatU=S.uid;
-    openApp();
-    requestNotify();
-  });
-}
-
-function openApp(){
-  $("login").className="hidden";
-  $("app").className="";
-  $("me").innerHTML=esc(USERS[S.uid].name);
-  applySavedColors();
-  buildSide();
-  renderEmojiPicker("emojis");
-  var firstBtn = $("side").getElementsByTagName("button")[0];
-  if(firstBtn) firstBtn.click();
-}
-
-function buildSide(){
-  var h = "";
-  var myUid = S.uid;
-
-  if(myUid === NATHAN_UID || myUid === MARLY_UID) {
-    // Nathan e Marly acessam APENAS a conversa privada com USER 1
-    var pId = getPairId(myUid, USER1_UID);
-    h += '<button class="person" data-id="'+pId+'" data-other="'+USER1_UID+'">'+
-         esc(USERS[USER1_UID].name)+
-         '<small>Conversa Privada</small></button>';
-  } else if(myUid === USER1_UID) {
-    h += '<button class="person" data-id="'+GROUP_ID+'">'+
-         esc(GROUP_NAME)+
-         '<small>Grupo • 6 participantes</small></button>';
-    
-    var uids = [NATHAN_UID, MARLY_UID, "8ovQde8DNAcjscHXqpadOrYgyFn2", "c3r7cT6qUjbn0a312xk3lCo5eDJ3", "sOkHZMVNengztduR2L5UymjI3zc2", "iFZf5DwP8CdeJfcFCReIKQwn8k62", "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"];
-    for(var i=0; i<uids.length; i++){
-      var other = uids[i];
-      var pair = getPairId(myUid, other);
-      h += '<button class="person" data-id="'+pair+'" data-other="'+other+'">'+
-           esc(USERS[other].name)+
-           '<small>Conversa Privada</small></button>';
-    }
-  } else {
-    h += '<button class="person" data-id="'+GROUP_ID+'">'+
-         esc(GROUP_NAME)+
-         '<small>Grupo • 6 participantes</small></button>';
-    
-    for(var j=0; j<GROUP_MEMBERS.length; j++){
-      var mUid = GROUP_MEMBERS[j];
-      if(mUid !== myUid){
-        var pairId = getPairId(myUid, mUid);
-        h += '<button class="person" data-id="'+pairId+'" data-other="'+mUid+'">'+
-             esc(USERS[mUid].name)+
-             '<small>Conversa Privada</small></button>';
-      }
-    }
-  }
-
-  $("side").innerHTML=h;
-  var bs=$("side").getElementsByTagName("button");
-  for(var k=0; k<bs.length; k++){
-    bs[k].onclick=function(){ selectChat(this); };
-  }
-}
-
-function selectChat(b){
-  var chatId = b.getAttribute("data-id");
-  var otherId = b.getAttribute("data-other");
-
-  S.conv = chatId;
-  S.other = otherId || null;
-
-  var bs=$("side").getElementsByTagName("button");
-  for(var i=0;i<bs.length;i++) bs[i].className="person";
-  b.className="person active";
-
-  if(chatId === GROUP_ID){
-    $("chatName").innerHTML=esc(GROUP_NAME)+" <small style='font-weight:normal;color:#777'>• 6 participantes</small>";
-    $("clearBtn").className="";
-  } else {
-    var otherName = USERS[otherId] ? USERS[otherId].name : "Privado";
-    $("chatName").innerHTML=esc(otherName)+" <small style='font-weight:normal;color:#777'>• Privado</small>";
-    $("clearBtn").className="hidden";
-  }
-
-  document.querySelector(".body").className = "body has-chat";
-  S.lastSeen=Date.now();
-  load();
-  if(S.timer)clearInterval(S.timer);
-  S.timer=setInterval(load,2000);
-}
-
-function dbUrl(){
-  return FIREBASE_DATABASE_URL+"/chat/"+S.conv+"/messages.json?auth="+encodeURIComponent(S.token);
-}
-
-function load(){
-  if(!S.conv)return;
-  api(dbUrl(),{method:"GET"},function(st,d){
-    if(st===401){refreshToken();return}
-    if(st!==200)return;
-    var old=S.data;
-    S.data=d||{};
-    render(old);
-  });
-}
-
-function render(old){
-  var box=$("messages"),wasNearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
-  var previousHeight=box.scrollHeight,previousTop=box.scrollTop;
-  var keys=[],k;
-  for(k in S.data)if(S.data.hasOwnProperty(k))keys.push(k);
-  keys.sort(function(a,b){return (Number(S.data[a].timestamp)||0)-(Number(S.data[b].timestamp)||0)});
-  var h="";
-  for(var i=0;i<keys.length;i++){
-    var m=S.data[keys[i]],mine=m.senderId===S.uid;
-    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Usuário";
-    
-    if(m.type==="sticker"){
-      h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble sticker-bubble">';
-      if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
-      h+='<img class="sticker-image" src="'+esc(m.url)+'" alt="Sticker">';
-      h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
-    } else {
-      h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
-      if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
-      
-      if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
-      else if(m.type==="audio"){
-        h+='<div class="audio-box">';
-        h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"></audio>';
-        h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
-        h+='</div>';
-      }
-      else h+=esc(m.text||"");
-      
-      h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
-    }
-  }
-  box.innerHTML=h||'<div class="empty">Nenhuma mensagem ainda.</div>';
-  if(wasNearBottom){box.scrollTop=box.scrollHeight;}
-  else{box.scrollTop=previousTop+(box.scrollHeight-previousHeight);}
-  var newest=keys.length?Number(S.data[keys[keys.length-1]].timestamp):0;
-  if(old&&newest>S.lastSeen){
-    var m2=S.data[keys[keys.length-1]];
-    if(m2.senderId!==S.uid)notify(m2);
-  }
-  S.lastSeen=Math.max(S.lastSeen,newest);
-}
-
-function formatTime(ts){
-  var d=new Date(Number(ts)||Date.now()),h=d.getHours(),m=d.getMinutes();
-  return (h<10?"0":"")+h+":"+(m<10?"0":"")+m;
-}
-
-function notify(m){
-  $('status').innerHTML="Nova mensagem";
-  try{
-    var a=$('notificationSound');
-    a.currentTime=0;
-    var pr=a.play();
-    if(pr&&pr.catch)pr.catch(function(){});
-  }catch(e){}
-  if(window.Notification&&Notification.permission==="granted")try{
-    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"ChatTemp";
-    new Notification(senderName,{body:m.type==="image"?"Foto":m.type==="audio"?"Áudio":m.type==="sticker"?"Sticker":m.text||"Nova mensagem"});
-  }catch(e){}
-}
-
-function sendMsg(m){
-  api(dbUrl(),{method:"POST",body:m},function(st){
-    if(st===401){refreshToken();return}
-    if(st===200){$('text').value="";load();}else $('status').innerHTML="Não foi possível enviar.";
-  });
-}
-
-function sendText(){
-  var t=$('text').value.replace(/^\s+|\s+$/g,"");
-  if(t){
-    sendMsg({senderId:S.uid,senderName:USERS[S.uid].name,text:t,type:"text",timestamp:Date.now()});
-    hideEmojiPicker();
-    hideStickerPicker();
-  }
-}
-
-function uploadFile(f){
-  if(!f||!S.conv)return;
-  if(f.size>50*1024*1024){$('status').innerHTML="Arquivo acima de 50 MB.";return}
-  var ext=(f.name.split('.').pop()||"bin").replace(/[^a-zA-Z0-9]/g,"");
-  var path=S.conv+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"."+ext;
-  var url=SUPABASE_URL+"/storage/v1/object/chat-media/"+path;
-  var x=new XMLHttpRequest();
-  x.open("POST",url,true);
-  x.setRequestHeader("Authorization","Bearer "+SUPABASE_ANON_KEY);
-  x.setRequestHeader("apikey",SUPABASE_ANON_KEY);
-  x.setRequestHeader("Content-Type",f.type||"application/octet-stream");
-  x.onreadystatechange=function(){
-    if(x.readyState!==4)return;
-    if(x.status>=200&&x.status<300){
-      var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
-      var isImg = f.type.indexOf("image/")===0;
-      var isAud = f.type.indexOf("audio/")===0;
-      sendMsg({
-        senderId:S.uid,
-        senderName:USERS[S.uid].name,
-        type: isImg ? "image" : (isAud ? "audio" : "file"),
-        url:publicUrl,
-        text:"",
-        timestamp:Date.now()
-      });
-    }else $('status').innerHTML="Erro no upload de mídia.";
-  };
-  x.send(f);
-}
-
-function startRecord(){
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    $('status').innerHTML="Seu navegador não suporta gravação direta.";
-    return;
-  }
-  if(S.recording){stopRecord();return}
+  if(!e||!p){$("err").innerHTML="Preencha tudo.";return}
   
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
-    S.recording=true;
-    $('rec').className="recording";
-    
-    var options = {};
-    var mimeType = "audio/mp4";
-    
-    if (window.MediaRecorder && MediaRecorder.isTypeSupported) {
-      if (MediaRecorder.isTypeSupported('audio/mp4')) {
-        options = { mimeType: 'audio/mp4' };
-        mimeType = 'audio/mp4';
-      } else if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-        options = { mimeType: 'audio/webm;codecs=opus' };
-        mimeType = 'audio/webm';
-      } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
-        options = { mimeType: 'audio/ogg;codecs=opus' };
-        mimeType = 'audio/ogg';
-      } else if (MediaRecorder.isTypeSupported('audio/wav')) {
-        options = { mimeType: 'audio/wav' };
-        mimeType = 'audio/wav';
+  var u="https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="+FIREBASE_API_KEY;
+  req("POST",u,JSON.stringify({email:e,password:p,returnSecureToken:true}),{"Content-Type":"application/json"},function(st,d,txt){
+    if(st===200&&d&&d.idToken){
+      if(!USERS[d.localId]){
+        $("err").innerHTML="Usuário não autorizado.";
+        return;
       }
+      S.token=d.idToken;
+      S.refresh=d.refreshToken;
+      S.uid=d.localId;
+      $("login").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      $("me").innerHTML=esc(USERS[S.uid]?USERS[S.uid].name:S.uid);
+      loadSavedColors();
+      renderSide();
+      startSync();
+    }else{
+      $("err").innerHTML="Erro no login: "+(d&&d.error?d.error.message:st);
     }
-
-    try {
-      S.rec = new MediaRecorder(stream, options);
-    } catch(e) {
-      S.rec = new MediaRecorder(stream);
-    }
-    
-    S.chunks=[];
-    S.rec.ondataavailable=function(e){ if(e.data && e.data.size > 0) S.chunks.push(e.data); };
-    
-    S.rec.onstop=function(){
-      stream.getTracks().forEach(function(t){ t.stop(); });
-      
-      var finalMime = S.rec.mimeType || mimeType;
-      var ext = 'mp4';
-      if(finalMime.indexOf('webm') !== -1) ext = 'webm';
-      if(finalMime.indexOf('ogg') !== -1) ext = 'ogg';
-      if(finalMime.indexOf('wav') !== -1) ext = 'wav';
-
-      var blob = new Blob(S.chunks, { type: finalMime });
-      var file = new File([blob], "audio_" + Date.now() + "." + ext, { type: finalMime });
-      
-      uploadFile(file);
-      S.recording=false;
-      $('rec').className="recording hidden";
-    };
-    
-    S.rec.start();
-  }).catch(function(err){
-    $('status').innerHTML="Permissão para microfone recusada ou erro de mídia.";
   });
-}
-
-function stopRecord(){if(S.rec&&S.recording)S.rec.stop();}
-
-function clearChat(){
-  if(!S.conv)return;
-  if(S.conv !== GROUP_ID) return;
-  if(!confirm("Apagar toda a conversa do grupo Auzover para todos os participantes?"))return;
-  var x=new XMLHttpRequest();
-  x.open("DELETE",dbUrl(),true);
-  x.onreadystatechange=function(){
-    if(x.readyState===4){
-      if(x.status===200){
-        S.data={};
-        $('messages').innerHTML='<div class="empty">Nenhuma mensagem ainda.</div>';
-      }else $('status').innerHTML="Não foi possível limpar.";
-    }
-  };
-  x.send();
-}
-
-function renderEmojiPicker(type){
-  var container = $('emojiList');
-  container.innerHTML = "";
-  if(type === 'emojis'){
-    for(var i=0; i<EMOJIS.length; i++){
-      var btn = document.createElement('button');
-      btn.className = 'emoji-btn';
-      btn.innerHTML = EMOJIS[i];
-      btn.onclick = (function(val){
-        return function(){ insertAtCursor(val); };
-      })(EMOJIS[i]);
-      container.appendChild(btn);
-    }
-  } else {
-    for(var j=0; j<EMOTICONS.length; j++){
-      var btn2 = document.createElement('button');
-      btn2.className = 'emoticon-btn';
-      btn2.innerHTML = esc(EMOTICONS[j]);
-      btn2.onclick = (function(val){
-        return function(){ insertAtCursor(val + " "); };
-      })(EMOTICONS[j]);
-      container.appendChild(btn2);
-    }
-  }
-}
-
-function insertAtCursor(textToInsert) {
-  var input = $('text');
-  input.focus();
-  if (document.selection) {
-    var sel = document.selection.createRange();
-    sel.text = textToInsert;
-  } else if (input.selectionStart || input.selectionStart === 0) {
-    var startPos = input.selectionStart;
-    var endPos = input.selectionEnd;
-    input.value = input.value.substring(0, startPos) + textToInsert + input.value.substring(endPos, input.value.length);
-    input.selectionStart = startPos + textToInsert.length;
-    input.selectionEnd = startPos + textToInsert.length;
-  } else {
-    input.value += textToInsert;
-  }
-}
-
-function toggleEmojiPicker(){
-  var p = $('emojiPicker');
-  hideStickerPicker();
-  if(p.className.indexOf('hidden') !== -1){
-    p.className = 'emoji-picker';
-    var box = $('messages');
-    box.scrollTop = box.scrollHeight;
-  } else {
-    hideEmojiPicker();
-  }
-}
-
-function hideEmojiPicker(){
-  $('emojiPicker').className = 'emoji-picker hidden';
-}
-
-function hideStickerPicker(){
-  $('stickerPicker').className = 'sticker-picker hidden';
-}
-
-$('tabEmojis').onclick = function(){
-  $('tabEmojis').className = 'emoji-tab active';
-  $('tabEmoticons').className = 'emoji-tab';
-  renderEmojiPicker('emojis');
-};
-
-$('tabEmoticons').onclick = function(){
-  $('tabEmoticons').className = 'emoji-tab active';
-  $('tabEmojis').className = 'emoji-tab';
-  renderEmojiPicker('emoticons');
-};
-
-$('emojiToggleBtn').onclick = toggleEmojiPicker;
-
-function stickerSvg(emoji, title){
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240">'+
-    '<rect x="8" y="8" width="224" height="224" rx="55" fill="#ffffff" stroke="#dddddd" stroke-width="8"/>'+
-    '<text x="120" y="145" text-anchor="middle" font-size="105">'+emoji+'</text>'+
-    '<text x="120" y="205" text-anchor="middle" font-family="Arial" font-size="20" fill="#075e54">'+title+'</text>'+
-    '</svg>';
-  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-}
-
-var DEFAULT_STICKERS=[
-  ["😀","Olá"],["😂","KKK"],["😍","Amei"],["😎","Boa"],["😱","Eita"],
-  ["😭","Chorei"],["😡","Irritado"],["🤔","Hmm"],["👍","Boa!"],["👏","Parabéns"],
-  ["❤️","Amor"],["🔥","Top"],["🎉","Festa"],["🙏","Obrigado"],["🤣","Muito bom"],
-  ["😴","Cansei"]
-];
-
-var STICKER_STATE={all:[],saved:{},mode:"all",loading:false};
-
-function stickerDbUrl(){
-  return FIREBASE_DATABASE_URL+"/stickers.json?auth="+encodeURIComponent(S.token);
-}
-function savedStickerDbUrl(){
-  return FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers.json?auth="+encodeURIComponent(S.token);
-}
-
-function loadStickerCollections(cb){
-  if(STICKER_STATE.loading){if(cb)cb();return;}
-  STICKER_STATE.loading=true;
-  var done=0, allData={}, savedData={};
-  function finish(){
-    done++;
-    if(done<2)return;
-    STICKER_STATE.all=[];
-    var k;
-    for(k in allData){
-      if(allData.hasOwnProperty(k)) {
-        allData[k].id=k;
-        STICKER_STATE.all.push(allData[k]);
-      }
-    }
-    STICKER_STATE.saved=savedData||{};
-    STICKER_STATE.loading=false;
-    if(cb)cb();
-  }
-  api(stickerDbUrl(),{method:"GET"},function(st,d){
-    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
-    if(st===200)allData=d||{};
-    finish();
-  });
-  api(savedStickerDbUrl(),{method:"GET"},function(st,d){
-    if(st===401){refreshToken();STICKER_STATE.loading=false;return;}
-    if(st===200)savedData=d||{};
-    finish();
-  });
-}
-
-function isSavedSticker(id){
-  return !!(STICKER_STATE.saved && STICKER_STATE.saved[id]);
-}
-
-function renderStickers(mode){
-  STICKER_STATE.mode=mode||"all";
-  var list=$('stickerList');
-  list.innerHTML="";
-  var i, b, img, item, save, owner, st;
-
-  if(STICKER_STATE.mode==="default"){
-    for(i=0;i<DEFAULT_STICKERS.length;i++){
-      st=DEFAULT_STICKERS[i];
-      item=document.createElement('div'); item.className='sticker-item';
-      b=document.createElement('button'); b.className='sticker-btn';
-      img=document.createElement('img'); img.src=stickerSvg(st[0],st[1]); img.alt=st[1];
-      b.appendChild(img);
-      b.onclick=(function(index){return function(){sendDefaultSticker(index);};})(i);
-      item.appendChild(b); list.appendChild(item);
-    }
-    return;
-  }
-
-  var source=STICKER_STATE.all||[];
-  if(STICKER_STATE.mode==="saved"){
-    source=[];
-    for(i=0;i<STICKER_STATE.all.length;i++){
-      if(isSavedSticker(STICKER_STATE.all[i].id))source.push(STICKER_STATE.all[i]);
-    }
-  }else if(STICKER_STATE.mode==="mine"){
-    source=[];
-    for(i=0;i<STICKER_STATE.all.length;i++){
-      if(STICKER_STATE.all[i].creatorId===S.uid)source.push(STICKER_STATE.all[i]);
-    }
-  }
-
-  if(!source.length){
-    list.innerHTML='<div class="sticker-empty">Nenhum sticker nesta coleção.</div>';
-    return;
-  }
-
-  for(i=0;i<source.length;i++){
-    st=source[i];
-    item=document.createElement('div'); item.className='sticker-item';
-    b=document.createElement('button'); b.className='sticker-btn';
-    img=document.createElement('img'); img.src=st.url; img.alt=st.name||"Sticker";
-    b.appendChild(img);
-    b.onclick=(function(obj){return function(){sendCustomSticker(obj);};})(st);
-    item.appendChild(b);
-
-    if(st.creatorName){
-      owner=document.createElement('div'); owner.className='sticker-owner'; owner.innerHTML=esc(st.creatorName);
-      item.appendChild(owner);
-    }
-
-    if(st.creatorId!==S.uid && !isSavedSticker(st.id)){
-      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvar';
-      save.onclick=(function(id){return function(e){if(e&&e.stopPropagation)e.stopPropagation();saveSticker(id);};})(st.id);
-      item.appendChild(save);
-    }else if(st.creatorId!==S.uid){
-      save=document.createElement('button'); save.className='sticker-save'; save.innerHTML='Salvo';
-      save.onclick=function(e){if(e&&e.stopPropagation)e.stopPropagation();};
-      item.appendChild(save);
-    }
-    list.appendChild(item);
-  }
-}
-
-function sendDefaultSticker(index){
-  if(!S.conv)return;
-  var st=DEFAULT_STICKERS[index];
-  sendMsg({
-    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
-    url:stickerSvg(st[0],st[1]),text:st[1],timestamp:Date.now()
-  });
-  hideStickerPicker();
-}
-
-function sendCustomSticker(st){
-  if(!S.conv)return;
-  sendMsg({
-    senderId:S.uid,senderName:USERS[S.uid].name,type:"sticker",
-    url:st.url,text:st.name||"Sticker",stickerId:st.id||"",timestamp:Date.now()
-  });
-  hideStickerPicker();
-}
-
-function saveSticker(id){
-  if(!id||!S.uid)return;
-  var data={savedAt:Date.now()};
-  api(FIREBASE_DATABASE_URL+"/users/"+S.uid+"/savedStickers/"+encodeURIComponent(id)+".json?auth="+encodeURIComponent(S.token),
-    {method:"PUT",body:data},function(st){
-      if(st===401){refreshToken();return;}
-      if(st===200){
-        STICKER_STATE.saved[id]=data;
-        renderStickers(STICKER_STATE.mode);
-        $('status').innerHTML="Sticker salvo no seu acervo.";
-      }else $('status').innerHTML="Não foi possível salvar o sticker.";
-    });
-}
-
-function toggleStickerCreate(show){
-  $('stickerCreate').className=show?'sticker-create':'sticker-create hidden';
-}
-
-function createSticker(){
-  var f=$('stickerFile').files[0], name=$('stickerName').value.replace(/^\s+|\s+$/g,"");
-  if(!f){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
-  if(f.type.indexOf("image/")!==0){$('stickerCreateStatus').innerHTML="Escolha uma imagem.";return;}
-  if(f.size>2*1024*1024){$('stickerCreateStatus').innerHTML="A imagem deve ter no máximo 2 MB.";return;}
-  if(!name)name="Sticker de "+USERS[S.uid].name;
-
-  $('stickerCreateStatus').innerHTML="Enviando...";
-  var ext=(f.name.split('.').pop()||"png").replace(/[^a-zA-Z0-9]/g,"").toLowerCase();
-  var path="stickers/"+S.uid+"/"+Date.now()+"_"+Math.random().toString(36).slice(2)+"."+ext;
-  var url=SUPABASE_URL+"/storage/v1/object/chat-media/"+path;
-  var x=new XMLHttpRequest();
-  x.open("POST",url,true);
-  x.setRequestHeader("Authorization","Bearer "+SUPABASE_ANON_KEY);
-  x.setRequestHeader("apikey",SUPABASE_ANON_KEY);
-  x.setRequestHeader("Content-Type",f.type||"image/png");
-  x.onreadystatechange=function(){
-    if(x.readyState!==4)return;
-    if(x.status>=200&&x.status<300){
-      var publicUrl=SUPABASE_URL+"/storage/v1/object/public/chat-media/"+path;
-      var sticker={
-        name:name,url:publicUrl,creatorId:S.uid,creatorName:USERS[S.uid].name,
-        createdAt:Date.now()
-      };
-      api(stickerDbUrl(),{method:"POST",body:sticker},function(st2,d){
-        if(st2===200){
-          $('stickerName').value="";
-          $('stickerFile').value="";
-          $('stickerCreateStatus').innerHTML="Sticker criado!";
-          toggleStickerCreate(false);
-          loadStickerCollections(function(){renderStickers("mine");});
-        }else $('stickerCreateStatus').innerHTML="Imagem enviada, mas não foi possível cadastrar o sticker.";
-      });
-    }else $('stickerCreateStatus').innerHTML="Erro ao enviar a imagem.";
-  };
-  x.send(f);
-}
-
-function toggleStickerPicker(){
-  var p=$('stickerPicker');
-  hideEmojiPicker();
-  if(p.className.indexOf('hidden')!==-1){
-    p.className='sticker-picker';
-    loadStickerCollections(function(){renderStickers("all");});
-    var box=$('messages'); box.scrollTop=box.scrollHeight;
-  }else hideStickerPicker();
-}
-
-function hideStickerPicker(){
-  $('stickerPicker').className='sticker-picker hidden';
-  toggleStickerCreate(false);
-}
-
-$('stickerToggleBtn').onclick=toggleStickerPicker;
-
-$('stickerAllBtn').onclick=function(){
-  $('stickerAllBtn').className='sticker-action active';
-  $('stickerMineBtn').className='sticker-action';
-  $('stickerSavedBtn').className='sticker-action';
-  $('stickerNewBtn').className='sticker-action';
-  toggleStickerCreate(false);
-  loadStickerCollections(function(){renderStickers("all");});
-};
-$('stickerMineBtn').onclick=function(){
-  $('stickerAllBtn').className='sticker-action';
-  $('stickerMineBtn').className='sticker-action active';
-  $('stickerSavedBtn').className='sticker-action';
-  $('stickerNewBtn').className='sticker-action';
-  toggleStickerCreate(false);
-  loadStickerCollections(function(){renderStickers("mine");});
-};
-$('stickerSavedBtn').onclick=function(){
-  $('stickerAllBtn').className='sticker-action';
-  $('stickerMineBtn').className='sticker-action';
-  $('stickerSavedBtn').className='sticker-action active';
-  $('stickerNewBtn').className='sticker-action';
-  toggleStickerCreate(false);
-  loadStickerCollections(function(){renderStickers("saved");});
-};
-$('stickerNewBtn').onclick=function(){
-  $('stickerAllBtn').className='sticker-action';
-  $('stickerMineBtn').className='sticker-action';
-  $('stickerSavedBtn').className='sticker-action';
-  $('stickerNewBtn').className='sticker-action active';
-  toggleStickerCreate(true);
-};
-$('stickerChooseBtn').onclick=function(){$('stickerFile').click();};
-$('stickerCreateBtn').onclick=createSticker;
-$('stickerCancelBtn').onclick=function(){
-  $('stickerName').value=""; $('stickerFile').value="";
-  toggleStickerCreate(false);
-  $('stickerNewBtn').className='sticker-action';
-  $('stickerAllBtn').className='sticker-action active';
-  loadStickerCollections(function(){renderStickers("all");});
-};
-
-function setConversationFullscreen(on){
-  var app=$('app');
-  if(on){
-    app.className='conversation-fullscreen';
-  }else{
-    app.className='';
-  }
-}
-
-$('fullScreenBtn').onclick=function(){
-  var app=$('app');
-  setConversationFullscreen(app.className.indexOf('conversation-fullscreen')===-1);
-};
-
-$('backChat').onclick=function(){
-  setConversationFullscreen(false);
-  document.querySelector('.body').className='body';
-  hideEmojiPicker();
-  hideStickerPicker();
-};
-
-function requestNotify(){
-  if(window.Notification&&Notification.permission==="default")try{Notification.requestPermission();}catch(e){}
-}
-
-function refreshToken(){
-  if(!S.refresh)return;
-  var u="https://securetoken.googleapis.com/v1/token?key="+encodeURIComponent(FIREBASE_API_KEY);
-  var x=new XMLHttpRequest();
-  x.open("POST",u,true);
-  x.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-  x.onreadystatechange=function(){
-    if(x.readyState!==4)return;
-    if(x.status!==200){logout();return}
-    var d;
-    try{d=JSON.parse(x.responseText)}catch(e){logout();return}
-    S.token=d.id_token;
-    S.refresh=d.refresh_token||S.refresh;
-    localStorage.chatT=S.token;
-    localStorage.chatR=S.refresh;
-  };
-  x.send("grant_type=refresh_token&refresh_token="+encodeURIComponent(S.refresh));
 }
 
 function logout(){
-  if(S.timer)clearInterval(S.timer);
-  localStorage.removeItem("chatT");
-  localStorage.removeItem("chatR");
-  localStorage.removeItem("chatU");
-  location.reload();
+  if(S.timer) clearInterval(S.timer);
+  S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
+  $("app").classList.add("hidden");
+  $("login").classList.remove("hidden");
 }
 
-function setColors(bg, bubble){
-  $('messages').style.backgroundColor = bg;
-  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
+function getConvKey(u1,u2){
+  return u1<u2 ? u1+"_"+u2 : u2+"_"+u1;
 }
 
-function applySavedColors(){
-  var bg = localStorage.chatBgColor || "#efe7dd";
-  var bubble = localStorage.chatBubbleColor || "#dcf8c6";
-  setColors(bg, bubble);
-  $('bgColorPicker').value = bg;
-  $('bubbleColorPicker').value = bubble;
+function canTalkTo(otherUid){
+  if(S.uid === otherUid) return false;
+  
+  if(S.uid === USER1_UID) return true;
+  if(otherUid === USER1_UID) return true;
+  
+  if(S.uid === NATHAN_UID || S.uid === MARLY_UID) return false;
+  if(otherUid === NATHAN_UID || otherUid === MARLY_UID) return false;
+
+  var isNewS1 = (S.uid === MARI_UID || S.uid === SPACI_UID || S.uid === SILLY_UID || S.uid === MARIA_UID || S.uid === LUA_UID);
+  var isNewS2 = (otherUid === MARI_UID || otherUid === SPACI_UID || otherUid === SILLY_UID || otherUid === MARIA_UID || otherUid === LUA_UID);
+
+  if(isNewS1 && isNewS2) return true;
+
+  return true;
 }
 
-$('bgColorPicker').onchange = function(){
-  var bg = this.value;
-  $('messages').style.backgroundColor = bg;
-  localStorage.chatBgColor = bg;
-};
-
-$('bubbleColorPicker').onchange = function(){
-  var bubble = this.value;
-  $('customBubbleStyle').innerHTML = '.mine .bubble{ background-color: ' + bubble + ' !important; }';
-  localStorage.chatBubbleColor = bubble;
-};
-
-$('text').addEventListener('focus', function(){
-  hideEmojiPicker();
-  hideStickerPicker();
-  setTimeout(function(){
-    window.scrollTo(0, 0);
-    var box = $('messages');
-    box.scrollTop = box.scrollHeight;
-  }, 300);
-});
-
-$('text').oninput=function(){
-  this.style.height='48px';
-  var h=this.scrollHeight;
-  if(h>96)h=96;
-  if(h<48)h=48;
-  this.style.height=h+'px';
-};
-
-$('loginBtn').onclick=login;
-$('pass').onkeydown=function(e){if((e||window.event).keyCode===13)login()};
-$('send').onclick=sendText;
-$('text').onkeydown=function(e){
-  e=e||window.event;
-  if(e.keyCode===13 && !e.shiftKey){
-    sendText();
-    return false;
+function renderSide(){
+  var side=$("side");
+  side.innerHTML="";
+  
+  if(isGroupAllowed(GROUP_ID)){
+    var gbtn=document.createElement("button");
+    gbtn.className="person"+(S.conv===getGroupPath(GROUP_ID)?" active":"");
+    gbtn.innerHTML=esc(GROUP_NAME)+" <small>Grupo</small>";
+    gbtn.onclick=function(){selectConv(getGroupPath(GROUP_ID),null,GROUP_NAME)};
+    side.appendChild(gbtn);
   }
-};
-$('photoBtn').onclick=function(){if(S.conv)$('file').click()};
-$('file').onchange=function(){if(this.files&&this.files[0])uploadFile(this.files[0]);this.value=""};
-$('micBtn').onclick=startRecord;
-$('clearBtn').onclick=clearChat;
-$('logout').onclick=logout;
-document.body.addEventListener('click',requestNotify,{once:true});
 
-try{
-  if(localStorage.chatT&&localStorage.chatU&&USERS[localStorage.chatU]){
-    S.token=localStorage.chatT;
-    S.refresh=localStorage.chatR;
-    S.uid=localStorage.chatU;
-    openApp();
+  if(isGroupAllowed(GROUP2_ID)){
+    var g2btn=document.createElement("button");
+    g2btn.className="person"+(S.conv===getGroupPath(GROUP2_ID)?" active":"");
+    g2btn.innerHTML=esc(GROUP2_NAME)+" <small>Grupo</small>";
+    g2btn.onclick=function(){selectConv(getGroupPath(GROUP2_ID),null,GROUP2_NAME)};
+    side.appendChild(g2btn);
   }
-}catch(e){}
+
+  for(var uid in USERS){
+    if(USERS.hasOwnProperty(uid)){
+      if(canTalkTo(uid)){
+        var btn=document.createElement("button");
+        var cKey=getConvKey(S.uid,uid);
+        btn.className="person"+(S.conv===cKey?" active":"");
+        btn.innerHTML=esc(USERS[uid].name);
+        btn.setAttribute("data-uid", uid);
+        btn.onclick=function(){
+          var other = this.getAttribute("data-uid");
+          selectConv(getConvKey(S.uid,other), other, USERS[other].name);
+        };
+        side.appendChild(btn);
+      }
+    }
+  }
+}
+
+function selectConv(key,otherUid,title){
+  S.conv=key;
+  S.other=otherUid;
+  $("chatName").innerHTML=esc(title);
+  
+  var topEl = document.querySelector(".top");
+  var chatbarEl = document.querySelector(".chatbar");
+  
+  // Se for o grupo "Papo do Zap 2", aplica a cor #FE3867
+  if(key === getGroupPath(GROUP2_ID)){
+    if(topEl) topEl.style.backgroundColor = "#FE3867";
+    if(chatbarEl) chatbarEl.style.backgroundColor = "#FE3867";
+    if(chatbarEl) chatbarEl.style.color = "#ffffff";
+  } else {
+    // Restaura a cor padrão do app para outras conversas
+    if(topEl) topEl.style.backgroundColor = "#075e54";
+    if(chatbarEl) chatbarEl.style.backgroundColor = "#f0f2f5";
+    if(chatbarEl) chatbarEl.style.color = "#222222";
+  }
+
+  var body=document.querySelector(".body");
+  if(body){body.classList.add("has-chat")}
+  $("clearBtn").classList.remove("hidden");
+  renderSide();
+  renderMessages();
+}
+
+function toggleFullScreenConversation(){
+  var app = $("app");
+  if(app.classList.contains("conversation-fullscreen")){
+    app.classList.remove("conversation-fullscreen");
+    $("fullScreenBtn").innerHTML = "⛶";
+    $("fullScreenBtn").title = "Tela cheia";
+  }else{
+    app.classList.add("conversation-fullscreen");
+    $("fullScreenBtn").innerHTML = "🗗";
+    $("fullScreenBtn").title = "Sair da tela cheia";
+  }
+}
+
+function startSync(){
+  fetchData();
+  S.timer=setInterval(fetchData,3000);
+}
+
+function playNotificationSound(){
+  try {
+    var sound = $("notificationSound");
+    if(sound){
+      sound.currentTime = 0;
+      sound.play();
+    }
+  } catch(e) {}
+}
+
+function fetchData(){
+  if(!S.token)return;
+  var u=FIREBASE_DATABASE_URL+"/chats.json?auth="+S.token;
+  req("GET",u,null,{},function(st,d){
+    if(st===200&&d){
+      var maxTS=S.lastSeen;
+      var hasNewMessage=false;
+      
+      for(var ck in d){
+        if(d.hasOwnProperty(ck)){
+          var msgs=d[ck];
+          for(var mk in msgs){
+            if(msgs.hasOwnProperty(mk)){
+              var m=msgs[mk];
+              if(m&&m.ts){
+                if(m.ts>maxTS){
+                  maxTS=m.ts;
+                  if(S.ready && m.from !== S.uid){
+                    hasNewMessage=true;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if(!S.ready){
+        S.ready=true;
+        S.lastSeen=maxTS;
+      }else if(hasNewMessage){
+        S.lastSeen=maxTS;
+        playNotificationSound();
+      }
+
+      S.data=d;
+      renderMessages();
+    }
+  });
+}
+
+function renderMessages(){
+  var box=$("messages");
+  if(!S.conv){
+    box.innerHTML='<div class="empty">Escolha uma conversa.</div>';
+    return;
+  }
+  var list=S.data[S.conv];
+  if(!list){
+    box.innerHTML='<div class="empty">Nenhuma mensagem ainda.</div>';
+    return;
+  }
+  
+  var arr=[];
+  for(var k in list){
+    if(list.hasOwnProperty(k)){
+      var item=list[k];
+      item._id=k;
+      arr.push(item);
+    }
+  }
+  arr.sort(function(a,b){return (a.ts||0)-(b.ts||0)});
+  
+  var html="";
+  for(var i=0;i<arr.length;i++){
+    var m=arr[i];
+    var mine=m.from===S.uid;
+    var sender=USERS[m.from]?USERS[m.from].name:m.from;
+    var time=m.ts?new Date(m.ts).toLocaleTimeString().slice(0,5):"";
+    
+    html+='<div class="bubble-row '+(mine?'mine':'')+'">';
+    html+='<div class="bubble">';
+    
+    if(!mine && S.conv.indexOf("group_")===0){
+      html+='<div style="font-size:11px;color:#075e54;font-weight:bold;margin-bottom:3px">'+esc(sender)+'</div>';
+    }
+    
+    if(m.type==="text"){
+      html+=esc(m.text||"");
+    }else if(m.type==="photo"){
+      html+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
+    }else if(m.type==="sticker"){
+      html+='<div class="sticker-bubble"><img class="sticker-image" src="'+esc(m.url)+'"></div>';
+    }else if(m.type==="audio"){
+      html+='<div class="audio-box">';
+      html+='<audio class="audio" controls preload="metadata">';
+      html+='<source src="'+esc(m.url)+'" type="audio/aac">';
+      html+='<source src="'+esc(m.url)+'" type="audio/mp3">';
+      html+='<source src="'+esc(m.url)+'" type="audio/ogg">';
+      html+='<source src="'+esc(m.url)+'" type="audio/3gpp">';
+      html+='Seu navegador não suporta o áudio nativo.';
+      html+='</audio>';
+      html+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+      html+='</div>';
+    }
+    
+    html+='<span class="time">'+esc(time)+'</span>';
+    html+='</div></div>';
+  }
+  
+  box.innerHTML=html;
+  box.scrollTop=box.scrollHeight;
+}
+
+function sendText(){
+  var t=$("text").value.replace(/^\s+|\s+$/g,'');
+  if(!t)return;
+  $("text").value="";
+  sendMsg({type:"text",text:t});
+}
+
+function sendMsg(payload){
+  if(!S.conv)return;
+  payload.from=S.uid;
+  payload.ts=Date.now();
+  
+  var u=FIREBASE_DATABASE_URL+"/chats/"+enc(S.conv)+".json?auth="+S.token;
+  req("POST",u,JSON.stringify(payload),{},function(st){
+    if(st===200){
+      fetchData();
+    }else{
+      setStatus("Erro ao enviar: "+st);
+    }
+  });
+}
+
+function clearChat(){
+  if(!S.conv)return;
+  if(!confirm("Deseja apagar esta conversa para todos?"))return;
+  var u=FIREBASE_DATABASE_URL+"/chats/"+enc(S.conv)+".json?auth="+S.token;
+  req("DELETE",u,null,{},function(st){
+    if(st===200){
+      fetchData();
+    }else{
+      setStatus("Erro ao limpar: "+st);
+    }
+  });
+}
+
+function uploadFile(){
+  var f=$("file").files[0];
+  if(!f)return;
+  
+  var isAudio = f.type.indexOf("audio")===0;
+  var ext = f.name.split('.').pop() || (isAudio ? "mp3" : "jpg");
+  var path = (isAudio ? "audios/" : "photos/") + Date.now() + "_" + Math.floor(Math.random()*1000) + "." + ext;
+  
+  setStatus("Enviando arquivo...");
+  
+  var url = SUPABASE_URL + "/storage/v1/object/chat-files/" + path;
+  
+  req("POST", url, f, {
+    "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+    "apikey": SUPABASE_ANON_KEY,
+    "Content-Type": f.type || (isAudio ? "audio/mp3" : "image/jpeg")
+  }, function(st, d, txt){
+    if(st===200 || st===201){
+      setStatus("");
+      var publicUrl = SUPABASE_URL + "/storage/v1/object/public/chat-files/" + path;
+      if(isAudio){
+        sendMsg({type:"audio", url:publicUrl});
+      }else{
+        sendMsg({type:"photo", url:publicUrl});
+      }
+    }else{
+      setStatus("Erro no upload: "+st);
+      alert("Erro upload: "+st+" "+txt);
+    }
+  });
+  
+  $("file").value="";
+}
+
+function toggleRecord(){
+  if(S.recording){
+    stopRecord();
+  }else{
+    startRecord();
+  }
+}
+
+function startRecord(){
+  if(isAndroid442()){
+    alert("O gravador direto via microfone não é suportado no Android 4.4.2 antigo.\n\nPor favor, utilize o botão de Anexo (📎) para gravar ou escolher um arquivo de áudio!");
+    $("file").setAttribute("capture", "microphone");
+    $("file").click();
+    return;
+  }
+
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert("Gravação de áudio não suportada neste navegador.");
+    return;
+  }
+  
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    S.recording=true;
+    S.chunks=[];
+    $("rec").classList.remove("hidden");
+    
+    var options = {};
+    if(typeof MediaRecorder.isTypeSupported === "function"){
+      if(MediaRecorder.isTypeSupported("audio/aac")){
+        options.mimeType = "audio/aac";
+      }else if(MediaRecorder.isTypeSupported("audio/mp4")){
+        options.mimeType = "audio/mp4";
+      }else if(MediaRecorder.isTypeSupported("audio/ogg")){
+        options.mimeType = "audio/ogg";
+      }else if(MediaRecorder.isTypeSupported("audio/webm")){
+        options.mimeType = "audio/webm";
+      }
+    }
+
+    try{
+      S.rec=new MediaRecorder(stream, options);
+    }catch(e){
+      S.rec=new MediaRecorder(stream);
+    }
+
+    S.rec.ondataavailable=function(e){
+      if(e.data && e.data.size>0) S.chunks.push(e.data);
+    };
+    S.rec.onstop=function(){
+      var mime = S.rec.mimeType || "audio/aac";
+      var blob=new Blob(S.chunks,{type:mime});
+      uploadAudioBlob(blob);
+      stream.getTracks().forEach(function(track){track.stop()});
+    };
+    S.rec.start();
+  }).catch(function(err){
+    alert("Erro ao acessar microfone: "+err.message);
+  });
+}
+
+function stopRecord(){
+  if(!S.recording)return;
+  S.recording=false;
+  $("rec").classList.add("hidden");
+  if(S.rec && S.rec.state!=="inactive"){
+    S.rec.stop();
+  }
+}
+
+function uploadAudioBlob(blob){
+  var ext = "aac";
+  if(blob.type.indexOf("ogg") !== -1) ext = "ogg";
+  else if(blob.type.indexOf("mp3") !== -1) ext = "mp3";
+  else if(blob.type.indexOf("webm") !== -1) ext = "webm";
+  else if(blob.type.indexOf("mp4") !== -1) ext = "mp4";
+
+  var path="audios/"+Date.now()+"_"+Math.floor(Math.random()*1000)+"."+ext;
+  setStatus("Enviando áudio...");
+  
+  var url = SUPABASE_URL + "/storage/v1/object/chat-files/" + path;
+  
+  req("POST", url, blob, {
+    "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+    "apikey": SUPABASE_ANON_KEY,
+    "Content-Type": blob.type || "audio/aac"
+  }, function(st, d, txt){
+    if(st===200 || st===201){
+      setStatus("");
+      var publicUrl = SUPABASE_URL + "/storage/v1/object/public/chat-files/" + path;
+      sendMsg({type:"audio", url:publicUrl});
+    }else{
+      setStatus("Erro no upload do áudio: "+st);
+      alert("Erro audio: "+st+" "+txt);
+    }
+  });
+}
+
+window.onload=setupApp;
 </script>
 </body>
 </html>
