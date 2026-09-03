@@ -170,7 +170,24 @@ var FIREBASE_API_KEY="AIzaSyDLqp4ieS3LqeJhHYLud1UjqtR7_5W8QfA";
 var FIREBASE_DATABASE_URL="https://chat-temporario-b83d1-default-rtdb.firebaseio.com";
 var SUPABASE_URL="https://dvmaiospgekqfiwkhcfh.supabase.co";
 var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
-var USERS={"ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},"rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},"qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"}};
+var USERS={
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
+  "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3":{name:"Dante"},
+  "sOkHZMVNengztduR2L5UymjI3zc2":{name:"Pedro"},
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
+  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"}
+};
+var GROUP_ID="auzover";
+var GROUP_NAME="Auzover";
+var GROUP_MEMBERS=[
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2",
+  "8ovQde8DNAcjscHXqpadOrYgyFn2",
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3",
+  "sOkHZMVNengztduR2L5UymjI3zc2",
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62",
+  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1"
+];
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
 
 var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
@@ -211,42 +228,57 @@ function login(){
   });
 }
 
+function isGroupMember(uid){
+  for(var i=0;i<GROUP_MEMBERS.length;i++){
+    if(GROUP_MEMBERS[i]===uid)return true;
+  }
+  return false;
+}
+
 function openApp(){
+  if(!isGroupMember(S.uid)){
+    $("err").innerHTML="Esta conta não tem acesso ao Auzover.";
+    return;
+  }
   $("login").className="hidden";
-  $('app').className="";
-  $('me').innerHTML=esc(USERS[S.uid].name);
+  $("app").className="";
+  $("me").innerHTML=esc(USERS[S.uid].name);
   applySavedColors();
   buildSide();
-  renderEmojiPicker('emojis');
+  renderEmojiPicker("emojis");
+  selectGroup($("side").getElementsByTagName("button")[0]);
 }
 
 function buildSide(){
-  var ids=S.uid==="ZwESBVxjszRqPiOy9dDhx7rRmUK2"?["qncO2nyU7id0Z6Oa3GXsgZ3udH92","rN0rwjdIxUV7ov3pbNWe745i7VE3"]:["ZwESBVxjszRqPiOy9dDhx7rRmUK2"];
-  var h="";
-  for(var i=0;i<ids.length;i++)h+='<button class="person" data-id="'+ids[i]+'">'+esc(USERS[ids[i]].name)+'<small>Conversa privada</small></button>';
-  $('side').innerHTML=h;
-  var bs=$('side').getElementsByTagName('button');
+  var h='<button class="person active" data-id="'+GROUP_ID+'">'+
+        esc(GROUP_NAME)+
+        '<small>Grupo • 6 participantes</small></button>';
+  $("side").innerHTML=h;
+  var bs=$("side").getElementsByTagName("button");
   for(var j=0;j<bs.length;j++){
-    bs[j].onclick=function(){select(this.getAttribute('data-id'),this);};
+    bs[j].onclick=function(){selectGroup(this);};
   }
 }
 
-function select(other,b){
-  var mine="ZwESBVxjszRqPiOy9dDhx7rRmUK2";
-  S.other=other;
-  S.conv=(S.uid===mine?(other==="qncO2nyU7id0Z6Oa3GXsgZ3udH92"?"user1_marly":"user1_nathan"):(S.uid==="qncO2nyU7id0Z6Oa3GXsgZ3udH92"?"user1_marly":"user1_nathan"));
-  var bs=$('side').getElementsByTagName('button');
+function selectGroup(b){
+  if(!isGroupMember(S.uid)){
+    $("status").innerHTML="Você não tem acesso a este grupo.";
+    return;
+  }
+  S.other=null;
+  S.conv=GROUP_ID;
+  var bs=$("side").getElementsByTagName("button");
   for(var i=0;i<bs.length;i++)bs[i].className="person";
   b.className="person active";
-  $('chatName').innerHTML=esc(USERS[other].name);
-  $('clearBtn').className="";
+  $("chatName").innerHTML=esc(GROUP_NAME)+" <small style='font-weight:normal;color:#777'>• 6 participantes</small>";
+  $("clearBtn").className="";
   S.lastSeen=Date.now();
   load();
   if(S.timer)clearInterval(S.timer);
   S.timer=setInterval(load,2000);
 }
 
-function dbUrl(){return FIREBASE_DATABASE_URL+"/chat/"+S.conv+"/messages.json?auth="+encodeURIComponent(S.token)}
+function dbUrl(){return FIREBASE_DATABASE_URL+"/chat/"+GROUP_ID+"/messages.json?auth="+encodeURIComponent(S.token)}
 
 function load(){
   if(!S.conv)return;
@@ -268,7 +300,9 @@ function render(old){
   var h="";
   for(var i=0;i<keys.length;i++){
     var m=S.data[keys[i]],mine=m.senderId===S.uid;
+    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Usuário";
     h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
+    if(!mine)h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
     if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
     else if(m.type==="audio"){
       h+='<div class="audio-box">';
@@ -304,7 +338,8 @@ function notify(m){
     if(pr&&pr.catch)pr.catch(function(){});
   }catch(e){}
   if(window.Notification&&Notification.permission==="granted")try{
-    new Notification("ChatTemp - "+USERS[S.other].name,{body:m.type==="image"?"📷 Foto":m.type==="audio"?"🎤 Áudio":m.text||"Nova mensagem"});
+    var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Auzover";
+    new Notification("Auzover - "+senderName,{body:m.type==="image"?"📷 Foto":m.type==="audio"?"🎤 Áudio":m.text||"Nova mensagem"});
   }catch(e){}
 }
 
@@ -318,7 +353,7 @@ function sendMsg(m){
 function sendText(){
   var t=$('text').value.replace(/^\s+|\s+$/g,"");
   if(t){
-    sendMsg({senderId:S.uid,text:t,type:"text",timestamp:Date.now()});
+    sendMsg({senderId:S.uid,senderName:USERS[S.uid].name,text:t,type:"text",timestamp:Date.now()});
     hideEmojiPicker();
   }
 }
@@ -342,6 +377,7 @@ function uploadFile(f){
       var isAud = f.type.indexOf("audio/")===0;
       sendMsg({
         senderId:S.uid,
+        senderName:USERS[S.uid].name,
         type: isImg ? "image" : (isAud ? "audio" : "file"),
         url:publicUrl,
         text:"",
@@ -419,7 +455,7 @@ function stopRecord(){if(S.rec&&S.recording)S.rec.stop();}
 
 function clearChat(){
   if(!S.conv)return;
-  if(!confirm("Apagar toda esta conversa para os dois usuários?"))return;
+  if(!confirm("Apagar toda a conversa do grupo Auzover para todos os participantes?"))return;
   var x=new XMLHttpRequest();
   x.open("DELETE",dbUrl(),true);
   x.onreadystatechange=function(){
