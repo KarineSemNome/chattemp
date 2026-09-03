@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#075e54">
-<title>Chat Temporário</title>
+<title>Whatsapp 2</title>
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;font-family:Arial,sans-serif;background:#efe7dd;color:#222}
@@ -152,7 +152,6 @@ button,input{font:inherit}
   .sticker-image{width:130px;height:130px}
 }
 
-/* Android 4.4.2: keep layout simple and avoid modern viewport-dependent behavior. */
 @media(max-width:650px) and (orientation:landscape){
   .sticker-picker{height:170px}
 }
@@ -162,7 +161,7 @@ button,input{font:inherit}
 <body>
 <div id="login">
   <div class="login-card">
-    <h1>ChatTemp</h1>
+    <h1>Whatsapp 2</h1>
     <p>Conversa privada</p>
     <input id="email" placeholder="E-mail" autocomplete="off">
     <input id="pass" type="password" placeholder="Senha">
@@ -173,7 +172,7 @@ button,input{font:inherit}
 
 <div id="app" class="hidden">
   <div class="top">
-    <div class="brand">ChatTemp</div>
+    <div class="brand">Whatsapp 2</div>
     <div id="me" class="me"></div>
     
     <div class="color-group" title="Cor do fundo">
@@ -283,8 +282,8 @@ var GROUP_MEMBERS=[
 
 var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
 
-var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
-var EMOTICONS = [":-)", ":-D", ";-)", "xD", ":-(", ":'-(", ":-P", ":-O", "B-)", ":-|", ":/*", "\\(^o^)/", "(¬_¬)", "(•_•)", "( ͡° ͜ʖ ͡°)", "¯\\_(ツ)_/¯", "(O_o)", "(>_<)", "(T_T)", "(x_x)", "(='.'=)", "(^_-)", "(*_*)"];
+var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","\%$","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦵","🦿","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","舌","👄","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","⚡","🔥","💥","✨","🌟","💫","🎉","🎊","🎁"];
+var EMOTICONS = [":-)", ":-D", ";-)", "xD", ":-(", ":'-(", ":-P", ":-O", "B-)", ":-|", ":/*", "\\(^o^)/", "(¬_¬)", "(•_•)", "( ͡° 倾 ͡°)", "¯\\_(ツ)_/¯", "(O_o)", "(>_<)", "(T_T)", "(x_x)", "(='.'=)", "(^_-)", "(*_*)"];
 
 function $(x){return document.getElementById(x)}
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
@@ -344,6 +343,7 @@ function buildSide(){
   var myUid = S.uid;
 
   if(myUid === NATHAN_UID || myUid === MARLY_UID) {
+    // Nathan e Marly acessam APENAS a conversa privada com USER 1
     var pId = getPairId(myUid, USER1_UID);
     h += '<button class="person" data-id="'+pId+'" data-other="'+USER1_UID+'">'+
          esc(USERS[USER1_UID].name)+
@@ -436,23 +436,27 @@ function render(old){
   for(var i=0;i<keys.length;i++){
     var m=S.data[keys[i]],mine=m.senderId===S.uid;
     var senderName=USERS[m.senderId]?USERS[m.senderId].name:"Usuário";
-    h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
-    if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
-    if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
-    else if(m.type==="audio"){
-      h+='<div class="audio-box">';
-      h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"></audio>';
-      h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
-      h+='</div>';
-    }
-    else if(m.type==="sticker"){
-      h='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble sticker-bubble">';
+    
+    if(m.type==="sticker"){
+      h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble sticker-bubble">';
+      if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
       h+='<img class="sticker-image" src="'+esc(m.url)+'" alt="Sticker">';
       h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
-      continue;
+    } else {
+      h+='<div class="bubble-row '+(mine?'mine':'')+'"><div class="bubble">';
+      if(!mine && S.conv===GROUP_ID) h+='<div style="font-size:11px;font-weight:bold;color:#075e54;margin-bottom:3px">'+esc(senderName)+'</div>';
+      
+      if(m.type==="image")h+='<a href="'+esc(m.url)+'" target="_blank"><img class="photo" src="'+esc(m.url)+'"></a>';
+      else if(m.type==="audio"){
+        h+='<div class="audio-box">';
+        h+='<audio class="audio" controls preload="metadata" src="'+esc(m.url)+'"></audio>';
+        h+='<a href="'+esc(m.url)+'" target="_blank" class="audio-fallback-btn">▶ Ouvir / Baixar Áudio</a>';
+        h+='</div>';
+      }
+      else h+=esc(m.text||"");
+      
+      h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
     }
-    else h+=esc(m.text||"");
-    h+='<span class="time">'+formatTime(m.timestamp)+'</span></div></div>';
   }
   box.innerHTML=h||'<div class="empty">Nenhuma mensagem ainda.</div>';
   if(wasNearBottom){box.scrollTop=box.scrollHeight;}
@@ -530,7 +534,6 @@ function uploadFile(f){
   x.send(f);
 }
 
-/* Gravação de Áudio Otimizada para Computador e Celular */
 function startRecord(){
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
     $('status').innerHTML="Seu navegador não suporta gravação direta.";
