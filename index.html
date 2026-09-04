@@ -859,7 +859,7 @@ function refreshTokenAndRetry(cb){
 function startSync(){
   fetchData();
   if(S.timer) clearInterval(S.timer);
-  S.timer = setInterval(fetchData, 3000);
+  S.timer = setInterval(fetchData, 1000);
 }
 
 function getAllowedConvKeys(){
@@ -876,39 +876,46 @@ function getAllowedConvKeys(){
 }
 
 function fetchData(){
-  if(!S.token) return;
+  if(!S.token || S.fetching) return;
   var keys = getAllowedConvKeys();
   var nextData = {};
-  var index = 0;
+  if(keys.length === 0) return;
+  S.fetching = true;
+  var pending = keys.length;
+  var shouldRefreshToken = false;
 
-  function readNext(){
-    if(index >= keys.length){
-      setStatus("Conectado", false);
-      var oldData = S.data;
-      S.data = nextData;
-      checkNewMessages(oldData, nextData);
-      if(!S.ready){
-        S.ready = true;
-        renderSide();
-      }
-      if(S.conv) renderMessages();
+  function finish(){
+    pending--;
+    if(pending > 0) return;
+    S.fetching = false;
+    if(shouldRefreshToken){
+      setStatus("Reconectando...", false);
+      refreshTokenAndRetry(fetchData);
       return;
     }
+    setStatus("Conectado", false);
+    var oldData = S.data;
+    S.data = nextData;
+    checkNewMessages(oldData, nextData);
+    if(!S.ready){
+      S.ready = true;
+      renderSide();
+    }
+    if(S.conv) renderMessages();
+  }
 
-    var key = keys[index++];
+  for(var i=0; i<keys.length; i++){
+    (function(key){
     var u = FIREBASE_DATABASE_URL + "/chats/" + key + ".json?auth=" + S.token;
     req("GET", u, null, null, function(st, d){
       if(st === 401 && !(d && d.error === "Permission denied")){
-        setStatus("Reconectando...", false);
-        refreshTokenAndRetry(fetchData);
-        return;
+        shouldRefreshToken = true;
       }
       if(st === 200 && d) nextData[key] = d;
-      readNext();
+      finish();
     });
+    })(keys[i]);
   }
-
-  readNext();
 }
 
 function checkNewMessages(oldData, newData){
