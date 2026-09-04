@@ -83,6 +83,7 @@ button,input{font:inherit}
   color:#000000 !important;
   font-size:16px !important;
   line-height:22px;
+  appearance:none;
   -webkit-appearance:none;
 }
 .send{width:78px;height:44px;min-width:78px;border:0;border-radius:22px;background:#075e54;color:#fff;font-weight:bold;cursor:pointer}
@@ -258,29 +259,27 @@ var SUPABASE_ANON_KEY="sb_publishable_ZauMz8gxsvsJUiC9Eqee-w_GFGMc-C2";
 var USER1_UID = "ZwESBVxjszRqPiOy9dDhx7rRmUK2";
 var NATHAN_UID = "rN0rwjdIxUV7ov3pbNWe745i7VE3";
 var MARLY_UID  = "qncO2nyU7id0Z6Oa3GXsgZ3udH92";
-var GIGI_UID   = "O0M9hAeCRib19DgGuKenNgp9grz2";
 
 var MARI_UID   = "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2";
 var SPACI_UID  = "f3NJQgbZB4YTozRDgqtBfVI0cPC2";
-var SOLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
+var SILLY_UID   = "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2";
 var MARIA_UID  = "Cue1xqMOHoPuEQM26ZlNo2MCBEc2";
 var LUA_UID    = "wy3z9PIDI8XYQCMbv3qYXginJKG3";
 
-var USERS={
-  "ZwESBVxjszRqPiOy9dDhx7rRmUK2":{name:"USER 1"},
-  "8ovQde8DNAcjscHXqpadOrYgyFn2":{name:"Sofia"},
-  "c3r7cT6qUjbn0a312xk3lCo5eDJ3":{name:"Alex"},
-  "sOkHZMVNengztduR2L5UymjI3zc2":{name:"Pedro"},
-  "iFZf5DwP8CdeJfcFCReIKQwn8k62":{name:"Pablo"},
-  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1":{name:"Tsar"},
-  "rN0rwjdIxUV7ov3pbNWe745i7VE3":{name:"Nathan"},
-  "qncO2nyU7id0Z6Oa3GXsgZ3udH92":{name:"Marly"},
-  "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2":{name:"Mari"},
-  "f3NJQgbZB4YTozRDgqtBfVI0cPC2":{name:"Spaci"},
-  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2":{name:"Soly"},
-  "Cue1xqMOHoPuEQM26ZlNo2MCBEc2":{name:"Maria"},
-  "wy3z9PIDI8XYQCMbv3qYXginJKG3":{name:"Lua"},
-  "O0M9hAeCRib19DgGuKenNgp9grz2":{name:"Gigi"}
+var USERS = {
+  "ZwESBVxjszRqPiOy9dDhx7rRmUK2": {name: "USER 1"},
+  "8ovQde8DNAcjscHXqpadOrYgyFn2": {name: "Sofia"}, // Se estivesse sem aspas (8ovQde...), daria exatamente esse erro!
+  "c3r7cT6qUjbn0a312xk3lCo5eDJ3": {name: "Alex"},
+  "sOkHZMVNengztduR2L5UymjI3zc2": {name: "Pedro"},
+  "iFZf5DwP8CdeJfcFCReIKQwn8k62": {name: "Pablo"},
+  "rN0rwjdIxUV7ov3pbNWe745i7VE3": {name: "Nathan"},
+  "qncO2nyU7id0Z6Oa3GXsgZ3udH92": {name: "Marly"},
+  "ZYPJlGUZbTZNQoDJHxfxCEoYXWD2": {name: "Mari"},
+  "f3NJQgbZB4YTozRDgqtBfVI0cPC2": {name: "Spaci"},
+  "R9o2CwcsSCUYZ5UrmIFH6EGdpyE2": {name: "Silly"},
+  "Cue1xqMOHoPuEQM26ZlNo2MCBEc2": {name: "Maria"},
+  "wy3z9PIDI8XYQCMbv3qYXginJKG3": {name: "Lua"},
+  "O0M9hAeCRib19DgGuKenNgp9grz2": {name: "Gigi"}  // Verifique se a linha anterior a essa tem vírgula!
 };
 
 var GROUP_ID="auzover";
@@ -291,7 +290,6 @@ var GROUP_MEMBERS=[
   "c3r7cT6qUjbn0a312xk3lCo5eDJ3",
   "sOkHZMVNengztduR2L5UymjI3zc2",
   "iFZf5DwP8CdeJfcFCReIKQwn8k62",
-  "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1",
   "O0M9hAeCRib19DgGuKenNgp9grz2"
 ];
 
@@ -301,12 +299,12 @@ var GROUP2_MEMBERS=[
   USER1_UID,
   MARI_UID,
   SPACI_UID,
-  SOLY_UID,
+  SILLY_UID,
   MARIA_UID,
   LUA_UID
 ];
 
-var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false};
+var S={token:null,refresh:null,uid:null,conv:null,other:null,data:{},timer:null,lastSeen:0,recording:false,rec:null,chunks:[],ready:false,refreshing:false};
 
 var EMOJIS = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","🥳","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️","👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽","🙀","😿","😾","👋","🤚","🖐️","✋","🖖","👌","✌️","🤞","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","👍","👎","✊","👊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🧠","🦴","👀","👁️","👅","👄","👶","🧒","👦","👧","🧑","👨","👩","🧔","👵","👴","👵","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💖","🔥","✨","🌟","💫","💥","💢","💦","💧","💨","💬","🗯️","💭","💤"];
 
@@ -322,6 +320,14 @@ var stickerState = {
 
 function $(id){return document.getElementById(id);}
 function esc(t){return (t||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function setStatus(message, isError){
+  var status = $("status");
+  if(status){
+    status.innerHTML = esc(message || "");
+    status.style.color = isError ? "#b00020" : "#777";
+  }
+}
 
 function playNotificationSound(){
   try{
@@ -435,6 +441,7 @@ function setupApp(){
   renderSide();
   renderEmojiList("emojis");
   
+  // Verifica login salvo automaticamente
   checkAutoLogin();
 }
 
@@ -763,9 +770,12 @@ function insertAtCursor(myField, myValue) {
 }
 
 function login(){
-  var e = $("email").value, p = $("pass").value;
+  var e = $("email").value.replace(/^\s+|\s+$/g, "").toLowerCase(), p = $("pass").value;
   $("err").innerHTML = "";
   if(!e || !p){ $("err").innerHTML = "Preencha tudo."; return; }
+
+  $("loginBtn").disabled = true;
+  $("loginBtn").innerHTML = "Entrando...";
   
   var u = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + FIREBASE_API_KEY;
   var body = JSON.stringify({
@@ -774,6 +784,7 @@ function login(){
     returnSecureToken: true
   });
   
+  // Enviado como text/plain contendo JSON para evitar requisição CORS OPTIONS (preflight)
   req("POST", u, body, {"Content-Type": "text/plain"}, function(st, d, txt){
     if(st === 200 && d && d.idToken){
       if(!USERS[d.localId]){
@@ -784,6 +795,7 @@ function login(){
       S.refresh = d.refreshToken;
       S.uid = d.localId;
 
+      // Persistir no navegador
       localStorage.setItem("user_token", d.idToken);
       localStorage.setItem("user_refresh", d.refreshToken);
       localStorage.setItem("user_uid", d.localId);
@@ -797,6 +809,8 @@ function login(){
     } else {
       $("err").innerHTML = "Erro no login: " + (d && d.error ? d.error.message : st);
     }
+    $("loginBtn").disabled = false;
+    $("loginBtn").innerHTML = "Entrar";
   });
 }
 
@@ -813,10 +827,8 @@ function logout(){
 }
 
 function refreshTokenAndRetry(cb){
-  if(!S.refresh) {
-    logout();
-    return;
-  }
+  if(!S.refresh || S.refreshing) return;
+  S.refreshing = true;
   var u = "https://securetoken.googleapis.com/v1/tokens?key=" + FIREBASE_API_KEY;
   var body = "grant_type=refresh_token&refresh_token=" + encodeURIComponent(S.refresh);
   
@@ -828,9 +840,18 @@ function refreshTokenAndRetry(cb){
       localStorage.setItem("user_token", S.token);
       localStorage.setItem("user_refresh", S.refresh);
 
+      S.refreshing = false;
+      setStatus("Conectado", false);
       if(cb) cb();
     } else {
-      logout();
+      S.refreshing = false;
+      var errorCode = d && d.error ? (d.error.message || d.error.code || d.error) : "";
+      if(errorCode === "invalid_grant" || errorCode === "INVALID_REFRESH_TOKEN" || errorCode === "TOKEN_REFRESH_TOKEN_INVALID"){
+        $("err").innerHTML = "Sua sessão expirou. Entre novamente.";
+        logout();
+      } else {
+        setStatus("Sem conexão com o servidor. Tentando novamente...", true);
+      }
     }
   });
 }
@@ -841,38 +862,53 @@ function startSync(){
   S.timer = setInterval(fetchData, 3000);
 }
 
+function getAllowedConvKeys(){
+  var keys = [];
+  if(GROUP_MEMBERS.indexOf(S.uid) >= 0) keys.push(GROUP_ID);
+  if(GROUP2_MEMBERS.indexOf(S.uid) >= 0) keys.push(GROUP2_ID);
+  for(var uid in USERS){
+    if(uid !== S.uid){
+      var key = getConvKey(S.uid, uid);
+      if(isAllowedConv(key)) keys.push(key);
+    }
+  }
+  return keys;
+}
+
 function fetchData(){
   if(!S.token) return;
-  var u = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
-  req("GET", u, null, null, function(st, d){
-    if(st === 401){
-      refreshTokenAndRetry(function(){
-        var uRetry = FIREBASE_DATABASE_URL + "/chats.json?auth=" + S.token;
-        req("GET", uRetry, null, null, function(stRetry, dRetry){
-          if(stRetry === 200 && dRetry){
-            S.data = dRetry;
-            if(!S.ready){ S.ready = true; renderSide(); }
-            if(S.conv){ renderMessages(); }
-          }
-        });
-      });
-      return;
-    }
-    if(st === 200 && d){
+  var keys = getAllowedConvKeys();
+  var nextData = {};
+  var index = 0;
+
+  function readNext(){
+    if(index >= keys.length){
+      setStatus("Conectado", false);
       var oldData = S.data;
-      S.data = d;
-      checkNewMessages(oldData, d);
-      
+      S.data = nextData;
+      checkNewMessages(oldData, nextData);
       if(!S.ready){
         S.ready = true;
         renderSide();
       }
-      
-      if(S.conv){
-        renderMessages();
-      }
+      if(S.conv) renderMessages();
+      return;
     }
-  });
+
+    var key = keys[index++];
+    var u = FIREBASE_DATABASE_URL + "/chats/" + key + ".json?auth=" + S.token;
+    req("GET", u, null, null, function(st, d){
+      if(st === 401 && !(d && d.error === "Permission denied")){
+        setStatus("Reconectando...", false);
+        refreshTokenAndRetry(fetchData);
+        return;
+      }
+      if(st === 200 && d) nextData[key] = d;
+      readNext();
+    });
+  }
+
+  readNext();
 }
 
 function checkNewMessages(oldData, newData){
@@ -902,11 +938,26 @@ function isAllowedConv(cKey){
   var p = cKey.split("_");
   if(p.length === 2 && (p[0] === S.uid || p[1] === S.uid)){
     var other = p[0] === S.uid ? p[1] : p[0];
-    if(USERS[other]) return true;
+    if(!USERS[other]) return false;
+    if(S.uid === USER1_UID || other === USER1_UID) return true;
+    if(S.uid === NATHAN_UID || S.uid === MARLY_UID || other === NATHAN_UID || other === MARLY_UID) return false;
+
+    var bapoPrivate = [MARI_UID, SPACI_UID, SILLY_UID, MARIA_UID, LUA_UID];
+    if(bapoPrivate.indexOf(S.uid) >= 0 && bapoPrivate.indexOf(other) >= 0) return true;
+
+    var auzoverPrivate = [
+      "8ovQde8DNAcjscHXqpadOrYgyFn2",
+      "c3r7cT6qUjbn0a312xk3lCo5eDJ3",
+      "sOkHZMVNengztduR2L5UymjI3zc2",
+      "iFZf5DwP8CdeJfcFCReIKQwn8k62",
+      "k3Js3Q6HqRWZPlaaPlsqVdbwAEv1",
+      "O0M9hAeCRib19DgGuKenNgp9grz2"
+    ];
+    if(auzoverPrivate.indexOf(S.uid) >= 0 && auzoverPrivate.indexOf(other) >= 0) return true;
   }
   return false;
 }
-
+  
 function getConvKey(uid1, uid2){
   return uid1 < uid2 ? uid1 + "_" + uid2 : uid2 + "_" + uid1;
 }
@@ -932,7 +983,7 @@ function renderSide(){
   }
 
   for(var uid in USERS){
-    if(uid !== S.uid){
+    if(uid !== S.uid && isAllowedConv(getConvKey(S.uid, uid))){
       (function(id){
         var key = getConvKey(S.uid, id);
         var btn = document.createElement("button");
@@ -946,6 +997,7 @@ function renderSide(){
 }
 
 function selectConv(key, otherUid, title){
+  if(!isAllowedConv(key)) return;
   S.conv = key;
   S.other = otherUid;
   $("chatName").innerHTML = esc(title);
@@ -1006,7 +1058,7 @@ function renderMessages(){
       img.src = stickerUrl;
       img.className = "sticker-image";
       bubble.appendChild(img);
-    } else if(txt.indexOf("http") === 0 && (txt.indexOf(".jpg") > 0 || txt.indexOf(".png") > 0 || txt.indexOf(".gif") > 0 || txt.indexOf(".webp") > 0)){
+    } else if(/^data:image\//i.test(txt) || (/* Imagens hospedadas */ /^https?:\/\//i.test(txt) && /\.(jpg|jpeg|png|gif|webp)(?:[?#]|$)/i.test(txt))){
       var img = document.createElement("img");
       img.src = txt;
       img.className = "photo";
@@ -1059,15 +1111,26 @@ function formatTime(ts){
 }
 
 function pushMessage(payload, cb){
-  if(!S.conv || !S.token) return;
+  if(!S.conv || !S.token || !isAllowedConv(S.conv)){
+    setStatus("Selecione uma conversa autorizada.", true);
+    return;
+  }
   var u = FIREBASE_DATABASE_URL + "/chats/" + S.conv + ".json?auth=" + S.token;
-  req("POST", u, JSON.stringify(payload), null, function(st){
+  req("POST", u, JSON.stringify(payload), null, function(st, d){
     if(st === 401){
+      if(d && d.error === "Permission denied"){
+        setStatus("Mensagem não enviada: acesso ao banco negado.", true);
+        return;
+      }
       refreshTokenAndRetry(function(){ pushMessage(payload, cb); });
       return;
     }
-    if(cb) cb();
-    fetchData();
+    if(st === 200){
+      if(cb) cb();
+      fetchData();
+    } else {
+      setStatus("Mensagem não enviada: erro " + st + ".", true);
+    }
   });
 }
 
@@ -1082,8 +1145,7 @@ function sendText(){
     time: Date.now()
   };
 
-  input.value = "";
-  pushMessage(payload);
+  pushMessage(payload, function(){ input.value = ""; });
 }
 
 function sendFile(){
@@ -1104,12 +1166,16 @@ function sendFile(){
 }
 
 function clearChat(){
-  if(!S.conv || !S.token) return;
+  if(!S.conv || !S.token || !isAllowedConv(S.conv)) return;
   if(!confirm("Tem certeza que deseja apagar o histórico desta conversa?")) return;
 
   var u = FIREBASE_DATABASE_URL + "/chats/" + S.conv + ".json?auth=" + S.token;
-  req("DELETE", u, null, null, function(st){
+  req("DELETE", u, null, null, function(st, d){
     if(st === 401){
+      if(d && d.error === "Permission denied"){
+        setStatus("Histórico não apagado: acesso ao banco negado.", true);
+        return;
+      }
       refreshTokenAndRetry(clearChat);
       return;
     }
